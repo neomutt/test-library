@@ -8,6 +8,6 @@
 
 **SAMPLES**
 
-- `test_lib` calls a function from each library source files
+- `test_lib` calls a function from each of the library source files
 - `test_hcache` creates an entry in the header cache and retrieves it
 

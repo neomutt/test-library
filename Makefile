@@ -4,6 +4,7 @@ RM	= rm -fr
 
 OUT	= test_lib test_hcache
 
+CFLAGS	+= -DDEBUG
 CFLAGS	+= -Wall
 CFLAGS	+= -Wno-unused-parameter
 CFLAGS	+= -g
@@ -23,5 +24,5 @@ test_hcache: test_hcache.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(HC_LDFLAGS) $(LIB_LDFLAGS)
 
 clean:
-	$(RM) $(OUT) cache
+	$(RM) $(OUT) cache tmp
 
