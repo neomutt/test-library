@@ -11,15 +11,7 @@
 - `test_lib` calls a function from each of the library source files
 - `test_hcache` creates an entry in the header cache and retrieves it
 
-## Library (88 functions)
-
-### ascii
-
-```c
-int               ascii_strcasecmp        (const char *a, const char *b);
-char *            ascii_strlower          (char *s);
-int               ascii_strncasecmp       (const char *a, const char *b, int n);
-```
+## Library (92 functions)
 
 ### base64
 
@@ -44,6 +36,7 @@ int               mutt_buffer_printf      (struct Buffer *buf, const char *fmt, 
 
 ```c
 time_t            mutt_local_tz           (time_t t);
+char *            mutt_make_date          (char *buf, size_t buflen);
 time_t            mutt_mktime             (struct tm *t, int local);
 void              mutt_normalize_time     (struct tm *tm);
 ```
@@ -68,13 +61,19 @@ char *            mutt_concatn_path       (char *dst, size_t dstlen, const char 
 char *            mutt_concat_path        (char *d, const char *dir, const char *fname, size_t l);
 int               mutt_copy_bytes         (FILE *in, FILE *out, size_t size);
 int               mutt_copy_stream        (FILE *fin, FILE *fout);
+time_t            mutt_decrease_mtime     (const char *f, struct stat *st);
+int               mutt_lock_file          (const char *path, int fd, int excl, int timeout);
 int               mutt_mkdir              (const char *path, mode_t mode);
 size_t            mutt_quote_filename     (char *d, size_t l, const char *f);
 char *            mutt_read_line          (char *s, size_t *size, FILE *fp, int *line, int flags);
 int               mutt_rmtree             (const char *path);
 int               mutt_rx_sanitize_string (char *dest, size_t destlen, const char *src);
 void              mutt_sanitize_filename  (char *f, short slash);
+void              mutt_set_mtime          (const char *from, const char *to);
+void              mutt_touch_atime        (int f);
 void              mutt_unlink             (const char *s);
+void              mutt_unlink_empty       (const char *path);
+int               mutt_unlock_file        (const char *path, int fd);
 int               safe_fclose             (FILE **f);
 FILE *            safe_fopen              (const char *path, const char *mode);
 int               safe_fsync_close        (FILE **f);
