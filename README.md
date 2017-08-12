@@ -11,11 +11,13 @@
 - `test_lib` calls a function from each of the library source files
 - `test_hcache` creates an entry in the header cache and retrieves it
 
-## Library (92 functions)
+## Library (106 functions)
 
 ### base64
 
 ```c
+const int Index_64[];
+
 int               mutt_from_base64        (char *out, const char *in);
 size_t            mutt_to_base64          (char *out, const char *cin, size_t len, size_t olen);
 ```
@@ -35,10 +37,17 @@ int               mutt_buffer_printf      (struct Buffer *buf, const char *fmt, 
 ### date
 
 ```c
+const char *const  Weekdays[];
+const char *const  Months[];
+const struct Tz T imeZones[];
+
+bool              is_day_name             (const char *s);
+int               mutt_check_month        (const char *s);
 time_t            mutt_local_tz           (time_t t);
 char *            mutt_make_date          (char *buf, size_t buflen);
 time_t            mutt_mktime             (struct tm *t, int local);
 void              mutt_normalize_time     (struct tm *tm);
+time_t            mutt_parse_date         (const char *s, const struct Tz **tz_out);
 ```
 
 ### debug
@@ -86,15 +95,15 @@ int               safe_symlink            (const char *oldpath, const char *newp
 
 ```c
 struct Hash *     hash_create             (int nelem, int flags);
-void              hash_delete             (struct Hash *table, const char *strkey, const void *data, void(*destroy)(void *));
-void              hash_destroy            (struct Hash **ptr, void(*destroy)(void *));
+void              hash_delete             (struct Hash *table, const char *strkey, const void *data, void (*destroy)(void *));
+void              hash_destroy            (struct Hash **ptr, void (*destroy)(void *));
 struct HashElem * hash_find_bucket        (const struct Hash *table, const char *strkey);
 void *            hash_find               (const struct Hash *table, const char *strkey);
 struct HashElem * hash_find_elem          (const struct Hash *table, const char *strkey);
 int               hash_insert             (struct Hash *table, const char *strkey, void *data);
 struct HashElem * hash_walk               (const struct Hash *table, struct HashWalkState *state);
 struct Hash *     int_hash_create         (int nelem, int flags);
-void              int_hash_delete         (struct Hash *table, unsigned int intkey, const void *data, void(*destroy)(void *));
+void              int_hash_delete         (struct Hash *table, unsigned int intkey, const void *data, void (*destroy)(void *));
 void *            int_hash_find           (const struct Hash *table, unsigned int intkey);
 int               int_hash_insert         (struct Hash *table, unsigned int intkey, void *data);
 ```
@@ -141,6 +150,8 @@ void              sha1_update             (struct Sha1Ctx *context, const unsign
 
 ```c
 int               is_email_wsp            (char c);
+size_t            lwslen                  (const char *s, size_t n);
+size_t            lwsrlen                 (const char *s, size_t n);
 int               mutt_atoi               (const char *str, int *dst);
 int               mutt_atos               (const char *str, short *dst);
 void              mutt_remove_trailing_ws (char *s);
@@ -158,9 +169,13 @@ int               mutt_strncmp            (const char *a, const char *b, size_t 
 void              mutt_str_replace        (char **p, const char *s);
 char *            mutt_substrcpy          (char *dest, const char *begin, const char *end, size_t destlen);
 char *            mutt_substrdup          (const char *begin, const char *end);
+const char *      next_word               (const char *s);
+void              rfc822_dequote_comment  (char *s);
 char *            safe_strcat             (char *d, size_t l, const char *s);
 char *            safe_strdup             (const char *s);
 char *            safe_strncat            (char *d, size_t l, const char *s, size_t sl);
 char *            skip_email_wsp          (const char *s);
 char *            strfcpy                 (char *dest, const char *src, size_t dlen);
+char *            strnfcpy                (char *dest, char *src, size_t size, size_t dlen);
 ```
+

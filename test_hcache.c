@@ -5,6 +5,11 @@
 #include "lib/lib.h"
 #include "hcache/hcache.h"
 
+struct Envelope *mutt_new_envelope(void)
+{
+  return NULL;
+}
+
 int mutt_convert_string(char **ps, const char *from, const char *to, int flags)
 {
   printf("mutt_convert_string\n");

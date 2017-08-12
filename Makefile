@@ -12,16 +12,16 @@ CFLAGS	+= -O0
 CFLAGS	+= -I$(NEO)
 CFLAGS	+= -fno-omit-frame-pointer
 
-LIB_LDFLAGS = -L$(NEO)/lib -llib
+MUTT_LDFLAGS = -L$(NEO)/lib -lmutt
 HC_LDFLAGS = -L$(NEO)/hcache -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
 
 all:	$(OUT)
 
 test_lib: test_lib.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(LIB_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
 
 test_hcache: test_hcache.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(HC_LDFLAGS) $(LIB_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(HC_LDFLAGS) $(MUTT_LDFLAGS)
 
 clean:
 	$(RM) $(OUT) cache tmp
