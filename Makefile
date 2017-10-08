@@ -12,8 +12,8 @@ CFLAGS	+= -O0
 CFLAGS	+= -I$(NEO)
 CFLAGS	+= -fno-omit-frame-pointer
 
-MUTT_LDFLAGS = -L$(NEO)/lib -lmutt
-HC_LDFLAGS = -L$(NEO)/hcache -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
+MUTT_LDFLAGS = -L$(NEO) -lmutt
+HC_LDFLAGS = -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
 
 all:	$(OUT)
 

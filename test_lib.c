@@ -24,6 +24,7 @@ void test_buffer(void)
   // struct Buffer *   mutt_buffer_init        (struct Buffer *b);
   // struct Buffer *   mutt_buffer_new         (void);
   // int               mutt_buffer_printf      (struct Buffer *buf, const char *fmt, ...);
+  // void              mutt_buffer_reset       (struct Buffer *b);
 
   struct Buffer *b = NULL;
   mutt_buffer_free(&b);
@@ -31,13 +32,15 @@ void test_buffer(void)
 
 void test_date(void)
 {
+  // int               imap_make_date          (char *buf, size_t buflen, time_t timestamp);
+  // time_t            imap_parse_date         (char *s);
   // bool              is_day_name             (const char *s);
   // int               mutt_check_month        (const char *s);
   // time_t            mutt_local_tz           (time_t t);
   // char *            mutt_make_date          (char *buf, size_t buflen);
   // time_t            mutt_mktime             (struct tm *t, int local);
   // void              mutt_normalize_time     (struct tm *tm);
-  // time_t            mutt_parse_date         (const char *s, const struct Tz **tz_out);
+  // time_t            mutt_parse_date         (const char *s, struct Tz *tz_out);
 
   mutt_local_tz(1501596063);
 }
@@ -62,8 +65,8 @@ void test_file(void)
   // int               mutt_mkdir              (const char *path, mode_t mode);
   // size_t            mutt_quote_filename     (char *d, size_t l, const char *f);
   // char *            mutt_read_line          (char *s, size_t *size, FILE *fp, int *line, int flags);
+  // int               mutt_regex_sanitize_string(char *dest, size_t destlen, const char *src);
   // int               mutt_rmtree             (const char *path);
-  // int               mutt_rx_sanitize_string (char *dest, size_t destlen, const char *src);
   // void              mutt_sanitize_filename  (char *f, short slash);
   // void              mutt_set_mtime          (const char *from, const char *to);
   // void              mutt_touch_atime        (int f);
@@ -99,7 +102,17 @@ void test_hash(void)
   hash_destroy(&h, NULL);
 }
 
-void test_md5(void)
+void test_mapping(void)
+{
+  // const char *      mutt_getnamebyvalue     (int val, const struct Mapping *map);
+  // int               mutt_getvaluebyname     (const char *name, const struct Mapping *map);
+
+  struct Mapping m[] = { { "apple", 1 }, { NULL, 0 } };
+
+  mutt_getnamebyvalue(1, m);
+}
+
+void test_md5 (void)
 {
   // void *            md5_buffer              (const char *buffer, size_t len, void *resblock);
   // void *            md5_finish_ctx          (struct Md5Ctx *ctx, void *resbuf);
@@ -149,6 +162,7 @@ void test_sha1(void)
 
 void test_string(void)
 {
+  // int               imap_wordcasecmp        (const char *a, const char *b);
   // int               is_email_wsp            (char c);
   // size_t            lwslen                  (const char *s, size_t n);
   // size_t            lwsrlen                 (const char *s, size_t n);
@@ -157,6 +171,7 @@ void test_string(void)
   // void              mutt_remove_trailing_ws (char *s);
   // char *            mutt_skip_whitespace    (char *p);
   // void              mutt_str_adjust         (char **p);
+  // void              mutt_str_append_item    (char **p, const char *item, int sep);
   // int               mutt_strcasecmp         (const char *a, const char *b);
   // const char *      mutt_strchrnul          (const char *s, char c);
   // int               mutt_strcmp             (const char *a, const char *b);
@@ -171,6 +186,7 @@ void test_string(void)
   // char *            mutt_substrdup          (const char *begin, const char *end);
   // const char *      next_word               (const char *s);
   // void              rfc822_dequote_comment  (char *s);
+  // const char *      rstrnstr                (const char *haystack, size_t haystack_length, const char *needle);
   // char *            safe_strcat             (char *d, size_t l, const char *s);
   // char *            safe_strdup             (const char *s);
   // char *            safe_strncat            (char *d, size_t l, const char *s, size_t sl);
@@ -196,6 +212,7 @@ int main()
   test_debug();
   test_file();
   test_hash();
+  test_mapping();
   test_md5();
   test_memory();
   test_message();
