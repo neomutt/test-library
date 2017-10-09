@@ -2,7 +2,7 @@ NEO	?= ../neo
 CC	= gcc
 RM	= rm -fr
 
-OUT	= test_conn test_email test_hcache test_lib test_maildir test_mbox
+OUT	= test_conn test_email test_hcache test_lib test_maildir test_mbox test_address test_date test_imap
 
 CFLAGS	+= -DDEBUG
 CFLAGS	+= -Wall
@@ -14,12 +14,19 @@ CFLAGS	+= -fno-omit-frame-pointer
 
 LDFLAGS	+= -L$(NEO)
 
+# CFLAGS	+= -fsanitize=undefined
+# LDFLAGS	+= -fsanitize=undefined
+
+# CFLAGS	+=-fsanitize=address -fsanitize-recover=address
+# LDFLAGS	+=-fsanitize=address -fsanitize-recover=address
+
 CONN_LDFLAGS	= -lconn -lemail -lidn2 -lgnutls
 EMAIL_LDFLAGS	= -lemail -lidn2
 HCACHE_LDFLAGS	= -lhcache -lemail -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
+IMAP_LDFLAGS	= -limap
 MAILDIR_LDFLAGS	= -lmaildir
 MBOX_LDFLAGS	= -lmbox
-MUTT_LDFLAGS	= -lmutt -lidn2
+MUTT_LDFLAGS	= -lemail -lmutt -lidn2
 
 all:	$(NEO) $(OUT)
 
@@ -31,6 +38,15 @@ test_email: test_email.c
 
 test_hcache: test_hcache.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(HCACHE_LDFLAGS) $(MUTT_LDFLAGS)
+
+test_date: test_date.c
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
+
+test_imap: test_imap.c
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
+
+test_address: test_address.c
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
 
 test_lib: test_lib.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
