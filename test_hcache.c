@@ -2,8 +2,15 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <string.h>
-#include "lib/lib.h"
+#include "mutt/mutt.h"
 #include "hcache/hcache.h"
+
+bool HeaderCacheCompress;
+
+struct Header *mutt_new_header(void)
+{
+  return NULL;
+}
 
 struct Envelope *mutt_new_envelope(void)
 {
@@ -18,7 +25,7 @@ int mutt_convert_string(char **ps, const char *from, const char *to, int flags)
 
 void mutt_encode_path(char *dest, size_t dlen, const char *src)
 {
-  strfcpy(dest, src, dlen);
+  mutt_str_strfcpy(dest, src, dlen);
   printf("mutt_encode_path: %s\n", src);
 }
 
