@@ -7,12 +7,17 @@
 
 bool HeaderCacheCompress;
 
+struct Address *mutt_addr_new(void)
+{
+  return NULL;
+}
+
 struct Header *mutt_new_header(void)
 {
   return NULL;
 }
 
-struct Envelope *mutt_new_envelope(void)
+struct Envelope *mutt_env_new(void)
 {
   return NULL;
 }

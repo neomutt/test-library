@@ -14,7 +14,7 @@ CFLAGS	+= -fno-omit-frame-pointer
 
 LDFLAGS	+= -L$(NEO)
 
-MUTT_LDFLAGS	= -lmutt
+MUTT_LDFLAGS	= -lmutt -lidn
 HCACHE_LDFLAGS	= -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
 CONN_LDFLAGS	= -lconn -lidn -lgnutls
 
