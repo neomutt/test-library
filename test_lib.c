@@ -1,3 +1,4 @@
+#include <locale.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
@@ -144,7 +145,48 @@ void test_idna(void)
   // char *              mutt_idna_local_to_intl     (const char *user, const char *domain);
   // int                 mutt_idna_to_ascii_lz       (const char *input, char **output, int flags);
 
-  mutt_idna_local_to_intl("john.doe", "example.com");
+  setlocale(LC_ALL, "");
+
+  char *mailbox = NULL;
+
+  IdnEncode = true;
+  IdnDecode = true;
+
+  mutt_str_replace(&Charset, "utf-8");
+
+  char *user = "joe";
+  char *domain1 = "\360\237\222\251.la";
+  char *domain2 = "xn--pxaix.la";
+
+  mailbox = mutt_idna_local_to_intl(user, domain1);
+  if (mailbox)
+  {
+    printf("%s@%s -> %s\n", user, domain1, mailbox);
+    FREE(&mailbox);
+  }
+
+  mailbox = mutt_idna_intl_to_local(user, domain2, 0);
+  if (mailbox)
+  {
+    printf("%s@%s -> %s\n", user, domain2, mailbox);
+    FREE(&mailbox);
+  }
+
+  FREE(&Charset);
+
+  char *input = "\316\264\317\200\316\270.com";
+  char *output = NULL;
+
+  int rc = mutt_idna_to_ascii_lz(input, &output, 0);
+  if (rc == 0)
+  {
+    printf("%s -> %s\n", input, output);
+    FREE(&output);
+  }
+  else
+  {
+    printf("failed: %d\n", rc);
+  }
 }
 
 void test_list(void)
