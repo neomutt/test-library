@@ -8,6 +8,7 @@
 
 ## Samples
 
+- `test_address` creates an address object
 - `test_conn` looks up a hostname
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
