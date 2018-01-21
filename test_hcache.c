@@ -59,7 +59,6 @@ int mx_unlock_file(const char *path, int fd)
 
 
 char *Charset;
-int Charset_is_utf8 = 0;
 char *HeaderCacheBackend;
 char *HeaderCachePageSize;
 unsigned char Options[50];
