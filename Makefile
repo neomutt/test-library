@@ -2,7 +2,7 @@ NEO	?= ../neo
 CC	= gcc
 RM	= rm -fr
 
-OUT	= test_lib test_hcache test_conn test_address
+OUT	= test_lib test_hcache test_conn
 
 CFLAGS	+= -DDEBUG
 CFLAGS	+= -Wall
@@ -17,12 +17,8 @@ LDFLAGS	+= -L$(NEO)
 MUTT_LDFLAGS	= -lmutt -lidn
 HCACHE_LDFLAGS	= -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
 CONN_LDFLAGS	= -lconn -lidn -lgnutls
-ADDR_LDFLAGS	= $(NEO)/address.o
 
 all:	$(NEO) $(OUT)
-
-test_address: test_address.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_lib: test_lib.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)

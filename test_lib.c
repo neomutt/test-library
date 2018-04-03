@@ -6,6 +6,38 @@
 #include <errno.h>
 #include "mutt/mutt.h"
 
+void test_address(void)
+{
+  // struct Address *    mutt_addr_append                  (struct Address **a, struct Address *b, bool prune);
+  // void                mutt_addr_cat                     (char *buf, size_t buflen, const char *value, const char *specials);
+  // bool                mutt_addr_cmp_strict              (const struct Address *a, const struct Address *b);
+  // bool                mutt_addr_cmp                     (struct Address *a, struct Address *b);
+  // struct Address *    mutt_addr_copy_list               (struct Address *addr, bool prune);
+  // struct Address *    mutt_addr_copy                    (struct Address *addr);
+  // const char *        mutt_addr_for_display             (struct Address *a);
+  // void                mutt_addr_free                    (struct Address **p);
+  // int                 mutt_addr_has_recips              (struct Address *a);
+  // bool                mutt_addr_is_intl                 (struct Address *a);
+  // bool                mutt_addr_is_local                (struct Address *a);
+  // int                 mutt_addrlist_to_intl             (struct Address *a, char **err);
+  // int                 mutt_addrlist_to_local            (struct Address *a);
+  // int                 mutt_addr_mbox_to_udomain         (const char *mbox, char **user, char **domain);
+  // struct Address *    mutt_addr_new                     (void);
+  // struct Address *    mutt_addr_parse_list2             (struct Address *p, const char *s);
+  // struct Address *    mutt_addr_parse_list              (struct Address *top, const char *s);
+  // void                mutt_addr_qualify                 (struct Address *addr, const char *host);
+  // int                 mutt_addr_remove_from_list        (struct Address **a, const char *mailbox);
+  // bool                mutt_addr_search                  (struct Address *a, struct Address *lst);
+  // void                mutt_addr_set_intl                (struct Address *a, char *intl_mailbox);
+  // void                mutt_addr_set_local               (struct Address *a, char *local_mailbox);
+  // bool                mutt_addr_valid_msgid             (const char *msgid);
+  // size_t              mutt_addr_write                   (char *buf, size_t buflen, struct Address *addr, bool display);
+  // void                mutt_addr_write_single            (char *buf, size_t buflen, struct Address *addr, bool display);
+
+  struct Address *a = mutt_addr_new();
+  mutt_addr_free(&a);
+}
+
 void test_base64(void)
 {
   // int                 mutt_b64_decode                   (char *out, const char *in);
@@ -67,6 +99,7 @@ void test_date(void)
   // char   *            mutt_date_make_date               (char *buf, size_t buflen);
   // int                 mutt_date_make_imap               (char *buf, size_t buflen, time_t timestamp);
   // time_t              mutt_date_make_time               (struct tm *t, int local);
+  // int                 mutt_date_make_tls                (char *buf, size_t buflen, time_t timestamp);
   // void                mutt_date_normalize_time          (struct tm *tm);
   // time_t              mutt_date_parse_date              (const char *s, struct Tz *tz_out);
   // time_t              mutt_date_parse_imap              (char *s);
@@ -74,12 +107,18 @@ void test_date(void)
   mutt_date_local_tz(1501596063);
 }
 
-void test_debug(void)
+void test_envlist(void)
 {
-  // int                 mutt_debug_real                   (const char *function, const char *file, int line, int level, ...);
+  // void                mutt_envlist_free                 (void);
+  // char **             mutt_envlist_getlist              (void);
+  // void                mutt_envlist_init                 (char *envp[]);
+  // bool                mutt_envlist_set                  (const char *name, const char *value, bool overwrite);
+  // bool                mutt_envlist_unset                (const char *name);
 
-  const char *user = "Will Robinson";
-  mutt_debug(1, "Danger, %s!\n", user);
+  char *dummy[] = { "apple", "banana", "cherry", NULL };
+
+  mutt_envlist_init(dummy);
+  mutt_envlist_free();
 }
 
 void test_file(void)
@@ -211,6 +250,26 @@ void test_list(void)
     printf("found\n");
 }
 
+void test_logging(void)
+{
+  // int                 log_disp_file                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
+  // int                 log_disp_queue                    (time_t stamp, const char *file, int line, const char *function, int level, ...);
+  // int                 log_disp_terminal                 (time_t stamp, const char *file, int line, const char *function, int level, ...);
+  // void                log_file_close                    (bool verbose);
+  // int                 log_file_open                     (bool verbose);
+  // bool                log_file_running                  (void);
+  // int                 log_file_set_filename             (const char *file, bool verbose);
+  // int                 log_file_set_level                (int level, bool verbose);
+  // void                log_file_set_version              (const char *version);
+  // int                 log_queue_add                     (struct LogLine *ll);
+  // void                log_queue_empty                   (void);
+  // void                log_queue_flush                   (log_dispatcher_t disp);
+  // int                 log_queue_save                    (FILE *fp);
+  // void                log_queue_set_max_size            (int size);
+
+  log_file_set_level(3, false);
+}
+
 void test_mapping(void)
 {
   // const char *        mutt_map_get_name                 (int val, const struct Mapping *map);
@@ -241,13 +300,13 @@ void test_mbyte(void)
 
 void test_md5(void)
 {
-  // void *              mutt_md5_buf                      (const char *buffer, size_t len, void *resblock);
+  // void *              mutt_md5_bytes                    (const void *buffer, size_t len, void *resbuf);
+  // void *              mutt_md5                          (const char *string, void *resbuf);
   // void *              mutt_md5_finish_ctx               (struct Md5Ctx *ctx, void *resbuf);
   // void                mutt_md5_init_ctx                 (struct Md5Ctx *ctx);
-  // void                mutt_md5_process_block            (const void *buffer, size_t len, struct Md5Ctx *ctx);
   // void                mutt_md5_process_bytes            (const void *buffer, size_t len, struct Md5Ctx *ctx);
-  // void *              mutt_md5_read_ctx                 (const struct Md5Ctx *ctx, void *resbuf);
-  // int                 mutt_md5_stream                   (FILE *stream, void *resblock);
+  // void                mutt_md5_process                  (const char *string, struct Md5Ctx *ctx);
+  // void                mutt_md5_toascii                  (const void *digest, char *resbuf);
 
   struct Md5Ctx m;
   mutt_md5_init_ctx(&m);
@@ -264,16 +323,17 @@ void test_memory(void)
   FREE(&ptr);
 }
 
-void test_message(void)
+void test_parameter(void)
 {
-  // void                mutt_error                        (const char *format, ...);
-  // void                mutt_message                      (const char *format, ...);
-  // void                mutt_perror                       (const char *message);
+  // int                 mutt_param_cmp_strict             (const struct ParameterList *p1, const struct ParameterList *p2);
+  // void                mutt_param_delete                 (struct ParameterList *p, const char *attribute);
+  // void                mutt_param_free_one               (struct Parameter **p);
+  // void                mutt_param_free                   (struct ParameterList *p);
+  // char *              mutt_param_get                    (const struct ParameterList *p, const char *s);
+  // struct Parameter *  mutt_param_new                    (void);
+  // void                mutt_param_set                    (struct ParameterList *p, const char *attribute, const char *value);
 
-  mutt_message("mutt_message");
-  mutt_error("mutt_error");
-  errno = EHOSTUNREACH;
-  mutt_perror("mutt_perror");
+  mutt_param_cmp_strict(NULL, NULL);
 }
 
 void test_regex(void)
@@ -309,6 +369,7 @@ void test_rfc2047(void)
 
   printf("%s\n", str);
   FREE(&str);
+  FREE(&Charset);
 }
 
 void test_sha1(void)
@@ -365,14 +426,14 @@ void test_string(void)
   // int                 mutt_str_strcmp                   (const char *a, const char *b);
   // int                 mutt_str_strcoll                  (const char *a, const char *b);
   // char *              mutt_str_strdup                   (const char *s);
-  // char *              mutt_str_strfcpy                  (char *dest, const char *src, size_t dlen);
+  // size_t              mutt_str_strfcpy                  (char *dest, const char *src, size_t dsize);
   // const char *        mutt_str_stristr                  (const char *haystack, const char *needle);
   // size_t              mutt_str_strlen                   (const char *a);
   // char *              mutt_str_strlower                 (char *s);
   // int                 mutt_str_strncasecmp              (const char *a, const char *b, size_t l);
   // char *              mutt_str_strncat                  (char *d, size_t l, const char *s, size_t sl);
   // int                 mutt_str_strncmp                  (const char *a, const char *b, size_t l);
-  // char *              mutt_str_strnfcpy                 (char *dest, char *src, size_t size, size_t dlen);
+  // size_t              mutt_str_strnfcpy                 (char *dest, const char *src, size_t n, size_t dsize);
   // char *              mutt_str_substr_cpy               (char *dest, const char *begin, const char *end, size_t destlen);
   // char *              mutt_str_substr_dup               (const char *begin, const char *end);
   // const char *        mutt_str_sysexit                  (int e);
@@ -390,20 +451,22 @@ void test_exit(void)
 
 int main()
 {
+  test_address();
   test_base64();
   test_buffer();
   test_charset();
   test_date();
-  test_debug();
+  test_envlist();
   test_file();
   test_hash();
   test_idna();
   test_list();
+  test_logging();
   test_mapping();
   test_mbyte();
   test_md5();
   test_memory();
-  test_message();
+  test_parameter();
   test_regex();
   test_rfc2047();
   test_sha1();
