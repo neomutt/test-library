@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (245 functions)
+## Library (250 functions)
 
 ### address
 
@@ -80,10 +80,12 @@ char *AssumedCharset;
 char *Charset;
 bool CharsetIsUtf8;
 wchar_t ReplacementChar;
+const struct MimeNames PreferredMimeNames[];
 
 void                mutt_ch_canonical_charset         (char *buf, size_t buflen, const char *name);
 const char *        mutt_ch_charset_lookup            (const char *chs);
 bool                mutt_ch_check_charset             (const char *cs, bool strict);
+int                 mutt_ch_check                     (const char *s, size_t slen, const char *from, const char *to);
 char *              mutt_ch_choose                    (const char *fromcode, const char *charsets, char *u, size_t ulen, char **d, size_t *dlen);
 int                 mutt_ch_chscmp                    (const char *cs1, const char *cs2);
 int                 mutt_ch_convert_nonmime_string    (char **ps);
@@ -93,22 +95,23 @@ struct FgetConv *   mutt_ch_fgetconv_open             (FILE *file, const char *f
 char *              mutt_ch_fgetconvs                 (char *buf, size_t buflen, struct FgetConv *fc);
 int                 mutt_ch_fgetconv                  (struct FgetConv *fc);
 char *              mutt_ch_get_default_charset       (void);
-size_t              mutt_ch_iconv                     (iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft, const char **inrepls, const char *outrepl);
+char *              mutt_ch_get_langinfo_charset      (void);
+size_t              mutt_ch_iconv                     (iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft, const char **inrepls, const char *outrepl, int *iconverrno);
 const char *        mutt_ch_iconv_lookup              (const char *chs);
 iconv_t             mutt_ch_iconv_open                (const char *tocode, const char *fromcode, int flags);
 bool                mutt_ch_lookup_add                (enum LookupType type, const char *pat, const char *replace, struct Buffer *err);
 void                mutt_ch_lookup_remove             (void);
-void                mutt_ch_set_charset               (char *charset);
-void                mutt_ch_set_langinfo_charset      (void);
+void                mutt_ch_set_charset               (const char *charset);
 ```
 
 ### date
 
 ```c
+time_t              mutt_date_add_timeout             (time_t now, long timeout);
 int                 mutt_date_check_month             (const char *s);
 bool                mutt_date_is_day_name             (const char *s);
 time_t              mutt_date_local_tz                (time_t t);
-char   *            mutt_date_make_date               (char *buf, size_t buflen);
+char *              mutt_date_make_date               (char *buf, size_t buflen);
 int                 mutt_date_make_imap               (char *buf, size_t buflen, time_t timestamp);
 time_t              mutt_date_make_time               (struct tm *t, int local);
 int                 mutt_date_make_tls                (char *buf, size_t buflen, time_t timestamp);
@@ -136,6 +139,8 @@ void                mutt_exit                         (int code);
 ### file
 
 ```c
+char *Tmpdir;
+
 const char *        mutt_file_basename                (const char *f);
 int                 mutt_file_check_empty             (const char *path);
 int                 mutt_file_chmod_add               (const char *path, mode_t mode);
@@ -148,12 +153,13 @@ char *              mutt_file_concat_path             (char *d, const char *dir,
 int                 mutt_file_copy_bytes              (FILE *in, FILE *out, size_t size);
 int                 mutt_file_copy_stream             (FILE *fin, FILE *fout);
 time_t              mutt_file_decrease_mtime          (const char *f, struct stat *st);
-const char *        mutt_file_dirname                 (const char *p);
+char *              mutt_file_dirname                 (const char *path);
 int                 mutt_file_fclose                  (FILE **f);
 FILE *              mutt_file_fopen                   (const char *path, const char *mode);
 int                 mutt_file_fsync_close             (FILE **f);
 int                 mutt_file_lock                    (int fd, int excl, int timeout);
 int                 mutt_file_mkdir                   (const char *path, mode_t mode);
+FILE *              mutt_file_mkstemp_full            (const char *file, int line, const char *func);
 int                 mutt_file_open                    (const char *path, int flags);
 size_t              mutt_file_quote_filename          (char *d, size_t l, const char *f);
 char *              mutt_file_read_keyword            (const char *file, char *buffer, size_t buflen);
@@ -161,12 +167,12 @@ char *              mutt_file_read_line               (char *s, size_t *size, FI
 int                 mutt_file_rename                  (char *oldfile, char *newfile);
 int                 mutt_file_rmtree                  (const char *path);
 int                 mutt_file_safe_rename             (const char *src, const char *target);
-void                mutt_file_sanitize_filename       (char *f, short slash);
+void                mutt_file_sanitize_filename       (char *f, bool slash);
 int                 mutt_file_sanitize_regex          (char *dest, size_t destlen, const char *src);
 void                mutt_file_set_mtime               (const char *from, const char *to);
 int                 mutt_file_symlink                 (const char *oldpath, const char *newpath);
 int                 mutt_file_to_absolute_path        (char *path, const char *reference);
-void                mutt_file_touch_atime             (int f);
+void                mutt_file_touch_atime             (int fd);
 void                mutt_file_unlink                  (const char *s);
 void                mutt_file_unlink_empty            (const char *path);
 int                 mutt_file_unlock                  (int fd);
@@ -175,18 +181,18 @@ int                 mutt_file_unlock                  (int fd);
 ### hash
 
 ```c
-struct Hash *       mutt_hash_create                  (int nelem, int flags);
+struct Hash *       mutt_hash_create                  (size_t nelem, int flags);
 void                mutt_hash_delete                  (struct Hash *table, const char *strkey, const void *data);
 void                mutt_hash_destroy                 (struct Hash **ptr);
 struct HashElem *   mutt_hash_find_bucket             (const struct Hash *table, const char *strkey);
 void *              mutt_hash_find                    (const struct Hash *table, const char *strkey);
 struct HashElem *   mutt_hash_find_elem               (const struct Hash *table, const char *strkey);
 struct HashElem *   mutt_hash_insert                  (struct Hash *table, const char *strkey, void *data);
-struct Hash *       mutt_hash_int_create              (int nelem, int flags);
+struct Hash *       mutt_hash_int_create              (size_t nelem, int flags);
 void                mutt_hash_int_delete              (struct Hash *table, unsigned int intkey, const void *data);
 void *              mutt_hash_int_find                (const struct Hash *table, unsigned int intkey);
 struct HashElem *   mutt_hash_int_insert              (struct Hash *table, unsigned int intkey, void *data);
-void                mutt_hash_set_destructor          (struct Hash *hash, hash_destructor fn, intptr_t fn_data);
+void                mutt_hash_set_destructor          (struct Hash *table, hash_destructor fn, intptr_t fn_data);
 struct HashElem *   mutt_hash_typed_insert            (struct Hash *table, const char *strkey, int type, void *data);
 struct HashElem *   mutt_hash_walk                    (const struct Hash *table, struct HashWalkState *state);
 ```
@@ -199,6 +205,7 @@ bool IdnEncode;
 
 char *              mutt_idna_intl_to_local           (const char *user, const char *domain, int flags);
 char *              mutt_idna_local_to_intl           (const char *user, const char *domain);
+const char *        mutt_idna_print_version           (void);
 int                 mutt_idna_to_ascii_lz             (const char *input, char **output, int flags);
 ```
 
@@ -209,6 +216,7 @@ void                mutt_list_clear                   (struct ListHead *h);
 int                 mutt_list_compare                 (const struct ListHead *ah, const struct ListHead *bh);
 struct ListNode *   mutt_list_find                    (struct ListHead *h, const char *data);
 void                mutt_list_free                    (struct ListHead *h);
+void                mutt_list_free_type               (struct ListHead *h, list_free_t fn);
 struct ListNode *   mutt_list_insert_after            (struct ListHead *h, struct ListNode *n, char *s);
 struct ListNode *   mutt_list_insert_head             (struct ListHead *h, char *s);
 struct ListNode *   mutt_list_insert_tail             (struct ListHead *h, char *s);
@@ -218,6 +226,8 @@ bool                mutt_list_match                   (const char *s, struct Lis
 ### logging
 
 ```c
+log_dispatcher_t MuttLogger;
+
 int                 log_disp_file                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
 int                 log_disp_queue                    (time_t stamp, const char *file, int line, const char *function, int level, ...);
 int                 log_disp_terminal                 (time_t stamp, const char *file, int line, const char *function, int level, ...);
@@ -244,11 +254,11 @@ int                 mutt_map_get_value                (const char *name, const s
 ### mbyte
 
 ```c
-bool OPT_LOCALES;
+bool OptLocales;
 
 int                 mutt_mb_charlen                   (const char *s, int *width);
 int                 mutt_mb_filter_unprintable        (char **s);
-bool                mutt_mb_get_initials              (const char *name, char *buf, int buflen);
+bool                mutt_mb_get_initials              (const char *name, char *buf, size_t buflen);
 bool                mutt_mb_is_display_corrupting_utf8(wchar_t wc);
 bool                mutt_mb_is_lower                  (const char *s);
 bool                mutt_mb_is_shell_char             (wchar_t ch);
@@ -293,7 +303,7 @@ const char MimeSpecials[];
 ### parameter
 
 ```c
-int                 mutt_param_cmp_strict             (const struct ParameterList *p1, const struct ParameterList *p2);
+bool                mutt_param_cmp_strict             (const struct ParameterList *p1, const struct ParameterList *p2);
 void                mutt_param_delete                 (struct ParameterList *p, const char *attribute);
 void                mutt_param_free_one               (struct Parameter **p);
 void                mutt_param_free                   (struct ParameterList *p);
@@ -354,7 +364,7 @@ void                mutt_sig_unblock                  (void);
 
 ```c
 void                mutt_str_adjust                   (char **p);
-void                mutt_str_append_item              (char **p, const char *item, int sep);
+void                mutt_str_append_item              (char **str, const char *item, int sep);
 int                 mutt_str_atoi                     (const char *str, int *dst);
 int                 mutt_str_atol                     (const char *str, long *dst);
 int                 mutt_str_atos                     (const char *str, short *dst);
@@ -364,7 +374,7 @@ void                mutt_str_dequote_comment          (char *s);
 const char *        mutt_str_find_word                (const char *src);
 const char *        mutt_str_getenv                   (const char *name);
 bool                mutt_str_is_ascii                 (const char *p, size_t len);
-int                 mutt_str_is_email_wsp             (char c);
+bool                mutt_str_is_email_wsp             (char c);
 size_t              mutt_str_lws_len                  (const char *s, size_t n);
 size_t              mutt_str_lws_rlen                 (const char *s, size_t n);
 const char *        mutt_str_next_word                (const char *s);
@@ -379,7 +389,7 @@ char *              mutt_str_strcat                   (char *d, size_t l, const 
 const char *        mutt_str_strchrnul                (const char *s, char c);
 int                 mutt_str_strcmp                   (const char *a, const char *b);
 int                 mutt_str_strcoll                  (const char *a, const char *b);
-char *              mutt_str_strdup                   (const char *s);
+char *              mutt_str_strdup                   (const char *str);
 size_t              mutt_str_strfcpy                  (char *dest, const char *src, size_t dsize);
 const char *        mutt_str_stristr                  (const char *haystack, const char *needle);
 size_t              mutt_str_strlen                   (const char *a);

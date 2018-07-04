@@ -10,7 +10,7 @@ unsigned char Options[50];
 int SigInt;
 char *Preconnect;
 short ConnectTimeout;
-bool OPT_NO_CURSES;
+bool OptNoCurses;
 bool UseIpv6;
 
 /**

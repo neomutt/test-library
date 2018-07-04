@@ -6,13 +6,19 @@
 #include "hcache/hcache.h"
 
 bool HeaderCacheCompress;
+char *HeaderCachePagesize;
 
 struct Address *mutt_addr_new(void)
 {
   return NULL;
 }
 
-struct Header *mutt_new_header(void)
+struct Body *mutt_body_new(void)
+{
+  return NULL;
+}
+
+struct Header *mutt_header_new(void)
 {
   return NULL;
 }
