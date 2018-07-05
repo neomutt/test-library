@@ -1,3 +1,4 @@
+#include "config.h"
 #include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -8,7 +9,7 @@
 
 unsigned char Options[50];
 int SigInt;
-char *Preconnect;
+const char *Preconnect;
 short ConnectTimeout;
 bool OptNoCurses;
 bool UseIpv6;

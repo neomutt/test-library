@@ -1,3 +1,4 @@
+#include "config.h"
 #include <locale.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -10,21 +11,19 @@ void test_address(void)
 {
   // struct Address *    mutt_addr_append                  (struct Address **a, struct Address *b, bool prune);
   // void                mutt_addr_cat                     (char *buf, size_t buflen, const char *value, const char *specials);
-  // bool                mutt_addr_cmp_strict              (const struct Address *a, const struct Address *b);
   // bool                mutt_addr_cmp                     (struct Address *a, struct Address *b);
-  // struct Address *    mutt_addr_copy_list               (struct Address *addr, bool prune);
+  // bool                mutt_addr_cmp_strict              (const struct Address *a, const struct Address *b);
   // struct Address *    mutt_addr_copy                    (struct Address *addr);
+  // struct Address *    mutt_addr_copy_list               (struct Address *addr, bool prune);
   // const char *        mutt_addr_for_display             (struct Address *a);
   // void                mutt_addr_free                    (struct Address **p);
   // int                 mutt_addr_has_recips              (struct Address *a);
   // bool                mutt_addr_is_intl                 (struct Address *a);
   // bool                mutt_addr_is_local                (struct Address *a);
-  // int                 mutt_addrlist_to_intl             (struct Address *a, char **err);
-  // int                 mutt_addrlist_to_local            (struct Address *a);
   // int                 mutt_addr_mbox_to_udomain         (const char *mbox, char **user, char **domain);
   // struct Address *    mutt_addr_new                     (void);
-  // struct Address *    mutt_addr_parse_list2             (struct Address *p, const char *s);
   // struct Address *    mutt_addr_parse_list              (struct Address *top, const char *s);
+  // struct Address *    mutt_addr_parse_list2             (struct Address *p, const char *s);
   // void                mutt_addr_qualify                 (struct Address *addr, const char *host);
   // int                 mutt_addr_remove_from_list        (struct Address **a, const char *mailbox);
   // bool                mutt_addr_search                  (struct Address *a, struct Address *lst);
@@ -33,9 +32,23 @@ void test_address(void)
   // bool                mutt_addr_valid_msgid             (const char *msgid);
   // size_t              mutt_addr_write                   (char *buf, size_t buflen, struct Address *addr, bool display);
   // void                mutt_addr_write_single            (char *buf, size_t buflen, struct Address *addr, bool display);
+  // int                 mutt_addrlist_to_intl             (struct Address *a, char **err);
+  // int                 mutt_addrlist_to_local            (struct Address *a);
 
   struct Address *a = mutt_addr_new();
   mutt_addr_free(&a);
+}
+
+void test_attach(void)
+{
+  // void                mutt_actx_add_attach              (struct AttachCtx *actx, struct AttachPtr *attach);
+  // void                mutt_actx_add_body                (struct AttachCtx *actx, struct Body *new_body);
+  // void                mutt_actx_add_fp                  (struct AttachCtx *actx, FILE *new_fp);
+  // void                mutt_actx_free                    (struct AttachCtx **pactx);
+  // void                mutt_actx_free_entries            (struct AttachCtx *actx);
+
+  struct AttachCtx *actx = mutt_mem_calloc(1, sizeof (*actx));
+  mutt_actx_free(&actx);
 }
 
 void test_base64(void)
@@ -48,11 +61,21 @@ void test_base64(void)
   mutt_b64_encode(buffer, msg, strlen(msg), sizeof(buffer));
 }
 
+void test_body(void)
+{
+  // bool                mutt_body_cmp_strict              (const struct Body *b1, const struct Body *b2);
+  // void                mutt_body_free                    (struct Body **p);
+  // struct Body *       mutt_body_new                     (void);
+
+  struct Body *b = mutt_body_new();
+  mutt_body_free(&b);
+}
+
 void test_buffer(void)
 {
+  // size_t              mutt_buffer_add                   (struct Buffer *buf, const char *s, size_t len);
   // size_t              mutt_buffer_addch                 (struct Buffer *buf, char c);
   // size_t              mutt_buffer_addstr                (struct Buffer *buf, const char *s);
-  // size_t              mutt_buffer_add                   (struct Buffer *buf, const char *s, size_t len);
   // struct Buffer *     mutt_buffer_alloc                 (size_t size);
   // void                mutt_buffer_free                  (struct Buffer **p);
   // struct Buffer *     mutt_buffer_from                  (char *seed);
@@ -70,16 +93,16 @@ void test_charset(void)
 {
   // void                mutt_ch_canonical_charset         (char *buf, size_t buflen, const char *name);
   // const char *        mutt_ch_charset_lookup            (const char *chs);
-  // bool                mutt_ch_check_charset             (const char *cs, bool strict);
   // int                 mutt_ch_check                     (const char *s, size_t slen, const char *from, const char *to);
+  // bool                mutt_ch_check_charset             (const char *cs, bool strict);
   // char *              mutt_ch_choose                    (const char *fromcode, const char *charsets, char *u, size_t ulen, char **d, size_t *dlen);
   // int                 mutt_ch_chscmp                    (const char *cs1, const char *cs2);
   // int                 mutt_ch_convert_nonmime_string    (char **ps);
   // int                 mutt_ch_convert_string            (char **ps, const char *from, const char *to, int flags);
+  // int                 mutt_ch_fgetconv                  (struct FgetConv *fc);
   // void                mutt_ch_fgetconv_close            (struct FgetConv **fc);
   // struct FgetConv *   mutt_ch_fgetconv_open             (FILE *file, const char *from, const char *to, int flags);
   // char *              mutt_ch_fgetconvs                 (char *buf, size_t buflen, struct FgetConv *fc);
-  // int                 mutt_ch_fgetconv                  (struct FgetConv *fc);
   // char *              mutt_ch_get_default_charset       (void);
   // char *              mutt_ch_get_langinfo_charset      (void);
   // size_t              mutt_ch_iconv                     (iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft, const char **inrepls, const char *outrepl, int *iconverrno);
@@ -109,6 +132,19 @@ void test_date(void)
   mutt_date_local_tz(1501596063);
 }
 
+void test_envelope(void)
+{
+  // bool                mutt_env_cmp_strict               (const struct Envelope *e1, const struct Envelope *e2);
+  // void                mutt_env_free                     (struct Envelope **p);
+  // void                mutt_env_merge                    (struct Envelope *base, struct Envelope **extra);
+  // struct Envelope *   mutt_env_new                      (void);
+  // int                 mutt_env_to_intl                  (struct Envelope *env, char **tag, char **err);
+  // void                mutt_env_to_local                 (struct Envelope *e);
+
+  struct Envelope *env = mutt_env_new();
+  mutt_env_free(&env);
+}
+
 void test_envlist(void)
 {
   // void                mutt_envlist_free                 (void);
@@ -127,13 +163,13 @@ void test_file(void)
 {
   // const char *        mutt_file_basename                (const char *f);
   // int                 mutt_file_check_empty             (const char *path);
+  // int                 mutt_file_chmod                   (const char *path, mode_t mode);
   // int                 mutt_file_chmod_add               (const char *path, mode_t mode);
   // int                 mutt_file_chmod_add_stat          (const char *path, mode_t mode, struct stat *st);
-  // int                 mutt_file_chmod                   (const char *path, mode_t mode);
   // int                 mutt_file_chmod_rm                (const char *path, mode_t mode);
   // int                 mutt_file_chmod_rm_stat           (const char *path, mode_t mode, struct stat *st);
-  // char *              mutt_file_concatn_path            (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
   // char *              mutt_file_concat_path             (char *d, const char *dir, const char *fname, size_t l);
+  // char *              mutt_file_concatn_path            (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
   // int                 mutt_file_copy_bytes              (FILE *in, FILE *out, size_t size);
   // int                 mutt_file_copy_stream             (FILE *fin, FILE *fout);
   // time_t              mutt_file_decrease_mtime          (const char *f, struct stat *st);
@@ -169,8 +205,8 @@ void test_hash(void)
   // struct Hash *       mutt_hash_create                  (size_t nelem, int flags);
   // void                mutt_hash_delete                  (struct Hash *table, const char *strkey, const void *data);
   // void                mutt_hash_destroy                 (struct Hash **ptr);
-  // struct HashElem *   mutt_hash_find_bucket             (const struct Hash *table, const char *strkey);
   // void *              mutt_hash_find                    (const struct Hash *table, const char *strkey);
+  // struct HashElem *   mutt_hash_find_bucket             (const struct Hash *table, const char *strkey);
   // struct HashElem *   mutt_hash_find_elem               (const struct Hash *table, const char *strkey);
   // struct HashElem *   mutt_hash_insert                  (struct Hash *table, const char *strkey, void *data);
   // struct Hash *       mutt_hash_int_create              (size_t nelem, int flags);
@@ -183,6 +219,16 @@ void test_hash(void)
 
   struct Hash *h = NULL;
   mutt_hash_destroy(&h);
+}
+
+void test_header(void)
+{
+  // bool                mutt_header_cmp_strict            (const struct Header *h1, const struct Header *h2);
+  // void                mutt_header_free                  (struct Header **h);
+  // struct Header *     mutt_header_new                   (void);
+
+  struct Header *hdr = mutt_header_new();
+  mutt_header_free(&hdr);
 }
 
 void test_idna(void)
@@ -297,20 +343,20 @@ void test_mbyte(void)
   // void                mutt_mb_wcstombs                  (char *dest, size_t dlen, const wchar_t *src, size_t slen);
   // int                 mutt_mb_wcswidth                  (const wchar_t *s, size_t n);
   // int                 mutt_mb_wcwidth                   (wchar_t wc);
-  // size_t              mutt_mb_width_ceiling             (const wchar_t *s, size_t n, int w1);
   // int                 mutt_mb_width                     (const char *str, int col, bool display);
+  // size_t              mutt_mb_width_ceiling             (const wchar_t *s, size_t n, int w1);
 
   mutt_mb_charlen("hello", NULL);
 }
 
 void test_md5(void)
 {
-  // void *              mutt_md5_bytes                    (const void *buffer, size_t len, void *resbuf);
   // void *              mutt_md5                          (const char *string, void *resbuf);
+  // void *              mutt_md5_bytes                    (const void *buffer, size_t len, void *resbuf);
   // void *              mutt_md5_finish_ctx               (struct Md5Ctx *ctx, void *resbuf);
   // void                mutt_md5_init_ctx                 (struct Md5Ctx *ctx);
-  // void                mutt_md5_process_bytes            (const void *buffer, size_t len, struct Md5Ctx *ctx);
   // void                mutt_md5_process                  (const char *string, struct Md5Ctx *ctx);
+  // void                mutt_md5_process_bytes            (const void *buffer, size_t len, struct Md5Ctx *ctx);
   // void                mutt_md5_toascii                  (const void *digest, char *resbuf);
 
   struct Md5Ctx m;
@@ -332,8 +378,8 @@ void test_parameter(void)
 {
   // bool                mutt_param_cmp_strict             (const struct ParameterList *p1, const struct ParameterList *p2);
   // void                mutt_param_delete                 (struct ParameterList *p, const char *attribute);
-  // void                mutt_param_free_one               (struct Parameter **p);
   // void                mutt_param_free                   (struct ParameterList *p);
+  // void                mutt_param_free_one               (struct Parameter **p);
   // char *              mutt_param_get                    (const struct ParameterList *p, const char *s);
   // struct Parameter *  mutt_param_new                    (void);
   // void                mutt_param_set                    (struct ParameterList *p, const char *attribute, const char *value);
@@ -391,13 +437,13 @@ void test_sha1(void)
 void test_signal(void)
 {
   // void                mutt_sig_allow_interrupt          (int disposition);
-  // void                mutt_sig_block_system             (void);
   // void                mutt_sig_block                    (void);
+  // void                mutt_sig_block_system             (void);
   // void                mutt_sig_empty_handler            (int sig);
   // void                mutt_sig_exit_handler             (int sig);
   // void                mutt_sig_init                     (sig_handler_t sig_fn, sig_handler_t exit_fn);
-  // void                mutt_sig_unblock_system           (int catch);
   // void                mutt_sig_unblock                  (void);
+  // void                mutt_sig_unblock_system           (int catch);
 
   mutt_sig_unblock();
 }
@@ -447,6 +493,31 @@ void test_string(void)
   mutt_str_strlen("hello");
 }
 
+void test_tags(void)
+{
+  // void                driver_tags_free                  (struct TagHead *head);
+  // char *              driver_tags_get                   (struct TagHead *head);
+  // char *              driver_tags_get_transformed       (struct TagHead *head);
+  // char *              driver_tags_get_transformed_for   (char *name, struct TagHead *head);
+  // char *              driver_tags_get_with_hidden       (struct TagHead *head);
+  // bool                driver_tags_replace               (struct TagHead *head, char *tags);
+
+  driver_tags_free(NULL);
+}
+
+void test_thread(void)
+{
+  // void                clean_references                  (struct MuttThread *brk, struct MuttThread *cur);
+  // struct Header *     find_virtual                      (struct MuttThread *cur, int reverse);
+  // void                insert_message                    (struct MuttThread **new, struct MuttThread *newparent, struct MuttThread *cur);
+  // int                 is_descendant                     (struct MuttThread *a, struct MuttThread *b);
+  // void                mutt_break_thread                 (struct Header *hdr);
+  // void                thread_hash_destructor            (int type, void *obj, intptr_t data);
+  // void                unlink_message                    (struct MuttThread **old, struct MuttThread *cur);
+
+  is_descendant(NULL, NULL);
+}
+
 void test_exit(void)
 {
   // void                mutt_exit                         (int code);
@@ -457,13 +528,17 @@ void test_exit(void)
 int main()
 {
   test_address();
+  test_attach();
   test_base64();
+  test_body();
   test_buffer();
   test_charset();
   test_date();
+  test_envelope();
   test_envlist();
   test_file();
   test_hash();
+  test_header();
   test_idna();
   test_list();
   test_logging();
@@ -477,6 +552,8 @@ int main()
   test_sha1();
   test_signal();
   test_string();
+  test_tags();
+  test_thread();
   test_exit();
 
   return 0;
