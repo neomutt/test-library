@@ -1,8 +1,8 @@
 #include "config.h"
-#include <stdio.h>
 #include <stdarg.h>
-#include <unistd.h>
+#include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "mutt/mutt.h"
 #include "hcache/hcache.h"
 
@@ -64,7 +64,6 @@ int mx_unlock_file(const char *path, int fd)
   return -1;
 }
 
-
 char *Charset;
 char *HeaderCacheBackend;
 char *HeaderCachePageSize;
@@ -82,7 +81,7 @@ int main()
   header_cache_t *hc = NULL;
   const char *path = "cache/";
   const char *folder = "test";
-  
+
   hc = mutt_hcache_open(path, folder, NULL);
   // printf("%p\n", hc);
 
@@ -96,11 +95,10 @@ int main()
 #else
   data = mutt_hcache_fetch_raw(hc, key, strlen(key));
   printf("data = '%s'\n", data);
-  mutt_hcache_free(hc, (void**) &data);
+  mutt_hcache_free(hc, (void **) &data);
 #endif
 
   mutt_hcache_close(hc);
 
   return 0;
 }
-

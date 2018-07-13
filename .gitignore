@@ -1,5 +1,7 @@
 test_address
 test_conn
-test_lib
+test_email
 test_hcache
+test_lib
+test_mbox
 tmp

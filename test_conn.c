@@ -27,11 +27,11 @@ enum AccountType
 };
 
 /* account flags */
-#define MUTT_ACCT_PORT  (1 << 0)
-#define MUTT_ACCT_USER  (1 << 1)
+#define MUTT_ACCT_PORT (1 << 0)
+#define MUTT_ACCT_USER (1 << 1)
 #define MUTT_ACCT_LOGIN (1 << 2)
-#define MUTT_ACCT_PASS  (1 << 3)
-#define MUTT_ACCT_SSL   (1 << 4)
+#define MUTT_ACCT_PASS (1 << 3)
+#define MUTT_ACCT_SSL (1 << 4)
 
 void mutt_query_exit(void)
 {
