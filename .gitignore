@@ -3,5 +3,6 @@ test_conn
 test_email
 test_hcache
 test_lib
+test_maildir
 test_mbox
 tmp
