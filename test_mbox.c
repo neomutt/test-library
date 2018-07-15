@@ -60,7 +60,7 @@ void mutt_progress_update(struct Progress *progress, long pos, int percent)
   mutt_message("mutt_progress_update NOTIMPL");
 }
 
-struct Envelope *mutt_rfc822_read_header(FILE *f, struct Header *hdr, short user_hdrs, short weed)
+struct Envelope *mutt_rfc822_read_header(FILE *f, struct Header *hdr, bool user_hdrs, bool weed)
 {
   mutt_message("mutt_rfc822_read_header NOTIMPL");
   return NULL;
@@ -83,7 +83,29 @@ void mutt_update_mailbox(struct Buffy *b)
 
 void mx_alloc_memory(struct Context *ctx)
 {
-  mutt_message("mx_alloc_memory NOTIMPL");
+  size_t s = MAX(sizeof(struct Header *), sizeof(int));
+
+  if ((ctx->hdrmax + 25) * s < ctx->hdrmax * s)
+  {
+    mutt_error(_("Integer overflow -- can't allocate memory."));
+    mutt_exit(1);
+  }
+
+  if (ctx->hdrs)
+  {
+    mutt_mem_realloc(&ctx->hdrs, sizeof(struct Header *) * (ctx->hdrmax += 25));
+    mutt_mem_realloc(&ctx->v2r, sizeof(int) * ctx->hdrmax);
+  }
+  else
+  {
+    ctx->hdrs = mutt_mem_calloc((ctx->hdrmax += 25), sizeof(struct Header *));
+    ctx->v2r = mutt_mem_calloc(ctx->hdrmax, sizeof(int));
+  }
+  for (int i = ctx->msgcount; i < ctx->hdrmax; i++)
+  {
+    ctx->hdrs[i] = NULL;
+    ctx->v2r[i] = -1;
+  }
 }
 
 void mx_fastclose_mailbox(struct Context *ctx)

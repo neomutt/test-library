@@ -9,7 +9,9 @@
 
 void test_base64(void)
 {
-  // int                 mutt_b64_decode                   (char *out, const char *in);
+  // const int Index64[];
+
+  // int                 mutt_b64_decode                   (char *out, const char *in, size_t olen);
   // size_t              mutt_b64_encode                   (char *out, const char *cin, size_t len, size_t olen);
 
   char buffer[16];
@@ -37,6 +39,12 @@ void test_buffer(void)
 
 void test_charset(void)
 {
+  // char *AssumedCharset;
+  // char *Charset;
+  // bool CharsetIsUtf8;
+  // wchar_t ReplacementChar;
+  // const struct MimeNames PreferredMimeNames[];
+
   // void                mutt_ch_canonical_charset         (char *buf, size_t buflen, const char *name);
   // const char *        mutt_ch_charset_lookup            (const char *chs);
   // int                 mutt_ch_check                     (const char *s, size_t slen, const char *from, const char *to);
@@ -94,6 +102,8 @@ void test_envlist(void)
 
 void test_file(void)
 {
+  // char *Tmpdir;
+
   // const char *        mutt_file_basename                (const char *f);
   // int                 mutt_file_check_empty             (const char *path);
   // int                 mutt_file_chmod                   (const char *path, mode_t mode);
@@ -154,55 +164,25 @@ void test_hash(void)
   mutt_hash_destroy(&h);
 }
 
-void test_idna(void)
+void test_history(void)
 {
-  // char *              mutt_idna_intl_to_local           (const char *user, const char *domain, int flags);
-  // char *              mutt_idna_local_to_intl           (const char *user, const char *domain);
-  // const char *        mutt_idna_print_version           (void);
-  // int                 mutt_idna_to_ascii_lz             (const char *input, char **output, int flags);
+  // short History;
+  // char *HistoryFile;
+  // bool HistoryRemoveDups;
+  // short SaveHistory;
 
-  setlocale(LC_ALL, "");
+  // void                mutt_hist_add                     (enum HistoryClass hclass, const char *str, bool save);
+  // bool                mutt_hist_at_scratch              (enum HistoryClass hclass);
+  // void                mutt_hist_free                    (void);
+  // void                mutt_hist_init                    (void);
+  // char *              mutt_hist_next                    (enum HistoryClass hclass);
+  // char *              mutt_hist_prev                    (enum HistoryClass hclass);
+  // void                mutt_hist_read_file               (void);
+  // void                mutt_hist_reset_state             (enum HistoryClass hclass);
+  // void                mutt_hist_save_scratch            (enum HistoryClass hclass, const char *str);
+  // int                 mutt_hist_search                  (char *search_buf, enum HistoryClass hclass, char **matches);
 
-  char *mailbox = NULL;
-
-  IdnEncode = true;
-  IdnDecode = true;
-
-  mutt_str_replace(&Charset, "utf-8");
-
-  char *user = "joe";
-  char *domain1 = "\360\237\222\251.la";
-  char *domain2 = "xn--pxaix.la";
-
-  mailbox = mutt_idna_local_to_intl(user, domain1);
-  if (mailbox)
-  {
-    printf("%s@%s -> %s\n", user, domain1, mailbox);
-    FREE(&mailbox);
-  }
-
-  mailbox = mutt_idna_intl_to_local(user, domain2, 0);
-  if (mailbox)
-  {
-    printf("%s@%s -> %s\n", user, domain2, mailbox);
-    FREE(&mailbox);
-  }
-
-  FREE(&Charset);
-
-  char *input = "\316\264\317\200\316\270.com";
-  char *output = NULL;
-
-  int rc = mutt_idna_to_ascii_lz(input, &output, 0);
-  if (rc == 0)
-  {
-    printf("%s -> %s\n", input, output);
-    FREE(&output);
-  }
-  else
-  {
-    printf("failed: %d\n", rc);
-  }
+  mutt_hist_free();
 }
 
 void test_list(void)
@@ -226,6 +206,8 @@ void test_list(void)
 
 void test_logging(void)
 {
+  // log_dispatcher_t MuttLogger;
+
   // int                 log_disp_file                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
   // int                 log_disp_queue                    (time_t stamp, const char *file, int line, const char *function, int level, ...);
   // int                 log_disp_terminal                 (time_t stamp, const char *file, int line, const char *function, int level, ...);
@@ -256,6 +238,8 @@ void test_mapping(void)
 
 void test_mbyte(void)
 {
+  // bool OptLocales;
+
   // int                 mutt_mb_charlen                   (const char *s, int *width);
   // int                 mutt_mb_filter_unprintable        (char **s);
   // bool                mutt_mb_get_initials              (const char *name, char *buf, size_t buflen);
@@ -316,21 +300,6 @@ void test_regex(void)
 
   struct Regex *rx = mutt_regex_compile("hel*o", 0);
   mutt_regex_free(&rx);
-}
-
-void test_rfc2047(void)
-{
-  // void                mutt_rfc2047_decode               (char **pd);
-  // void                mutt_rfc2047_encode               (char **pd, const char *specials, int col, const char *charsets);
-
-  char *str = strdup("한국어 Русский 义勇军");
-
-  mutt_str_replace(&Charset, "utf-8");
-  mutt_rfc2047_encode(&str, MimeSpecials, 0, NULL);
-
-  printf("%s\n", str);
-  FREE(&str);
-  FREE(&Charset);
 }
 
 void test_sha1(void)
@@ -419,7 +388,7 @@ int main()
   test_envlist();
   test_file();
   test_hash();
-  test_idna();
+  test_history();
   test_list();
   test_logging();
   test_mapping();
@@ -427,7 +396,6 @@ int main()
   test_md5();
   test_memory();
   test_regex();
-  test_rfc2047();
   test_sha1();
   test_signal();
   test_string();

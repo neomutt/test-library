@@ -14,7 +14,7 @@ CFLAGS	+= -fno-omit-frame-pointer
 
 LDFLAGS	+= -L$(NEO)
 
-CONN_LDFLAGS	= -lconn -lidn -lgnutls
+CONN_LDFLAGS	= -lconn -lemail -lidn -lgnutls
 EMAIL_LDFLAGS	= -lemail
 HCACHE_LDFLAGS	= -lhcache -lemail -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
 MAILDIR_LDFLAGS	= -lmaildir
