@@ -50,7 +50,7 @@ void test_charset(void)
   // int                 mutt_ch_check                     (const char *s, size_t slen, const char *from, const char *to);
   // bool                mutt_ch_check_charset             (const char *cs, bool strict);
   // char *              mutt_ch_choose                    (const char *fromcode, const char *charsets, char *u, size_t ulen, char **d, size_t *dlen);
-  // int                 mutt_ch_chscmp                    (const char *cs1, const char *cs2);
+  // bool                mutt_ch_chscmp                    (const char *cs1, const char *cs2);
   // int                 mutt_ch_convert_nonmime_string    (char **ps);
   // int                 mutt_ch_convert_string            (char **ps, const char *from, const char *to, int flags);
   // int                 mutt_ch_fgetconv                  (struct FgetConv *fc);
@@ -104,19 +104,17 @@ void test_file(void)
 {
   // char *Tmpdir;
 
-  // const char *        mutt_file_basename                (const char *f);
   // int                 mutt_file_check_empty             (const char *path);
   // int                 mutt_file_chmod                   (const char *path, mode_t mode);
   // int                 mutt_file_chmod_add               (const char *path, mode_t mode);
   // int                 mutt_file_chmod_add_stat          (const char *path, mode_t mode, struct stat *st);
   // int                 mutt_file_chmod_rm                (const char *path, mode_t mode);
   // int                 mutt_file_chmod_rm_stat           (const char *path, mode_t mode, struct stat *st);
-  // char *              mutt_file_concat_path             (char *d, const char *dir, const char *fname, size_t l);
-  // char *              mutt_file_concatn_path            (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
   // int                 mutt_file_copy_bytes              (FILE *in, FILE *out, size_t size);
   // int                 mutt_file_copy_stream             (FILE *fin, FILE *fout);
   // time_t              mutt_file_decrease_mtime          (const char *f, struct stat *st);
-  // char *              mutt_file_dirname                 (const char *path);
+  // void                mutt_file_expand_fmt              (char *dest, size_t destlen, const char *fmt, const char *src);
+  // void                mutt_file_expand_fmt_quote        (char *dest, size_t destlen, const char *fmt, const char *src);
   // int                 mutt_file_fclose                  (FILE **f);
   // FILE *              mutt_file_fopen                   (const char *path, const char *mode);
   // int                 mutt_file_fsync_close             (FILE **f);
@@ -134,7 +132,6 @@ void test_file(void)
   // int                 mutt_file_sanitize_regex          (char *dest, size_t destlen, const char *src);
   // void                mutt_file_set_mtime               (const char *from, const char *to);
   // int                 mutt_file_symlink                 (const char *oldpath, const char *newpath);
-  // int                 mutt_file_to_absolute_path        (char *path, const char *reference);
   // void                mutt_file_touch_atime             (int fd);
   // void                mutt_file_unlink                  (const char *s);
   // void                mutt_file_unlink_empty            (const char *path);
@@ -156,7 +153,7 @@ void test_hash(void)
   // void                mutt_hash_int_delete              (struct Hash *table, unsigned int intkey, const void *data);
   // void *              mutt_hash_int_find                (const struct Hash *table, unsigned int intkey);
   // struct HashElem *   mutt_hash_int_insert              (struct Hash *table, unsigned int intkey, void *data);
-  // void                mutt_hash_set_destructor          (struct Hash *table, hash_destructor fn, intptr_t fn_data);
+  // void                mutt_hash_set_destructor          (struct Hash *table, hash_destructor_t fn, intptr_t fn_data);
   // struct HashElem *   mutt_hash_typed_insert            (struct Hash *table, const char *strkey, int type, void *data);
   // struct HashElem *   mutt_hash_walk                    (const struct Hash *table, struct HashWalkState *state);
 
@@ -322,7 +319,7 @@ void test_signal(void)
   // void                mutt_sig_exit_handler             (int sig);
   // void                mutt_sig_init                     (sig_handler_t sig_fn, sig_handler_t exit_fn);
   // void                mutt_sig_unblock                  (void);
-  // void                mutt_sig_unblock_system           (int catch);
+  // void                mutt_sig_unblock_system           (bool catch);
 
   mutt_sig_unblock();
 }
@@ -351,7 +348,7 @@ void test_string(void)
   // char *              mutt_str_skip_email_wsp           (const char *s);
   // char *              mutt_str_skip_whitespace          (char *p);
   // int                 mutt_str_strcasecmp               (const char *a, const char *b);
-  // char *              mutt_str_strcat                   (char *d, size_t l, const char *s);
+  // char *              mutt_str_strcat                   (char *buf, size_t buflen, const char *s);
   // const char *        mutt_str_strchrnul                (const char *s, char c);
   // int                 mutt_str_strcmp                   (const char *a, const char *b);
   // int                 mutt_str_strcoll                  (const char *a, const char *b);
