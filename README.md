@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (326 functions)
+## Library (337 functions)
 
 There are now two libararies, libmutt and libemail.
 
@@ -66,8 +66,8 @@ void                mutt_actx_free_entries            (struct AttachCtx *actx);
 ```c
 const int Index64[];
 
-int                 mutt_b64_decode                   (char *out, const char *in, size_t olen);
-size_t              mutt_b64_encode                   (char *out, const char *cin, size_t len, size_t olen);
+int                 mutt_b64_decode                   (const char *in, char *out, size_t olen);
+size_t              mutt_b64_encode                   (const char *in, size_t inlen, char *out, size_t outlen);
 ```
 
 ### body (email)
@@ -82,16 +82,23 @@ struct Body *       mutt_body_new                     (void);
 
 ```c
 size_t              mutt_buffer_add                   (struct Buffer *buf, const char *s, size_t len);
+int                 mutt_buffer_add_printf            (struct Buffer *buf, const char *fmt, ...);
 size_t              mutt_buffer_addch                 (struct Buffer *buf, char c);
 size_t              mutt_buffer_addstr                (struct Buffer *buf, const char *s);
 struct Buffer *     mutt_buffer_alloc                 (size_t size);
 void                mutt_buffer_free                  (struct Buffer **p);
-struct Buffer *     mutt_buffer_from                  (char *seed);
-struct Buffer *     mutt_buffer_init                  (struct Buffer *b);
+struct Buffer *     mutt_buffer_from                  (const char *seed);
+void                mutt_buffer_increase_size         (struct Buffer *buf, size_t new_size);
+struct Buffer *     mutt_buffer_init                  (struct Buffer *buf);
 bool                mutt_buffer_is_empty              (const struct Buffer *buf);
 struct Buffer *     mutt_buffer_new                   (void);
+void                mutt_buffer_pool_free             (void);
+struct Buffer *     mutt_buffer_pool_get              (void);
+void                mutt_buffer_pool_init             (void);
+void                mutt_buffer_pool_release          (struct Buffer **pbuf);
 int                 mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
-void                mutt_buffer_reset                 (struct Buffer *b);
+void                mutt_buffer_reset                 (struct Buffer *buf);
+void                mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
 ```
 
 ### charset (mutt)
@@ -141,6 +148,14 @@ time_t              mutt_date_parse_date              (const char *s, struct Tz 
 time_t              mutt_date_parse_imap              (char *s);
 ```
 
+### email (email)
+
+```c
+bool                mutt_email_cmp_strict            (const struct Email *e1, const struct Email *e2);
+void                mutt_email_free                  (struct Email **e);
+struct Email *      mutt_email_new                   (void);
+```
+
 ### email_globals (email)
 
 ```c
@@ -151,19 +166,19 @@ char *SpamSeparator;
 bool Weed;
 
 struct ListHead Ignore;
-struct RegexList *NoSpamList;
-struct ReplaceList *SpamList;
+struct RegexList NoSpamList;
+struct ReplaceList SpamList;
 struct ListHead UnIgnore;
 ```
 
 ### envelope (email)
 
 ```c
-bool                mutt_env_cmp_strict               (const struct Envelope *e1, const struct Envelope *e2);
+bool                mutt_env_cmp_strict               (const struct Envelope *e1, const struct Envelope *e2); void                mutt_env_free                     (struct Envelope **p);
 void                mutt_env_free                     (struct Envelope **p);
 void                mutt_env_merge                    (struct Envelope *base, struct Envelope **extra);
 struct Envelope *   mutt_env_new                      (void);
-int                 mutt_env_to_intl                  (struct Envelope *env, char **tag, char **err);
+int                 mutt_env_to_intl                  (struct Envelope *env, const char **tag, char **err);
 void                mutt_env_to_local                 (struct Envelope *e);
 ```
 
@@ -202,12 +217,13 @@ void                mutt_file_expand_fmt_quote        (char *dest, size_t destle
 int                 mutt_file_fclose                  (FILE **f);
 FILE *              mutt_file_fopen                   (const char *path, const char *mode);
 int                 mutt_file_fsync_close             (FILE **f);
-int                 mutt_file_lock                    (int fd, int excl, int timeout);
+long                mutt_file_get_size                (const char *path);
+int                 mutt_file_lock                    (int fd, bool excl, bool timeout);
 int                 mutt_file_mkdir                   (const char *path, mode_t mode);
 FILE *              mutt_file_mkstemp_full            (const char *file, int line, const char *func);
 int                 mutt_file_open                    (const char *path, int flags);
-size_t              mutt_file_quote_filename          (char *d, size_t l, const char *f);
-char *              mutt_file_read_keyword            (const char *file, char *buffer, size_t buflen);
+size_t              mutt_file_quote_filename          (const char *filename, char *buf, size_t buflen);
+char *              mutt_file_read_keyword            (const char *file, char *buf, size_t buflen);
 char *              mutt_file_read_line               (char *s, size_t *size, FILE *fp, int *line, int flags);
 int                 mutt_file_rename                  (char *oldfile, char *newfile);
 int                 mutt_file_rmtree                  (const char *path);
@@ -242,17 +258,9 @@ struct Hash *       mutt_hash_int_create              (size_t nelem, int flags);
 void                mutt_hash_int_delete              (struct Hash *table, unsigned int intkey, const void *data);
 void *              mutt_hash_int_find                (const struct Hash *table, unsigned int intkey);
 struct HashElem *   mutt_hash_int_insert              (struct Hash *table, unsigned int intkey, void *data);
-void                mutt_hash_set_destructor          (struct Hash *table, hash_destructor fn, intptr_t fn_data);
+void                mutt_hash_set_destructor          (struct Hash *table, hash_destructor_t fn, intptr_t fn_data);
 struct HashElem *   mutt_hash_typed_insert            (struct Hash *table, const char *strkey, int type, void *data);
 struct HashElem *   mutt_hash_walk                    (const struct Hash *table, struct HashWalkState *state);
-```
-
-### header (email)
-
-```c
-bool                mutt_header_cmp_strict            (const struct Header *h1, const struct Header *h2);
-void                mutt_header_free                  (struct Header **h);
-struct Header *     mutt_header_new                   (void);
 ```
 
 ### history (mutt)
@@ -372,7 +380,7 @@ void                mutt_mem_realloc                  (void *ptr, size_t size);
 ### mime (email)
 
 ```c
-const int IndexHex[128];
+const int IndexHex[];
 const char *const BodyTypes[];
 const char *const BodyEncodings[];
 const char MimeSpecials[];
@@ -399,24 +407,25 @@ char *              mutt_extract_message_id           (const char *s, const char
 bool                mutt_is_message_type              (int type, const char *subtype);
 bool                mutt_matches_ignore               (const char *s);
 void                mutt_parse_content_type           (char *s, struct Body *ct);
-struct Body *       mutt_parse_multipart              (FILE *fp, const char *boundary, LOFF_T end_off, bool digest);
+struct Body *       mutt_parse_multipart              (FILE *fp, const char *boundary, off_t end_off, bool digest);
 void                mutt_parse_part                   (FILE *fp, struct Body *b);
 struct Body *       mutt_read_mime_header             (FILE *fp, bool digest);
-int                 mutt_rfc822_parse_line            (struct Envelope *e, struct Header *hdr, char *line, char *p, bool user_hdrs, bool weed, bool do_2047);
+int                 mutt_rfc822_parse_line            (struct Envelope *env, struct Email *e, char *line, char *p, bool user_hdrs, bool weed, bool do_2047);
 struct Body *       mutt_rfc822_parse_message         (FILE *fp, struct Body *parent);
-struct Envelope *   mutt_rfc822_read_header           (FILE *f, struct Header *hdr, bool user_hdrs, bool weed);
+struct Envelope *   mutt_rfc822_read_header           (FILE *f, struct Email *e, bool user_hdrs, bool weed);
 char *              mutt_rfc822_read_line             (FILE *f, char *line, size_t *linelen);
 ```
 
 ### path (mutt)
 
 ```c
+bool                mutt_path_abbr_folder             (char *buf, size_t buflen, const char *folder);
 const char *        mutt_path_basename                (const char *f);
 bool                mutt_path_canon                   (char *buf, size_t buflen, const char *homedir);
 char *              mutt_path_concat                  (char *d, const char *dir, const char *fname, size_t l);
 char *              mutt_path_concatn                 (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
 char *              mutt_path_dirname                 (const char *path);
-void                mutt_path_get_parent              (char *path, char *buf, size_t buflen);
+bool                mutt_path_parent                  (char *buf, size_t buflen);
 bool                mutt_path_pretty                  (char *buf, size_t buflen, const char *homedir);
 size_t              mutt_path_realpath                (char *buf);
 bool                mutt_path_tidy                    (char *buf);
@@ -431,17 +440,17 @@ int                 mutt_path_to_absolute             (char *path, const char *r
 struct Regex *      mutt_regex_compile                (const char *str, int flags);
 struct Regex *      mutt_regex_create                 (const char *str, int flags, struct Buffer *err);
 void                mutt_regex_free                   (struct Regex **r);
-int                 mutt_regexlist_add                (struct RegexList **rl, const char *str, int flags, struct Buffer *err);
-void                mutt_regexlist_free               (struct RegexList **rl);
+int                 mutt_regexlist_add                (struct RegexList *rl, const char *str, int flags, struct Buffer *err);
+void                mutt_regexlist_free               (struct RegexList *rl);
 bool                mutt_regexlist_match              (struct RegexList *rl, const char *str);
-struct RegexList *  mutt_regexlist_new                (void);
-int                 mutt_regexlist_remove             (struct RegexList **rl, const char *str);
-int                 mutt_replacelist_add              (struct ReplaceList **rl, const char *pat, const char *templ, struct Buffer *err);
+struct RegexListNode *mutt_regexlist_new              (void);
+int                 mutt_regexlist_remove             (struct RegexList *rl, const char *str);
+int                 mutt_replacelist_add              (struct ReplaceList *rl, const char *pat, const char *templ, struct Buffer *err);
 char *              mutt_replacelist_apply            (struct ReplaceList *rl, char *buf, size_t buflen, const char *str);
-void                mutt_replacelist_free             (struct ReplaceList **rl);
+void                mutt_replacelist_free             (struct ReplaceList *rl);
 bool                mutt_replacelist_match            (struct ReplaceList *rl, char *buf, size_t buflen, const char *str);
-struct ReplaceList *mutt_replacelist_new              (void);
-int                 mutt_replacelist_remove           (struct ReplaceList **rl, const char *pat);
+struct ReplaceListNode *mutt_replacelist_new          (void);
+int                 mutt_replacelist_remove           (struct ReplaceList *rl, const char *pat);
 ```
 
 ### rfc2047 (email)
@@ -494,21 +503,25 @@ int                 mutt_str_atol                     (const char *str, long *ds
 int                 mutt_str_atos                     (const char *str, short *dst);
 int                 mutt_str_atoui                    (const char *str, unsigned int *dst);
 int                 mutt_str_atoul                    (const char *str, unsigned long *dst);
+int                 mutt_str_atoull                   (const char *str, unsigned long long *dst);
 void                mutt_str_dequote_comment          (char *s);
 const char *        mutt_str_find_word                (const char *src);
 const char *        mutt_str_getenv                   (const char *name);
+bool                mutt_str_inline_replace           (char *buf, size_t buflen, size_t xlen, const char *rstr);
 bool                mutt_str_is_ascii                 (const char *p, size_t len);
 bool                mutt_str_is_email_wsp             (char c);
 size_t              mutt_str_lws_len                  (const char *s, size_t n);
 size_t              mutt_str_lws_rlen                 (const char *s, size_t n);
 const char *        mutt_str_next_word                (const char *s);
 void                mutt_str_pretty_size              (char *buf, size_t buflen, size_t num);
+int                 mutt_str_remall_strcasestr        (char *str, const char *target);
 void                mutt_str_remove_trailing_ws       (char *s);
 void                mutt_str_replace                  (char **p, const char *s);
 const char *        mutt_str_rstrnstr                 (const char *haystack, size_t haystack_length, const char *needle);
 char *              mutt_str_skip_email_wsp           (const char *s);
 char *              mutt_str_skip_whitespace          (char *p);
 int                 mutt_str_strcasecmp               (const char *a, const char *b);
+const char *        mutt_str_strcasestr               (const char *haystack, const char *needle);
 char *              mutt_str_strcat                   (char *buf, size_t buflen, const char *s);
 const char *        mutt_str_strchrnul                (const char *s, char c);
 int                 mutt_str_strcmp                   (const char *a, const char *b);
@@ -546,10 +559,10 @@ bool                driver_tags_replace               (struct TagHead *head, cha
 
 ```c
 void                clean_references                  (struct MuttThread *brk, struct MuttThread *cur);
-struct Header *     find_virtual                      (struct MuttThread *cur, int reverse);
+struct Email *      find_virtual                      (struct MuttThread *cur, int reverse);
 void                insert_message                    (struct MuttThread **new, struct MuttThread *newparent, struct MuttThread *cur);
 bool                is_descendant                     (struct MuttThread *a, struct MuttThread *b);
-void                mutt_break_thread                 (struct Header *hdr);
+void                mutt_break_thread                 (struct Email *e);
 void                thread_hash_destructor            (int type, void *obj, intptr_t data);
 void                unlink_message                    (struct MuttThread **old, struct MuttThread *cur);
 ```
@@ -561,7 +574,7 @@ enum UrlScheme      url_check_scheme                  (const char *s);
 void                url_free                          (struct Url *u);
 int                 url_parse                         (struct Url *u, char *src);
 int                 url_pct_decode                    (char *s);
-void                url_pct_encode                    (char *dst, size_t l, const char *src);
-int                 url_tostring                      (struct Url *u, char *dest, size_t len, int flags);
+void                url_pct_encode                    (char *buf, size_t buflen, const char *src);
+int                 url_tostring                      (struct Url *u, char *buf, size_t buflen, int flags);
 ```
 

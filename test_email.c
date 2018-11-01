@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "mutt/mutt.h"
-#include "email/email.h"
+#include "email/lib.h"
 
 void test_address(void)
 {
@@ -67,6 +67,16 @@ void test_body(void)
   mutt_body_free(&b);
 }
 
+void test_email(void)
+{
+  // bool                mutt_email_cmp_strict            (const struct Email *e1, const struct Email *e2);
+  // void                mutt_email_free                  (struct Email **e);
+  // struct Email *      mutt_email_new                   (void);
+
+  struct Email *e = mutt_email_new();
+  mutt_email_free(&e);
+}
+
 void test_email_globals(void)
 {
   // bool MarkOld;
@@ -76,8 +86,8 @@ void test_email_globals(void)
   // bool Weed;
 
   // struct ListHead Ignore;
-  // struct RegexList *NoSpamList;
-  // struct ReplaceList *SpamList;
+  // struct RegexList NoSpamList;
+  // struct ReplaceList SpamList;
   // struct ListHead UnIgnore;
 
   MarkOld = true;
@@ -85,11 +95,11 @@ void test_email_globals(void)
 
 void test_envelope(void)
 {
-  // bool                mutt_env_cmp_strict               (const struct Envelope *e1, const struct Envelope *e2);
+  // bool                mutt_env_cmp_strict               (const struct Envelope *e1, const struct Envelope *e2); void                mutt_env_free                     (struct Envelope **p);
   // void                mutt_env_free                     (struct Envelope **p);
   // void                mutt_env_merge                    (struct Envelope *base, struct Envelope **extra);
   // struct Envelope *   mutt_env_new                      (void);
-  // int                 mutt_env_to_intl                  (struct Envelope *env, char **tag, char **err);
+  // int                 mutt_env_to_intl                  (struct Envelope *env, const char **tag, char **err);
   // void                mutt_env_to_local                 (struct Envelope *e);
 
   struct Envelope *env = mutt_env_new();
@@ -105,16 +115,6 @@ void test_from(void)
   time_t date = 0;
 
   is_from(str, buf, sizeof(buf), &date);
-}
-
-void test_header(void)
-{
-  // bool                mutt_header_cmp_strict            (const struct Header *h1, const struct Header *h2);
-  // void                mutt_header_free                  (struct Header **h);
-  // struct Header *     mutt_header_new                   (void);
-
-  struct Header *hdr = mutt_header_new();
-  mutt_header_free(&hdr);
 }
 
 void test_idna(void)
@@ -173,7 +173,7 @@ void test_idna(void)
 
 void test_mime(void)
 {
-  // const int IndexHex[128];
+  // const int IndexHex[];
   // const char *const BodyTypes[];
   // const char *const BodyEncodings[];
   // const char MimeSpecials[];
@@ -202,15 +202,34 @@ void test_parse(void)
   // bool                mutt_is_message_type              (int type, const char *subtype);
   // bool                mutt_matches_ignore               (const char *s);
   // void                mutt_parse_content_type           (char *s, struct Body *ct);
-  // struct Body *       mutt_parse_multipart              (FILE *fp, const char *boundary, LOFF_T end_off, bool digest);
+  // struct Body *       mutt_parse_multipart              (FILE *fp, const char *boundary, off_t end_off, bool digest);
   // void                mutt_parse_part                   (FILE *fp, struct Body *b);
   // struct Body *       mutt_read_mime_header             (FILE *fp, bool digest);
-  // int                 mutt_rfc822_parse_line            (struct Envelope *e, struct Header *hdr, char *line, char *p, bool user_hdrs, bool weed, bool do_2047);
+  // int                 mutt_rfc822_parse_line            (struct Envelope *env, struct Email *e, char *line, char *p, bool user_hdrs, bool weed, bool do_2047);
   // struct Body *       mutt_rfc822_parse_message         (FILE *fp, struct Body *parent);
-  // struct Envelope *   mutt_rfc822_read_header           (FILE *f, struct Header *hdr, bool user_hdrs, bool weed);
+  // struct Envelope *   mutt_rfc822_read_header           (FILE *f, struct Email *e, bool user_hdrs, bool weed);
   // char *              mutt_rfc822_read_line             (FILE *f, char *line, size_t *linelen);
 
   mutt_check_encoding("quoted-printable");
+}
+
+void test_path(void)
+{
+  // bool                mutt_path_abbr_folder             (char *buf, size_t buflen, const char *folder);
+  // const char *        mutt_path_basename                (const char *f);
+  // bool                mutt_path_canon                   (char *buf, size_t buflen, const char *homedir);
+  // char *              mutt_path_concat                  (char *d, const char *dir, const char *fname, size_t l);
+  // char *              mutt_path_concatn                 (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
+  // char *              mutt_path_dirname                 (const char *path);
+  // bool                mutt_path_parent                  (char *buf, size_t buflen);
+  // bool                mutt_path_pretty                  (char *buf, size_t buflen, const char *homedir);
+  // size_t              mutt_path_realpath                (char *buf);
+  // bool                mutt_path_tidy                    (char *buf);
+  // bool                mutt_path_tidy_dotdot             (char *buf);
+  // bool                mutt_path_tidy_slash              (char *buf);
+  // int                 mutt_path_to_absolute             (char *path, const char *reference);
+
+  mutt_path_basename("/home/mutt/file");
 }
 
 void test_rfc2047(void)
@@ -259,10 +278,10 @@ void test_tags(void)
 void test_thread(void)
 {
   // void                clean_references                  (struct MuttThread *brk, struct MuttThread *cur);
-  // struct Header *     find_virtual                      (struct MuttThread *cur, int reverse);
+  // struct Email *      find_virtual                      (struct MuttThread *cur, int reverse);
   // void                insert_message                    (struct MuttThread **new, struct MuttThread *newparent, struct MuttThread *cur);
   // bool                is_descendant                     (struct MuttThread *a, struct MuttThread *b);
-  // void                mutt_break_thread                 (struct Header *hdr);
+  // void                mutt_break_thread                 (struct Email *e);
   // void                thread_hash_destructor            (int type, void *obj, intptr_t data);
   // void                unlink_message                    (struct MuttThread **old, struct MuttThread *cur);
 
@@ -275,8 +294,8 @@ void test_url(void)
   // void                url_free                          (struct Url *u);
   // int                 url_parse                         (struct Url *u, char *src);
   // int                 url_pct_decode                    (char *s);
-  // void                url_pct_encode                    (char *dst, size_t l, const char *src);
-  // int                 url_tostring                      (struct Url *u, char *dest, size_t len, int flags);
+  // void                url_pct_encode                    (char *buf, size_t buflen, const char *src);
+  // int                 url_tostring                      (struct Url *u, char *buf, size_t buflen, int flags);
 
   url_check_scheme("imaps://host.com");
 }
@@ -286,14 +305,15 @@ int main()
   test_address();
   test_attach();
   test_body();
+  test_email();
   test_email_globals();
   test_envelope();
   test_from();
-  test_header();
   test_idna();
   test_mime();
   test_parameter();
   test_parse();
+  test_path();
   test_rfc2047();
   test_rfc2231();
   test_tags();

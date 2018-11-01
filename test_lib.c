@@ -11,27 +11,34 @@ void test_base64(void)
 {
   // const int Index64[];
 
-  // int                 mutt_b64_decode                   (char *out, const char *in, size_t olen);
-  // size_t              mutt_b64_encode                   (char *out, const char *cin, size_t len, size_t olen);
+  // int                 mutt_b64_decode                   (const char *in, char *out, size_t olen);
+  // size_t              mutt_b64_encode                   (const char *in, size_t inlen, char *out, size_t outlen);
 
   char buffer[16];
   char *msg = "hello";
-  mutt_b64_encode(buffer, msg, strlen(msg), sizeof(buffer));
+  mutt_b64_encode(msg, strlen(msg), buffer, sizeof(buffer));
 }
 
 void test_buffer(void)
 {
   // size_t              mutt_buffer_add                   (struct Buffer *buf, const char *s, size_t len);
+  // int                 mutt_buffer_add_printf            (struct Buffer *buf, const char *fmt, ...);
   // size_t              mutt_buffer_addch                 (struct Buffer *buf, char c);
   // size_t              mutt_buffer_addstr                (struct Buffer *buf, const char *s);
   // struct Buffer *     mutt_buffer_alloc                 (size_t size);
   // void                mutt_buffer_free                  (struct Buffer **p);
-  // struct Buffer *     mutt_buffer_from                  (char *seed);
-  // struct Buffer *     mutt_buffer_init                  (struct Buffer *b);
+  // struct Buffer *     mutt_buffer_from                  (const char *seed);
+  // void                mutt_buffer_increase_size         (struct Buffer *buf, size_t new_size);
+  // struct Buffer *     mutt_buffer_init                  (struct Buffer *buf);
   // bool                mutt_buffer_is_empty              (const struct Buffer *buf);
   // struct Buffer *     mutt_buffer_new                   (void);
+  // void                mutt_buffer_pool_free             (void);
+  // struct Buffer *     mutt_buffer_pool_get              (void);
+  // void                mutt_buffer_pool_init             (void);
+  // void                mutt_buffer_pool_release          (struct Buffer **pbuf);
   // int                 mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
-  // void                mutt_buffer_reset                 (struct Buffer *b);
+  // void                mutt_buffer_reset                 (struct Buffer *buf);
+  // void                mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
 
   struct Buffer *b = NULL;
   mutt_buffer_free(&b);
@@ -118,12 +125,13 @@ void test_file(void)
   // int                 mutt_file_fclose                  (FILE **f);
   // FILE *              mutt_file_fopen                   (const char *path, const char *mode);
   // int                 mutt_file_fsync_close             (FILE **f);
-  // int                 mutt_file_lock                    (int fd, int excl, int timeout);
+  // long                mutt_file_get_size                (const char *path);
+  // int                 mutt_file_lock                    (int fd, bool excl, bool timeout);
   // int                 mutt_file_mkdir                   (const char *path, mode_t mode);
   // FILE *              mutt_file_mkstemp_full            (const char *file, int line, const char *func);
   // int                 mutt_file_open                    (const char *path, int flags);
-  // size_t              mutt_file_quote_filename          (char *d, size_t l, const char *f);
-  // char *              mutt_file_read_keyword            (const char *file, char *buffer, size_t buflen);
+  // size_t              mutt_file_quote_filename          (const char *filename, char *buf, size_t buflen);
+  // char *              mutt_file_read_keyword            (const char *file, char *buf, size_t buflen);
   // char *              mutt_file_read_line               (char *s, size_t *size, FILE *fp, int *line, int flags);
   // int                 mutt_file_rename                  (char *oldfile, char *newfile);
   // int                 mutt_file_rmtree                  (const char *path);
@@ -283,17 +291,17 @@ void test_regex(void)
   // struct Regex *      mutt_regex_compile                (const char *str, int flags);
   // struct Regex *      mutt_regex_create                 (const char *str, int flags, struct Buffer *err);
   // void                mutt_regex_free                   (struct Regex **r);
-  // int                 mutt_regexlist_add                (struct RegexList **rl, const char *str, int flags, struct Buffer *err);
-  // void                mutt_regexlist_free               (struct RegexList **rl);
+  // int                 mutt_regexlist_add                (struct RegexList *rl, const char *str, int flags, struct Buffer *err);
+  // void                mutt_regexlist_free               (struct RegexList *rl);
   // bool                mutt_regexlist_match              (struct RegexList *rl, const char *str);
-  // struct RegexList *  mutt_regexlist_new                (void);
-  // int                 mutt_regexlist_remove             (struct RegexList **rl, const char *str);
-  // int                 mutt_replacelist_add              (struct ReplaceList **rl, const char *pat, const char *templ, struct Buffer *err);
+  // struct RegexListNode *mutt_regexlist_new              (void);
+  // int                 mutt_regexlist_remove             (struct RegexList *rl, const char *str);
+  // int                 mutt_replacelist_add              (struct ReplaceList *rl, const char *pat, const char *templ, struct Buffer *err);
   // char *              mutt_replacelist_apply            (struct ReplaceList *rl, char *buf, size_t buflen, const char *str);
-  // void                mutt_replacelist_free             (struct ReplaceList **rl);
+  // void                mutt_replacelist_free             (struct ReplaceList *rl);
   // bool                mutt_replacelist_match            (struct ReplaceList *rl, char *buf, size_t buflen, const char *str);
-  // struct ReplaceList *mutt_replacelist_new              (void);
-  // int                 mutt_replacelist_remove           (struct ReplaceList **rl, const char *pat);
+  // struct ReplaceListNode *mutt_replacelist_new          (void);
+  // int                 mutt_replacelist_remove           (struct ReplaceList *rl, const char *pat);
 
   struct Regex *rx = mutt_regex_compile("hel*o", 0);
   mutt_regex_free(&rx);
@@ -333,21 +341,25 @@ void test_string(void)
   // int                 mutt_str_atos                     (const char *str, short *dst);
   // int                 mutt_str_atoui                    (const char *str, unsigned int *dst);
   // int                 mutt_str_atoul                    (const char *str, unsigned long *dst);
+  // int                 mutt_str_atoull                   (const char *str, unsigned long long *dst);
   // void                mutt_str_dequote_comment          (char *s);
   // const char *        mutt_str_find_word                (const char *src);
   // const char *        mutt_str_getenv                   (const char *name);
+  // bool                mutt_str_inline_replace           (char *buf, size_t buflen, size_t xlen, const char *rstr);
   // bool                mutt_str_is_ascii                 (const char *p, size_t len);
   // bool                mutt_str_is_email_wsp             (char c);
   // size_t              mutt_str_lws_len                  (const char *s, size_t n);
   // size_t              mutt_str_lws_rlen                 (const char *s, size_t n);
   // const char *        mutt_str_next_word                (const char *s);
   // void                mutt_str_pretty_size              (char *buf, size_t buflen, size_t num);
+  // int                 mutt_str_remall_strcasestr        (char *str, const char *target);
   // void                mutt_str_remove_trailing_ws       (char *s);
   // void                mutt_str_replace                  (char **p, const char *s);
   // const char *        mutt_str_rstrnstr                 (const char *haystack, size_t haystack_length, const char *needle);
   // char *              mutt_str_skip_email_wsp           (const char *s);
   // char *              mutt_str_skip_whitespace          (char *p);
   // int                 mutt_str_strcasecmp               (const char *a, const char *b);
+  // const char *        mutt_str_strcasestr               (const char *haystack, const char *needle);
   // char *              mutt_str_strcat                   (char *buf, size_t buflen, const char *s);
   // const char *        mutt_str_strchrnul                (const char *s, char c);
   // int                 mutt_str_strcmp                   (const char *a, const char *b);

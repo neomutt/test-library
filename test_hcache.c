@@ -9,26 +9,6 @@
 bool HeaderCacheCompress;
 char *HeaderCachePagesize;
 
-struct Address *mutt_addr_new(void)
-{
-  return NULL;
-}
-
-struct Body *mutt_body_new(void)
-{
-  return NULL;
-}
-
-struct Header *mutt_header_new(void)
-{
-  return NULL;
-}
-
-struct Envelope *mutt_env_new(void)
-{
-  return NULL;
-}
-
 int mutt_convert_string(char **ps, const char *from, const char *to, int flags)
 {
   printf("mutt_convert_string\n");
@@ -68,8 +48,6 @@ char *Charset;
 char *HeaderCacheBackend;
 char *HeaderCachePageSize;
 unsigned char Options[50];
-struct ReplaceList *SpamList;
-struct RxList *NoSpamList;
 
 int main()
 {
