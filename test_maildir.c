@@ -6,11 +6,13 @@
 #include "email/email.h"
 #include "context.h"
 #include "mailbox.h"
-#include "maildir/maildir.h"
+#include "maildir/lib.h"
 #include "mx.h"
 
 struct Progress;
 
+bool MaildirCheckCur;
+bool AutoSubscribe;
 bool FlagSafe;
 char *HeaderCache;
 char *HomeDir;
@@ -23,6 +25,24 @@ volatile sig_atomic_t SigInt;
 short Sort;
 short WriteInc;
 int MonitorContextChanged = 0;
+struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);
+struct RegexList MailLists = STAILQ_HEAD_INITIALIZER(MailLists);
+struct Hash *AutoSubscribeCache;
+struct RegexList UnMailLists = STAILQ_HEAD_INITIALIZER(UnMailLists);
+struct RegexList SubscribedLists = STAILQ_HEAD_INITIALIZER(SubscribedLists);
+
+int url_parse_mailto(struct Envelope *e, char **body, const char *src)
+{
+  return -1;
+}
+
+void ctx_update_tables(struct Context *ctx, bool committing)
+{
+}
+
+void mutt_mailbox_changed(struct Mailbox *m, enum MailboxNotification action)
+{
+}
 
 void mutt_clear_threads(struct Context *ctx)
 {
@@ -105,36 +125,36 @@ void mx_alloc_memory(struct Mailbox *m)
 {
   size_t s = MAX(sizeof(struct Email *), sizeof(int));
 
-  if ((m->hdrmax + 25) * s < m->hdrmax * s)
+  if ((m->email_max + 25) * s < m->email_max * s)
   {
     mutt_error(_("Out of memory"));
     mutt_exit(1);
   }
 
-  if (m->hdrs)
+  if (m->emails)
   {
-    mutt_mem_realloc(&m->hdrs, sizeof(struct Email *) * (m->hdrmax += 25));
-    mutt_mem_realloc(&m->v2r, sizeof(int) * m->hdrmax);
+    mutt_mem_realloc(&m->emails, sizeof(struct Email *) * (m->email_max += 25));
+    mutt_mem_realloc(&m->v2r, sizeof(int) * m->email_max);
   }
   else
   {
-    m->hdrs = mutt_mem_calloc((m->hdrmax += 25), sizeof(struct Email *));
-    m->v2r = mutt_mem_calloc(m->hdrmax, sizeof(int));
+    m->emails = mutt_mem_calloc((m->email_max += 25), sizeof(struct Email *));
+    m->v2r = mutt_mem_calloc(m->email_max, sizeof(int));
   }
-  for (int i = m->msg_count; i < m->hdrmax; i++)
+  for (int i = m->msg_count; i < m->email_max; i++)
   {
-    m->hdrs[i] = NULL;
+    m->emails[i] = NULL;
     m->v2r[i] = -1;
   }
 }
 
-int mx_msg_close(struct Context *ctx, struct Message **msg)
+int mx_msg_close(struct Mailbox *m, struct Message **msg)
 {
   mutt_message("mx_msg_close NOTIMPL");
   return -1;
 }
 
-struct Message *mx_msg_open_new(struct Context *ctx, struct Email *hdr, int flags)
+struct Message *mx_msg_open_new(struct Mailbox *m, struct Email *e, int flags)
 {
   mutt_message("mx_msg_open_new NOTIMPL");
   return NULL;
@@ -155,13 +175,6 @@ int nm_update_filename(struct Context *ctx, const char *old, const char *new, st
   mutt_message("nm_update_filename NOTIMPL");
   return -1;
 }
-
-enum MuttStatType
-{
-  MUTT_STAT_ATIME,
-  MUTT_STAT_MTIME,
-  MUTT_STAT_CTIME
-};
 
 void mutt_get_stat_timespec(struct timespec *dest, struct stat *sb, enum MuttStatType type)
 {
@@ -222,12 +235,12 @@ int main(int argc, char *argv[])
   m.magic = MUTT_MAILDIR;
   mutt_str_strfcpy(m.path, file, sizeof(m.path));
 
-  int rc = mx_maildir_ops.mbox_open(&ctx);
+  int rc = MxMaildirOps.mbox_open(ctx.mailbox);
   printf("%d\n", rc);
   if (rc != 0)
     return 1;
 
-  rc = mx_maildir_ops.mbox_close(&ctx);
+  rc = MxMaildirOps.mbox_close(ctx.mailbox);
   printf("%d\n", rc);
   if (rc != 0)
     return 1;

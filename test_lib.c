@@ -166,7 +166,7 @@ void test_hash(void)
   // struct HashElem *   mutt_hash_walk                    (const struct Hash *table, struct HashWalkState *state);
 
   struct Hash *h = NULL;
-  mutt_hash_destroy(&h);
+  mutt_hash_free(&h);
 }
 
 void test_history(void)

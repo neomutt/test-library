@@ -4,10 +4,22 @@
 #include <string.h>
 #include <unistd.h>
 #include "mutt/mutt.h"
+#include "email/lib.h"
 #include "hcache/hcache.h"
 
+bool AutoSubscribe;
 bool HeaderCacheCompress;
 char *HeaderCachePagesize;
+struct Hash *AutoSubscribeCache;
+struct RegexList UnMailLists = STAILQ_HEAD_INITIALIZER(UnMailLists);
+struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);
+struct RegexList MailLists = STAILQ_HEAD_INITIALIZER(MailLists);
+struct RegexList SubscribedLists = STAILQ_HEAD_INITIALIZER(SubscribedLists);
+
+int url_parse_mailto(struct Envelope *e, char **body, const char *src)
+{
+  return -1;
+}
 
 int mutt_convert_string(char **ps, const char *from, const char *to, int flags)
 {
