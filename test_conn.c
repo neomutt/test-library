@@ -9,22 +9,10 @@
 
 unsigned char Options[50];
 int SigInt;
-const char *Preconnect;
-short ConnectTimeout;
+const char *C_Preconnect;
+short C_ConnectTimeout;
 bool OptNoCurses;
 bool UseIpv6;
-
-/**
- * enum AccountType - account types
- */
-enum AccountType
-{
-  MUTT_ACCT_TYPE_NONE = 0,
-  MUTT_ACCT_TYPE_IMAP,
-  MUTT_ACCT_TYPE_POP,
-  MUTT_ACCT_TYPE_SMTP,
-  MUTT_ACCT_TYPE_NNTP
-};
 
 /* account flags */
 #define MUTT_ACCT_PORT (1 << 0)

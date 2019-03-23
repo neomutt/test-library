@@ -11,19 +11,19 @@
 
 struct Progress;
 
-bool MaildirCheckCur;
-bool AutoSubscribe;
-bool FlagSafe;
-char *HeaderCache;
+bool C_MaildirCheckCur;
+bool C_AutoSubscribe;
+bool C_FlagSafe;
+char *C_HeaderCache;
 char *HomeDir;
-bool MailCheckRecent;
-bool MaildirTrash;
-bool MarkOld;
-short ReadInc;
+bool C_MailCheckRecent;
+bool C_MaildirTrash;
+bool C_MarkOld;
+short C_ReadInc;
 char *ShortHostname;
 volatile sig_atomic_t SigInt;
-short Sort;
-short WriteInc;
+short C_Sort;
+short C_WriteInc;
 int MonitorContextChanged = 0;
 struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);
 struct RegexList MailLists = STAILQ_HEAD_INITIALIZER(MailLists);
@@ -154,7 +154,7 @@ int mx_msg_close(struct Mailbox *m, struct Message **msg)
   return -1;
 }
 
-struct Message *mx_msg_open_new(struct Mailbox *m, struct Email *e, int flags)
+struct Message *mx_msg_open_new(struct Mailbox *m, struct Email *e, MsgOpenFlags flags)
 {
   mutt_message("mx_msg_open_new NOTIMPL");
   return NULL;

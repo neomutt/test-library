@@ -11,15 +11,15 @@
 
 struct Progress;
 
-bool AutoSubscribe;
-short Sort;
-short WriteInc;
-bool CheckMboxSize;
-bool MailCheckRecent;
+bool C_AutoSubscribe;
+short C_Sort;
+short C_WriteInc;
+bool C_CheckMboxSize;
+bool C_MailCheckRecent;
 char *HomeDir;
 char *ShortHostname;
 char *Username;
-short ReadInc;
+short C_ReadInc;
 volatile sig_atomic_t SigInt;
 struct Hash *AutoSubscribeCache;
 struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);
@@ -27,7 +27,7 @@ struct RegexList SubscribedLists = STAILQ_HEAD_INITIALIZER(SubscribedLists);
 struct RegexList MailLists = STAILQ_HEAD_INITIALIZER(MailLists);
 struct RegexList UnMailLists = STAILQ_HEAD_INITIALIZER(UnMailLists);
 
-struct Context *mx_mbox_open(struct Mailbox *m, const char *path, int flags)
+struct Context *mx_mbox_open(struct Mailbox *m, OpenMailboxFlags flags)
 {
   return NULL;
 }

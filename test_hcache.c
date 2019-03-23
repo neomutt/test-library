@@ -7,9 +7,9 @@
 #include "email/lib.h"
 #include "hcache/hcache.h"
 
-bool AutoSubscribe;
-bool HeaderCacheCompress;
-char *HeaderCachePagesize;
+bool C_AutoSubscribe;
+bool C_HeaderCacheCompress;
+char *C_HeaderCachePagesize;
 struct Hash *AutoSubscribeCache;
 struct RegexList UnMailLists = STAILQ_HEAD_INITIALIZER(UnMailLists);
 struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);

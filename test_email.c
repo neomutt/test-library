@@ -8,7 +8,7 @@
 #include "mutt/mutt.h"
 #include "email/lib.h"
 
-bool AutoSubscribe;
+bool C_AutoSubscribe;
 struct Hash *AutoSubscribeCache;
 struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);
 struct RegexList UnMailLists = STAILQ_HEAD_INITIALIZER(UnMailLists);
@@ -102,7 +102,7 @@ void test_email_globals(void)
   // struct ReplaceList SpamList;
   // struct ListHead UnIgnore;
 
-  MarkOld = true;
+  C_MarkOld = true;
 }
 
 void test_envelope(void)
@@ -143,10 +143,10 @@ void test_idna(void)
 
   char *mailbox = NULL;
 
-  IdnEncode = true;
-  IdnDecode = true;
+  C_IdnEncode = true;
+  C_IdnDecode = true;
 
-  mutt_str_replace(&Charset, "utf-8");
+  mutt_str_replace(&C_Charset, "utf-8");
 
   char *user = "joe";
   char *domain1 = "\360\237\222\251.la";
@@ -166,7 +166,7 @@ void test_idna(void)
     FREE(&mailbox);
   }
 
-  FREE(&Charset);
+  FREE(&C_Charset);
 
   char *input = "\316\264\317\200\316\270.com";
   char *output = NULL;
@@ -253,12 +253,12 @@ void test_rfc2047(void)
 
   char *str = strdup("한국어 Русский 义勇军");
 
-  mutt_str_replace(&Charset, "utf-8");
+  mutt_str_replace(&C_Charset, "utf-8");
   rfc2047_encode(&str, MimeSpecials, 0, NULL);
 
   printf("%s\n", str);
   FREE(&str);
-  FREE(&Charset);
+  FREE(&C_Charset);
 }
 
 void test_rfc2231(void)
