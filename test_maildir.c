@@ -25,11 +25,12 @@ volatile sig_atomic_t SigInt;
 short C_Sort;
 short C_WriteInc;
 int MonitorContextChanged = 0;
-struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);
-struct RegexList MailLists = STAILQ_HEAD_INITIALIZER(MailLists);
 struct Hash *AutoSubscribeCache;
-struct RegexList UnMailLists = STAILQ_HEAD_INITIALIZER(UnMailLists);
-struct RegexList SubscribedLists = STAILQ_HEAD_INITIALIZER(SubscribedLists);
+
+void mutt_mailbox_size_add(struct Mailbox *m, const struct Email *e)
+{
+  m->size += mutt_email_size(e);
+}
 
 int url_parse_mailto(struct Envelope *e, char **body, const char *src)
 {

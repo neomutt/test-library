@@ -22,10 +22,6 @@ char *Username;
 short C_ReadInc;
 volatile sig_atomic_t SigInt;
 struct Hash *AutoSubscribeCache;
-struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);
-struct RegexList SubscribedLists = STAILQ_HEAD_INITIALIZER(SubscribedLists);
-struct RegexList MailLists = STAILQ_HEAD_INITIALIZER(MailLists);
-struct RegexList UnMailLists = STAILQ_HEAD_INITIALIZER(UnMailLists);
 
 struct Context *mx_mbox_open(struct Mailbox *m, OpenMailboxFlags flags)
 {

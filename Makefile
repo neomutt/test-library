@@ -20,24 +20,24 @@ LDFLAGS	+= -L$(NEO)
 # CFLAGS	+=-fsanitize=address -fsanitize-recover=address
 # LDFLAGS	+=-fsanitize=address -fsanitize-recover=address
 
-CONN_LDFLAGS	= -lconn -lemail -lidn2 -lgnutls
-EMAIL_LDFLAGS	= -lemail -lidn2
-HCACHE_LDFLAGS	= -lhcache -lemail -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
+CONN_LDFLAGS	= -lconn -lgnutls
+EMAIL_LDFLAGS	= -lemail
+HCACHE_LDFLAGS	= -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
 IMAP_LDFLAGS	= -limap
 MAILDIR_LDFLAGS	= -lmaildir
 MBOX_LDFLAGS	= -lmbox
-MUTT_LDFLAGS	= -lemail -lmutt -lidn2
+MUTT_LDFLAGS	= -lmutt -lidn2
 
 all:	$(NEO) $(OUT)
 
 test_conn: test_conn.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_email: test_email.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_hcache: test_hcache.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(HCACHE_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(HCACHE_LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_date: test_date.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
@@ -46,7 +46,7 @@ test_imap: test_imap.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
 
 test_address: test_address.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_lib: test_lib.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)

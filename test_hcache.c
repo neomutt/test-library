@@ -11,10 +11,6 @@ bool C_AutoSubscribe;
 bool C_HeaderCacheCompress;
 char *C_HeaderCachePagesize;
 struct Hash *AutoSubscribeCache;
-struct RegexList UnMailLists = STAILQ_HEAD_INITIALIZER(UnMailLists);
-struct RegexList UnSubscribedLists = STAILQ_HEAD_INITIALIZER(UnSubscribedLists);
-struct RegexList MailLists = STAILQ_HEAD_INITIALIZER(MailLists);
-struct RegexList SubscribedLists = STAILQ_HEAD_INITIALIZER(SubscribedLists);
 
 int url_parse_mailto(struct Envelope *e, char **body, const char *src)
 {
