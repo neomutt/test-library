@@ -43,6 +43,7 @@ void test_buffer(void)
   // int                     mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
   // void                    mutt_buffer_reset                 (struct Buffer *buf);
   // void                    mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
+  // void                    mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
 
   struct Buffer *b = NULL;
   mutt_buffer_free(&b);
@@ -147,7 +148,7 @@ void test_file(void)
   // int                     mutt_file_rmtree                  (const char *path);
   // int                     mutt_file_safe_rename             (const char *src, const char *target);
   // void                    mutt_file_sanitize_filename       (char *fp, bool slash);
-  // int                     mutt_file_sanitize_regex          (char *dest, size_t destlen, const char *src);
+  // int                     mutt_file_sanitize_regex          (struct Buffer *dest, const char *src);
   // void                    mutt_file_set_mtime               (const char *from, const char *to);
   // int                     mutt_file_stat_compare            (struct stat *sba, enum MuttStatType sba_type, struct stat *sbb, enum MuttStatType sbb_type);
   // int                     mutt_file_stat_timespec_compare   (struct stat *sba, enum MuttStatType type, struct timespec *b);
@@ -353,7 +354,7 @@ void test_sha1(void)
 
 void test_signal(void)
 {
-  // void                    mutt_sig_allow_interrupt          (int disposition);
+  // void                    mutt_sig_allow_interrupt          (bool allow);
   // void                    mutt_sig_block                    (void);
   // void                    mutt_sig_block_system             (void);
   // void                    mutt_sig_empty_handler            (int sig);
@@ -369,6 +370,7 @@ void test_string(void)
 {
   // void                    mutt_str_adjust                   (char **p);
   // void                    mutt_str_append_item              (char **str, const char *item, int sep);
+  // int                     mutt_str_asprintf                 (char **strp, const char *fmt, ...);
   // int                     mutt_str_atoi                     (const char *str, int *dst);
   // int                     mutt_str_atol                     (const char *str, long *dst);
   // int                     mutt_str_atos                     (const char *str, short *dst);
@@ -391,6 +393,7 @@ void test_string(void)
   // const char *            mutt_str_rstrnstr                 (const char *haystack, size_t haystack_length, const char *needle);
   // char *                  mutt_str_skip_email_wsp           (const char *s);
   // char *                  mutt_str_skip_whitespace          (char *p);
+  // struct ListHead         mutt_str_split                    (const char *src, char sep);
   // size_t                  mutt_str_startswith               (const char *str, const char *prefix, enum CaseSensitivity cs);
   // int                     mutt_str_strcasecmp               (const char *a, const char *b);
   // const char *            mutt_str_strcasestr               (const char *haystack, const char *needle);

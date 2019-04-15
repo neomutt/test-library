@@ -81,6 +81,7 @@ void test_email(void)
   // bool                    mutt_email_cmp_strict             (const struct Email *e1, const struct Email *e2);
   // void                    mutt_email_free                   (struct Email **e);
   // struct Email *          mutt_email_new                    (void);
+  // size_t                  mutt_email_size                   (const struct Email *e);
 
   struct Email *e = mutt_email_new();
   mutt_email_free(&e);
@@ -229,6 +230,7 @@ void test_parse(void)
   // bool                    mutt_is_message_type              (int type, const char *subtype);
   // bool                    mutt_matches_ignore               (const char *s);
   // void                    mutt_parse_content_type           (const char *s, struct Body *ct);
+  // int                     mutt_parse_mailto                 (struct Envelope *e, char **body, const char *src);
   // struct Body *           mutt_parse_multipart              (FILE *fp, const char *boundary, off_t end_off, bool digest);
   // void                    mutt_parse_part                   (FILE *fp, struct Body *b);
   // struct Body *           mutt_read_mime_header             (FILE *fp, bool digest);
@@ -305,6 +307,7 @@ void test_url(void)
   // struct Url *            url_parse                         (const char *src);
   // int                     url_pct_decode                    (char *s);
   // void                    url_pct_encode                    (char *buf, size_t buflen, const char *src);
+  // int                     url_tobuffer                      (struct Url *u, struct Buffer *buf, int flags);
   // int                     url_tostring                      (struct Url *u, char *buf, size_t buflen, int flags);
 
   url_check_scheme("imaps://host.com");

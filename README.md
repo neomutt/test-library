@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (367 functions)
+## Library (373 functions)
 
 There are now two libraries, libmutt and libemail.
 
@@ -104,6 +104,7 @@ void                    mutt_buffer_pool_release          (struct Buffer **pbuf)
 int                     mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
 void                    mutt_buffer_reset                 (struct Buffer *buf);
 void                    mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
+void                    mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
 ```
 
 ### charset (mutt)
@@ -162,6 +163,7 @@ time_t                  mutt_date_parse_imap              (const char *s);
 bool                    mutt_email_cmp_strict             (const struct Email *e1, const struct Email *e2);
 void                    mutt_email_free                   (struct Email **e);
 struct Email *          mutt_email_new                    (void);
+size_t                  mutt_email_size                   (const struct Email *e);
 ```
 
 ### email_globals (email)
@@ -240,7 +242,7 @@ int                     mutt_file_rename                  (const char *oldfile, 
 int                     mutt_file_rmtree                  (const char *path);
 int                     mutt_file_safe_rename             (const char *src, const char *target);
 void                    mutt_file_sanitize_filename       (char *fp, bool slash);
-int                     mutt_file_sanitize_regex          (char *dest, size_t destlen, const char *src);
+int                     mutt_file_sanitize_regex          (struct Buffer *dest, const char *src);
 void                    mutt_file_set_mtime               (const char *from, const char *to);
 int                     mutt_file_stat_compare            (struct stat *sba, enum MuttStatType sba_type, struct stat *sbb, enum MuttStatType sbb_type);
 int                     mutt_file_stat_timespec_compare   (struct stat *sba, enum MuttStatType type, struct timespec *b);
@@ -438,6 +440,7 @@ char *                  mutt_extract_message_id           (const char *s, const 
 bool                    mutt_is_message_type              (int type, const char *subtype);
 bool                    mutt_matches_ignore               (const char *s);
 void                    mutt_parse_content_type           (const char *s, struct Body *ct);
+int                     mutt_parse_mailto                 (struct Envelope *e, char **body, const char *src);
 struct Body *           mutt_parse_multipart              (FILE *fp, const char *boundary, off_t end_off, bool digest);
 void                    mutt_parse_part                   (FILE *fp, struct Body *b);
 struct Body *           mutt_read_mime_header             (FILE *fp, bool digest);
@@ -517,7 +520,7 @@ void                    mutt_sha1_update                  (struct Sha1Ctx *sha1c
 ### signal (mutt)
 
 ```c
-void                    mutt_sig_allow_interrupt          (int disposition);
+void                    mutt_sig_allow_interrupt          (bool allow);
 void                    mutt_sig_block                    (void);
 void                    mutt_sig_block_system             (void);
 void                    mutt_sig_empty_handler            (int sig);
@@ -532,6 +535,7 @@ void                    mutt_sig_unblock_system           (bool catch);
 ```c
 void                    mutt_str_adjust                   (char **p);
 void                    mutt_str_append_item              (char **str, const char *item, int sep);
+int                     mutt_str_asprintf                 (char **strp, const char *fmt, ...);
 int                     mutt_str_atoi                     (const char *str, int *dst);
 int                     mutt_str_atol                     (const char *str, long *dst);
 int                     mutt_str_atos                     (const char *str, short *dst);
@@ -554,6 +558,7 @@ void                    mutt_str_replace                  (char **p, const char 
 const char *            mutt_str_rstrnstr                 (const char *haystack, size_t haystack_length, const char *needle);
 char *                  mutt_str_skip_email_wsp           (const char *s);
 char *                  mutt_str_skip_whitespace          (char *p);
+struct ListHead         mutt_str_split                    (const char *src, char sep);
 size_t                  mutt_str_startswith               (const char *str, const char *prefix, enum CaseSensitivity cs);
 int                     mutt_str_strcasecmp               (const char *a, const char *b);
 const char *            mutt_str_strcasestr               (const char *haystack, const char *needle);
@@ -610,6 +615,7 @@ void                    url_free                          (struct Url **u);
 struct Url *            url_parse                         (const char *src);
 int                     url_pct_decode                    (char *s);
 void                    url_pct_encode                    (char *buf, size_t buflen, const char *src);
-int                     url_tostring                      (struct Url *u, char *buf, size_t buflen, int flags);
+int                     url_tobuffer                      (struct Url *u, struct Buffer *buf, int flags);
+int                     url_tostring                      (struct Url *u, char *dest, size_t len, int flags);
 ```
 
