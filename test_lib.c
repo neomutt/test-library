@@ -28,6 +28,7 @@ void test_buffer(void)
   // size_t                  mutt_buffer_addstr                (struct Buffer *buf, const char *s);
   // size_t                  mutt_buffer_addstr_n              (struct Buffer *buf, const char *s, size_t len);
   // struct Buffer *         mutt_buffer_alloc                 (size_t size);
+  // void                    mutt_buffer_concat_path           (struct Buffer *buf, const char *dir, const char *fname);
   // void                    mutt_buffer_fix_dptr              (struct Buffer *buf);
   // void                    mutt_buffer_free                  (struct Buffer **p);
   // struct Buffer *         mutt_buffer_from                  (const char *seed);
@@ -38,7 +39,6 @@ void test_buffer(void)
   // struct Buffer *         mutt_buffer_new                   (void);
   // void                    mutt_buffer_pool_free             (void);
   // struct Buffer *         mutt_buffer_pool_get              (void);
-  // void                    mutt_buffer_pool_init             (void);
   // void                    mutt_buffer_pool_release          (struct Buffer **pbuf);
   // int                     mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
   // void                    mutt_buffer_reset                 (struct Buffer *buf);
@@ -309,6 +309,7 @@ void test_path(void)
   // char *                  mutt_path_concatn                 (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
   // char *                  mutt_path_dirname                 (const char *path);
   // char *                  mutt_path_escape                  (const char *src);
+  // void                    mutt_path_getcwd                  (struct Buffer *cwd);
   // bool                    mutt_path_parent                  (char *buf, size_t buflen);
   // bool                    mutt_path_pretty                  (char *buf, size_t buflen, const char *homedir);
   // size_t                  mutt_path_realpath                (char *buf);

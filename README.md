@@ -12,11 +12,11 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (373 functions)
+## Library (374 functions)
 
-There are now two libraries, libmutt and libemail.
+There are now three libraries, libaddress, libemail and libmutt.
 
-### address (email)
+### address (address)
 
 ```c
 int AddressError;
@@ -89,6 +89,7 @@ size_t                  mutt_buffer_addch                 (struct Buffer *buf, c
 size_t                  mutt_buffer_addstr                (struct Buffer *buf, const char *s);
 size_t                  mutt_buffer_addstr_n              (struct Buffer *buf, const char *s, size_t len);
 struct Buffer *         mutt_buffer_alloc                 (size_t size);
+void                    mutt_buffer_concat_path           (struct Buffer *buf, const char *dir, const char *fname);
 void                    mutt_buffer_fix_dptr              (struct Buffer *buf);
 void                    mutt_buffer_free                  (struct Buffer **p);
 struct Buffer *         mutt_buffer_from                  (const char *seed);
@@ -99,7 +100,6 @@ size_t                  mutt_buffer_len                   (const struct Buffer *
 struct Buffer *         mutt_buffer_new                   (void);
 void                    mutt_buffer_pool_free             (void);
 struct Buffer *         mutt_buffer_pool_get              (void);
-void                    mutt_buffer_pool_init             (void);
 void                    mutt_buffer_pool_release          (struct Buffer **pbuf);
 int                     mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
 void                    mutt_buffer_reset                 (struct Buffer *buf);
@@ -260,7 +260,7 @@ int                     mutt_file_unlock                  (int fd);
 bool                    is_from                           (const char *s, char *path, size_t pathlen, time_t *tp);
 ```
 
-### group (email)
+### group (address)
 
 ```c
 bool                    mutt_group_match                  (struct Group *g, const char *s);
@@ -315,7 +315,7 @@ void                    mutt_hist_save_scratch            (enum HistoryClass hcl
 int                     mutt_hist_search                  (const char *search_buf, enum HistoryClass hclass, char **matches);
 ```
 
-### idna (email)
+### idna (address)
 
 ```c
 bool C_IdnDecode;
@@ -460,6 +460,7 @@ char *                  mutt_path_concat                  (char *d, const char *
 char *                  mutt_path_concatn                 (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
 char *                  mutt_path_dirname                 (const char *path);
 char *                  mutt_path_escape                  (const char *src);
+void                    mutt_path_getcwd                  (struct Buffer *cwd);
 bool                    mutt_path_parent                  (char *buf, size_t buflen);
 bool                    mutt_path_pretty                  (char *buf, size_t buflen, const char *homedir);
 size_t                  mutt_path_realpath                (char *buf);
