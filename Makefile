@@ -27,7 +27,7 @@ HCACHE_LDFLAGS	= -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -
 IMAP_LDFLAGS	= -limap
 MAILDIR_LDFLAGS	= -lmaildir
 MBOX_LDFLAGS	= -lmbox
-MUTT_LDFLAGS	= -lmutt -lidn2
+MUTT_LDFLAGS	= -lmutt -lidn -lidn2
 
 all:	$(NEO) $(OUT)
 
