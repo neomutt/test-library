@@ -3,6 +3,7 @@ test_address
 test_conn
 test_date
 test_email
+test_fuzz
 test_hcache
 test_imap
 test_lib
