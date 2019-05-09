@@ -59,7 +59,7 @@ void test_group(void)
   // void                    mutt_grouplist_init               (void);
   // int                     mutt_grouplist_remove_addrlist    (struct GroupList *head, struct Address *a);
   // int                     mutt_grouplist_remove_regex       (struct GroupList *head, const char *s);
-  // struct Group *          mutt_pattern_group                (const char *k);
+  // struct Group *          mutt_pattern_group                (const char *pat);
 
   mutt_grouplist_free();
 }

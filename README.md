@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (374 functions)
+## Library (375 functions)
 
 There are now three libraries, libaddress, libemail and libmutt.
 
@@ -150,7 +150,7 @@ struct tm               mutt_date_localtime               (time_t t);
 size_t                  mutt_date_localtime_format        (char *buf, size_t buflen, char *format, time_t t);
 char *                  mutt_date_make_date               (char *buf, size_t buflen);
 int                     mutt_date_make_imap               (char *buf, size_t buflen, time_t timestamp);
-time_t                  mutt_date_make_time               (struct tm *t, int local);
+time_t                  mutt_date_make_time               (struct tm *t, bool local);
 int                     mutt_date_make_tls                (char *buf, size_t buflen, time_t timestamp);
 void                    mutt_date_normalize_time          (struct tm *tm);
 time_t                  mutt_date_parse_date              (const char *s, struct Tz *tz_out);
@@ -213,6 +213,8 @@ void                    mutt_exit                         (int code);
 ```c
 char *C_Tmpdir;
 
+void                    mutt_buffer_file_expand_fmt_quote (struct Buffer *dest, const char *fmt, const char *src);
+void                    mutt_buffer_quote_filename        (struct Buffer *buf, const char *filename, bool add_outer);
 int                     mutt_file_check_empty             (const char *path);
 int                     mutt_file_chmod                   (const char *path, mode_t mode);
 int                     mutt_file_chmod_add               (const char *path, mode_t mode);
@@ -222,8 +224,7 @@ int                     mutt_file_chmod_rm_stat           (const char *path, mod
 int                     mutt_file_copy_bytes              (FILE *fp_in, FILE *fp_out, size_t size);
 int                     mutt_file_copy_stream             (FILE *fp_in, FILE *fp_out);
 time_t                  mutt_file_decrease_mtime          (const char *fp, struct stat *st);
-void                    mutt_file_expand_fmt              (char *dest, size_t destlen, const char *fmt, const char *src);
-void                    mutt_file_expand_fmt_quote        (char *dest, size_t destlen, const char *fmt, const char *src);
+void                    mutt_file_expand_fmt              (struct Buffer *dest, const char *fmt, const char *src);
 int                     mutt_file_fclose                  (FILE **fp);
 FILE *                  mutt_file_fopen                   (const char *path, const char *mode);
 int                     mutt_file_fsync_close             (FILE **fp);
@@ -241,7 +242,7 @@ char *                  mutt_file_read_line               (char *line, size_t *s
 int                     mutt_file_rename                  (const char *oldfile, const char *newfile);
 int                     mutt_file_rmtree                  (const char *path);
 int                     mutt_file_safe_rename             (const char *src, const char *target);
-void                    mutt_file_sanitize_filename       (char *fp, bool slash);
+void                    mutt_file_sanitize_filename       (char *path, bool slash);
 int                     mutt_file_sanitize_regex          (struct Buffer *dest, const char *src);
 void                    mutt_file_set_mtime               (const char *from, const char *to);
 int                     mutt_file_stat_compare            (struct stat *sba, enum MuttStatType sba_type, struct stat *sbb, enum MuttStatType sbb_type);
@@ -273,7 +274,7 @@ void                    mutt_grouplist_free               (void);
 void                    mutt_grouplist_init               (void);
 int                     mutt_grouplist_remove_addrlist    (struct GroupList *head, struct Address *a);
 int                     mutt_grouplist_remove_regex       (struct GroupList *head, const char *s);
-struct Group *          mutt_pattern_group                (const char *k);
+struct Group *          mutt_pattern_group                (const char *pat);
 ```
 
 ### hash (mutt)
@@ -396,7 +397,7 @@ void *                  mutt_md5_bytes                    (const void *buffer, s
 void *                  mutt_md5_finish_ctx               (struct Md5Ctx *md5ctx, void *resbuf);
 void                    mutt_md5_init_ctx                 (struct Md5Ctx *md5ctx);
 void                    mutt_md5_process                  (const char *str, struct Md5Ctx *md5ctx);
-void                    mutt_md5_process_bytes            (const void *buffer, size_t len, struct Md5Ctx *md5ctx);
+void                    mutt_md5_process_bytes            (const void *buf, size_t buflen, struct Md5Ctx *md5ctx);
 void                    mutt_md5_toascii                  (const void *digest, char *resbuf);
 ```
 
@@ -460,14 +461,14 @@ char *                  mutt_path_concat                  (char *d, const char *
 char *                  mutt_path_concatn                 (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
 char *                  mutt_path_dirname                 (const char *path);
 char *                  mutt_path_escape                  (const char *src);
-void                    mutt_path_getcwd                  (struct Buffer *cwd);
+const char *            mutt_path_getcwd                  (struct Buffer *cwd);
 bool                    mutt_path_parent                  (char *buf, size_t buflen);
 bool                    mutt_path_pretty                  (char *buf, size_t buflen, const char *homedir);
 size_t                  mutt_path_realpath                (char *buf);
 bool                    mutt_path_tidy                    (char *buf);
 bool                    mutt_path_tidy_dotdot             (char *buf);
 bool                    mutt_path_tidy_slash              (char *buf);
-int                     mutt_path_to_absolute             (char *path, const char *reference);
+bool                    mutt_path_to_absolute             (char *path, const char *reference);
 ```
 
 ### regex (mutt)
@@ -506,7 +507,7 @@ void                    rfc2047_encode_envelope           (struct Envelope *env)
 bool C_Rfc2047Parameters;
 
 void                    rfc2231_decode_parameters         (struct ParameterList *p);
-int                     rfc2231_encode_string             (char **pd);
+struct ParameterList    rfc2231_encode_string             (const char *attribute, char *value);
 ```
 
 ### sha1 (mutt)
@@ -535,7 +536,7 @@ void                    mutt_sig_unblock_system           (bool catch);
 
 ```c
 void                    mutt_str_adjust                   (char **p);
-void                    mutt_str_append_item              (char **str, const char *item, int sep);
+void                    mutt_str_append_item              (char **str, const char *item, char sep);
 int                     mutt_str_asprintf                 (char **strp, const char *fmt, ...);
 int                     mutt_str_atoi                     (const char *str, int *dst);
 int                     mutt_str_atol                     (const char *str, long *dst);
@@ -578,7 +579,7 @@ int                     mutt_str_strncmp                  (const char *a, const 
 size_t                  mutt_str_strnfcpy                 (char *dest, const char *src, size_t n, size_t dsize);
 char *                  mutt_str_substr_cpy               (char *dest, const char *begin, const char *end, size_t destlen);
 char *                  mutt_str_substr_dup               (const char *begin, const char *end);
-const char *            mutt_str_sysexit                  (int e);
+const char *            mutt_str_sysexit                  (int err_num);
 int                     mutt_str_word_casecmp             (const char *a, const char *b);
 ```
 

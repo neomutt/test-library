@@ -152,10 +152,13 @@ void test_rfc2231(void)
   // bool C_Rfc2047Parameters;
 
   // void                    rfc2231_decode_parameters         (struct ParameterList *p);
-  // int                     rfc2231_encode_string             (char **pd);
+  // struct ParameterList    rfc2231_encode_string             (const char *attribute, char *value);
 
-  char *str = strdup("한국어 Русский 义勇军");
-  rfc2231_encode_string(&str);
+  const char *attr = "apple";
+  char *value = strdup("한국어 Русский 义勇军");
+  struct ParameterList pl = rfc2231_encode_string(attr, value);
+  if (TAILQ_EMPTY(&pl))
+    return;
 }
 
 void test_tags(void)
@@ -194,7 +197,7 @@ void test_url(void)
   // int                     url_pct_decode                    (char *s);
   // void                    url_pct_encode                    (char *buf, size_t buflen, const char *src);
   // int                     url_tobuffer                      (struct Url *u, struct Buffer *buf, int flags);
-  // int                     url_tostring                      (struct Url *u, char *buf, size_t buflen, int flags);
+  // int                     url_tostring                      (struct Url *u, char *dest, size_t len, int flags);
 
   url_check_scheme("imaps://host.com");
 }

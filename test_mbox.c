@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
   struct Mailbox m = { 0 };
   ctx.mailbox = &m;
   m.magic = MUTT_MBOX;
-  mutt_str_strfcpy(m.path, file, sizeof(m.path));
+  m.pathbuf = mutt_buffer_from(file);
 
   int rc = MxMboxOps.mbox_open(ctx.mailbox);
   printf("%d\n", rc);
