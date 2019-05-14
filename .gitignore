@@ -9,4 +9,5 @@ test_imap
 test_lib
 test_maildir
 test_mbox
+test_pattern
 tmp
