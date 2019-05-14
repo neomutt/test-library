@@ -23,18 +23,13 @@ bool test_file(const char *name)
   struct Email *e = mutt_email_new();
   struct Envelope *env = NULL;
 
-  while (true)
-  {
-    env = mutt_rfc822_read_header(fp, e, false, false);
-    if (!env)
-      return false;
+  env = mutt_rfc822_read_header(fp, e, false, false);
+  if (!env)
+    return false;
 
-    mutt_env_free(&env);
+  mutt_parse_part(fp, e->content);
 
-    if (ftello(fp) == st.st_size)
-      break;
-  }
-
+  mutt_env_free(&env);
   mutt_email_free(&e);
   fclose(fp);
   return true;

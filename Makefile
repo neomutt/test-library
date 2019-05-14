@@ -14,11 +14,14 @@ CFLAGS	+= -fno-omit-frame-pointer
 
 LDFLAGS	+= -L$(NEO)
 
-# CFLAGS	+= -fsanitize=undefined
-# LDFLAGS	+= -fsanitize=undefined
+# CFLAGS	+= -fsanitize=undefined -fno-sanitize-recover=undefined
+# LDFLAGS	+= -fsanitize=undefined -fno-sanitize-recover=undefined
 
 # CFLAGS	+=-fsanitize=address -fsanitize-recover=address
 # LDFLAGS	+=-fsanitize=address -fsanitize-recover=address
+
+# CFLAGS	+= -fsanitize=address -fno-sanitize-recover=address
+# LDFLAGS	+= -fsanitize=address -fno-sanitize-recover=address
 
 CONN_LDFLAGS	= -lconn -lgnutls
 ADDR_LDFLAGS	= -laddress
