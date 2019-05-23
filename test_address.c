@@ -15,33 +15,32 @@ void test_address(void)
   // const char *const AddressErrors[];
   // const char AddressSpecials[];
 
-  // struct Address *        mutt_addr_append                  (struct Address **a, struct Address *b, bool prune);
   // void                    mutt_addr_cat                     (char *buf, size_t buflen, const char *value, const char *specials);
-  // bool                    mutt_addr_cmp                     (struct Address *a, struct Address *b);
-  // bool                    mutt_addr_cmp_strict              (const struct Address *a, const struct Address *b);
-  // struct Address *        mutt_addr_copy                    (struct Address *addr);
-  // struct Address *        mutt_addr_copy_list               (struct Address *addr, bool prune);
-  // const char *            mutt_addr_for_display             (struct Address *a);
-  // void                    mutt_addr_free                    (struct Address **p);
-  // int                     mutt_addr_has_recips              (struct Address *a);
-  // bool                    mutt_addr_is_intl                 (struct Address *a);
-  // bool                    mutt_addr_is_local                (struct Address *a);
-  // int                     mutt_addr_mbox_to_udomain         (const char *mbox, char **user, char **domain);
+  // bool                    mutt_addr_cmp                     (const struct Address *a, const struct Address *b);
+  // struct Address *        mutt_addr_copy                    (const struct Address *addr);
+  // struct Address *        mutt_addr_create                  (const char *personal, const char *mailbox);
+  // const char *            mutt_addr_for_display             (const struct Address *a);
+  // void                    mutt_addr_free                    (struct Address **a);
   // struct Address *        mutt_addr_new                     (void);
-  // struct Address *        mutt_addr_parse_list              (struct Address *top, const char *s);
-  // struct Address *        mutt_addr_parse_list2             (struct Address *p, const char *s);
-  // void                    mutt_addr_qualify                 (struct Address *addr, const char *host);
-  // int                     mutt_addr_remove_from_list        (struct Address **a, const char *mailbox);
-  // struct Address *        mutt_addr_remove_xrefs            (struct Address *a, struct Address *b);
-  // bool                    mutt_addr_search                  (struct Address *a, struct Address *lst);
-  // void                    mutt_addr_set_intl                (struct Address *a, char *intl_mailbox);
-  // void                    mutt_addr_set_local               (struct Address *a, char *local_mailbox);
+  // bool                    mutt_addr_to_local                (struct Address *a);
   // bool                    mutt_addr_valid_msgid             (const char *msgid);
   // size_t                  mutt_addr_write                   (char *buf, size_t buflen, struct Address *addr, bool display);
-  // void                    mutt_addr_write_single            (char *buf, size_t buflen, struct Address *addr, bool display);
-  // struct Address *        mutt_addrlist_dedupe              (struct Address *addr);
-  // int                     mutt_addrlist_to_intl             (struct Address *a, char **err);
-  // int                     mutt_addrlist_to_local            (struct Address *a);
+  // void                    mutt_addrlist_append              (struct AddressList *al, struct Address *a);
+  // void                    mutt_addrlist_clear               (struct AddressList *al);
+  // void                    mutt_addrlist_copy                (struct AddressList *dst, const struct AddressList *src, bool prune);
+  // int                     mutt_addrlist_count_recips        (const struct AddressList *al);
+  // void                    mutt_addrlist_dedupe              (struct AddressList *al);
+  // bool                    mutt_addrlist_equal               (const struct AddressList *ala, const struct AddressList *alb);
+  // int                     mutt_addrlist_parse               (struct AddressList *al, const char *s);
+  // int                     mutt_addrlist_parse2              (struct AddressList *al, const char *s);
+  // void                    mutt_addrlist_prepend             (struct AddressList *al, struct Address *a);
+  // void                    mutt_addrlist_qualify             (struct AddressList *al, const char *host);
+  // int                     mutt_addrlist_remove              (struct AddressList *al, const char *mailbox);
+  // void                    mutt_addrlist_remove_xrefs        (const struct AddressList *a, struct AddressList *b);
+  // bool                    mutt_addrlist_search              (const struct Address *needle, const struct AddressList *haystack);
+  // int                     mutt_addrlist_to_intl             (struct AddressList *al, char **err);
+  // int                     mutt_addrlist_to_local            (struct AddressList *al);
+  // size_t                  mutt_addrlist_write               (char *buf, size_t buflen, const struct AddressList *al, bool display);
 
   struct Address *a = mutt_addr_new();
   mutt_addr_free(&a);
@@ -51,13 +50,13 @@ void test_group(void)
 {
   // bool                    mutt_group_match                  (struct Group *g, const char *s);
   // void                    mutt_grouplist_add                (struct GroupList *head, struct Group *group);
-  // void                    mutt_grouplist_add_addrlist       (struct GroupList *head, struct Address *a);
+  // void                    mutt_grouplist_add_addrlist       (struct GroupList *head, struct AddressList *al);
   // int                     mutt_grouplist_add_regex          (struct GroupList *head, const char *s, int flags, struct Buffer *err);
   // void                    mutt_grouplist_clear              (struct GroupList *head);
   // void                    mutt_grouplist_destroy            (struct GroupList *head);
   // void                    mutt_grouplist_free               (void);
   // void                    mutt_grouplist_init               (void);
-  // int                     mutt_grouplist_remove_addrlist    (struct GroupList *head, struct Address *a);
+  // int                     mutt_grouplist_remove_addrlist    (struct GroupList *head, struct AddressList *al);
   // int                     mutt_grouplist_remove_regex       (struct GroupList *head, const char *s);
   // struct Group *          mutt_pattern_group                (const char *pat);
 
@@ -118,15 +117,15 @@ void test_idna(void)
   }
 }
 
-void print_addresses(const struct Address *addr)
+void print_addresses(const struct AddressList *al)
 {
-  for (; addr; addr = addr->next)
+  struct Address *addr = NULL;
+  TAILQ_FOREACH(addr, al, entries)
   {
     printf("Address %p\n", addr);
     printf("    personal     = %s\n", addr->personal);
     printf("    mailbox      = %s\n", addr->mailbox);
     printf("    group        = %d\n", addr->group);
-    printf("    next         = %p\n", addr->next);
     printf("    is_intl      = %d\n", addr->is_intl);
     printf("    intl_checked = %d\n", addr->intl_checked);
   }
@@ -144,17 +143,17 @@ int main(int argc, char *argv[])
   test_group();
   test_idna();
 
-  struct Address *a = NULL;
+  struct AddressList al = TAILQ_HEAD_INITIALIZER(al);
 
-  a = mutt_addr_parse_list(a, argv[1]);
-  if (!a)
+  mutt_addrlist_parse(&al, argv[1]);
+  if (TAILQ_EMPTY(&al))
   {
     printf("failed\n");
     return 1;
   }
 
-  print_addresses(a);
-  mutt_addr_free(&a);
+  print_addresses(&al);
+  mutt_addrlist_clear(&al);
 
   return 0;
 }

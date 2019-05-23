@@ -53,9 +53,9 @@ int mutt_copy_message_ctx(FILE *fpout, struct Context *src, struct Email *hdr, i
   return 0;
 }
 
-struct Mailbox *mutt_find_mailbox(const char *path)
+struct Mailbox *mutt_mailbox_find(const char *path)
 {
-  mutt_message("mutt_find_mailbox NOTIMPL");
+  mutt_message("mutt_mailbox_find NOTIMPL");
   return NULL;
 }
 
@@ -94,9 +94,9 @@ void mutt_sort_headers(struct Context *ctx, int init)
   mutt_message("mutt_sort_headers NOTIMPL");
 }
 
-void mutt_update_mailbox(struct Mailbox *m)
+void mutt_mailbox_update(struct Mailbox *m)
 {
-  mutt_message("mutt_update_mailbox NOTIMPL");
+  mutt_message("mutt_mailbox_update NOTIMPL");
 }
 
 void mx_alloc_memory(struct Mailbox *m)

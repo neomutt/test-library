@@ -37,9 +37,6 @@ void test_buffer(void)
   // bool                    mutt_buffer_is_empty              (const struct Buffer *buf);
   // size_t                  mutt_buffer_len                   (const struct Buffer *buf);
   // struct Buffer *         mutt_buffer_new                   (void);
-  // void                    mutt_buffer_pool_free             (void);
-  // struct Buffer *         mutt_buffer_pool_get              (void);
-  // void                    mutt_buffer_pool_release          (struct Buffer **pbuf);
   // int                     mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
   // void                    mutt_buffer_reset                 (struct Buffer *buf);
   // void                    mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
@@ -322,6 +319,15 @@ void test_path(void)
   mutt_path_basename("/home/mutt/file");
 }
 
+void test_pool(void)
+{
+  // void                    mutt_buffer_pool_free             (void);
+  // struct Buffer *         mutt_buffer_pool_get              (void);
+  // void                    mutt_buffer_pool_release          (struct Buffer **pbuf);
+
+  mutt_buffer_pool_free();
+}
+
 void test_regex(void)
 {
   // struct Regex *          mutt_regex_compile                (const char *str, int flags);
@@ -394,7 +400,7 @@ void test_string(void)
   // void                    mutt_str_replace                  (char **p, const char *s);
   // const char *            mutt_str_rstrnstr                 (const char *haystack, size_t haystack_length, const char *needle);
   // char *                  mutt_str_skip_email_wsp           (const char *s);
-  // char *                  mutt_str_skip_whitespace          (char *p);
+  // char *                  mutt_str_skip_whitespace          (const char *p);
   // struct ListHead         mutt_str_split                    (const char *src, char sep);
   // size_t                  mutt_str_startswith               (const char *str, const char *prefix, enum CaseSensitivity cs);
   // int                     mutt_str_strcasecmp               (const char *a, const char *b);
@@ -444,6 +450,7 @@ int main()
   test_md5();
   test_memory();
   test_path();
+  test_pool();
   test_regex();
   test_sha1();
   test_signal();

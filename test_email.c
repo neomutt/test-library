@@ -35,6 +35,7 @@ void test_body(void)
 
 void test_email(void)
 {
+  // void                    el_free                           (struct EmailList *el);
   // bool                    mutt_email_cmp_strict             (const struct Email *e1, const struct Email *e2);
   // void                    mutt_email_free                   (struct Email **e);
   // struct Email *          mutt_email_new                    (void);
@@ -131,10 +132,10 @@ void test_parse(void)
 void test_rfc2047(void)
 {
   // void                    rfc2047_decode                    (char **pd);
-  // void                    rfc2047_decode_addrlist           (struct Address *a);
+  // void                    rfc2047_decode_addrlist           (struct AddressList *al);
   // void                    rfc2047_decode_envelope           (struct Envelope *env);
   // void                    rfc2047_encode                    (char **pd, const char *specials, int col, const char *charsets);
-  // void                    rfc2047_encode_addrlist           (struct Address *addr, const char *tag);
+  // void                    rfc2047_encode_addrlist           (struct AddressList *al, const char *tag);
   // void                    rfc2047_encode_envelope           (struct Envelope *env);
 
   char *str = strdup("한국어 Русский 义勇军");
