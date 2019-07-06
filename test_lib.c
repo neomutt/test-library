@@ -86,7 +86,7 @@ void test_date(void)
   // bool                    mutt_date_is_day_name             (const char *s);
   // time_t                  mutt_date_local_tz                (time_t t);
   // struct tm               mutt_date_localtime               (time_t t);
-  // size_t                  mutt_date_localtime_format        (char *buf, size_t buflen, char *format, time_t t);
+  // size_t                  mutt_date_localtime_format        (char *buf, size_t buflen, const char *format, time_t t);
   // char *                  mutt_date_make_date               (char *buf, size_t buflen);
   // int                     mutt_date_make_imap               (char *buf, size_t buflen, time_t timestamp);
   // time_t                  mutt_date_make_time               (struct tm *t, bool local);
@@ -213,6 +213,7 @@ void test_list(void)
   // struct ListNode *       mutt_list_insert_head             (struct ListHead *h, char *s);
   // struct ListNode *       mutt_list_insert_tail             (struct ListHead *h, char *s);
   // bool                    mutt_list_match                   (const char *s, struct ListHead *h);
+  // struct ListHead         mutt_list_str_split               (const char *src, char sep);
 
   struct ListHead head = STAILQ_HEAD_INITIALIZER(head);
 
@@ -226,6 +227,7 @@ void test_logging(void)
   // log_dispatcher_t MuttLogger;
 
   // int                     log_disp_file                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
+  // int                     log_disp_null                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
   // int                     log_disp_queue                    (time_t stamp, const char *file, int line, const char *function, int level, ...);
   // int                     log_disp_terminal                 (time_t stamp, const char *file, int line, const char *function, int level, ...);
   // void                    log_file_close                    (bool verbose);
@@ -298,6 +300,19 @@ void test_memory(void)
   FREE(&ptr);
 }
 
+void test_notify(void)
+{
+  // void                    notify_free                       (struct Notify **ptr);
+  // struct Notify *         notify_new                        (void *object, enum NotifyType type);
+  // bool                    notify_observer_add               (struct Notify *notify, enum NotifyType type, int subtype, observer_t callback, intptr_t data);
+  // bool                    notify_observer_remove            (struct Notify *notify, observer_t callback);
+  // bool                    notify_send                       (struct Notify *notify, int type, int subtype, intptr_t data);
+  // void                    notify_set_parent                 (struct Notify *notify, struct Notify *parent);
+
+  struct Notify *n = NULL;
+  notify_free(&n);
+}
+
 void test_path(void)
 {
   // bool                    mutt_path_abbr_folder             (char *buf, size_t buflen, const char *folder);
@@ -367,11 +382,27 @@ void test_signal(void)
   // void                    mutt_sig_block_system             (void);
   // void                    mutt_sig_empty_handler            (int sig);
   // void                    mutt_sig_exit_handler             (int sig);
-  // void                    mutt_sig_init                     (sig_handler_t sig_fn, sig_handler_t exit_fn);
+  // void                    mutt_sig_init                     (sig_handler_t sig_fn, sig_handler_t exit_fn, sig_handler_t segv_fn);
   // void                    mutt_sig_unblock                  (void);
-  // void                    mutt_sig_unblock_system           (bool catch);
+  // void                    mutt_sig_unblock_system           (bool restore);
 
   mutt_sig_unblock();
+}
+
+void test_slist(void)
+{
+  // struct Slist *          slist_add_list                    (struct Slist *list, const struct Slist *add);
+  // struct Slist *          slist_add_string                  (struct Slist *list, const char *str);
+  // bool                    slist_compare                     (const struct Slist *a, const struct Slist *b);
+  // struct Slist *          slist_dup                         (const struct Slist *list);
+  // struct Slist *          slist_empty                       (struct Slist **list);
+  // void                    slist_free                        (struct Slist **list);
+  // bool                    slist_is_member                   (const struct Slist *list, const char *str);
+  // struct Slist *          slist_parse                       (const char *str, int flags);
+  // struct Slist *          slist_remove_string               (struct Slist *list, const char *str);
+
+  struct Slist *s = NULL;
+  slist_free(&s);
 }
 
 void test_string(void)
@@ -389,7 +420,7 @@ void test_string(void)
   // const char *            mutt_str_find_word                (const char *src);
   // const char *            mutt_str_getenv                   (const char *name);
   // bool                    mutt_str_inline_replace           (char *buf, size_t buflen, size_t xlen, const char *rstr);
-  // bool                    mutt_str_is_ascii                 (const char *p, size_t len);
+  // bool                    mutt_str_is_ascii                 (const char *str, size_t len);
   // bool                    mutt_str_is_email_wsp             (char c);
   // size_t                  mutt_str_lws_len                  (const char *s, size_t n);
   // size_t                  mutt_str_lws_rlen                 (const char *s, size_t n);
@@ -401,7 +432,6 @@ void test_string(void)
   // const char *            mutt_str_rstrnstr                 (const char *haystack, size_t haystack_length, const char *needle);
   // char *                  mutt_str_skip_email_wsp           (const char *s);
   // char *                  mutt_str_skip_whitespace          (const char *p);
-  // struct ListHead         mutt_str_split                    (const char *src, char sep);
   // size_t                  mutt_str_startswith               (const char *str, const char *prefix, enum CaseSensitivity cs);
   // int                     mutt_str_strcasecmp               (const char *a, const char *b);
   // const char *            mutt_str_strcasestr               (const char *haystack, const char *needle);
@@ -418,7 +448,7 @@ void test_string(void)
   // char *                  mutt_str_strncat                  (char *d, size_t l, const char *s, size_t sl);
   // int                     mutt_str_strncmp                  (const char *a, const char *b, size_t l);
   // size_t                  mutt_str_strnfcpy                 (char *dest, const char *src, size_t n, size_t dsize);
-  // char *                  mutt_str_substr_cpy               (char *dest, const char *begin, const char *end, size_t destlen);
+  // char *                  mutt_str_substr_copy              (const char *begin, const char *end, char *buf, size_t buflen);
   // char *                  mutt_str_substr_dup               (const char *begin, const char *end);
   // const char *            mutt_str_sysexit                  (int err_num);
   // int                     mutt_str_word_casecmp             (const char *a, const char *b);
@@ -449,11 +479,13 @@ int main()
   test_mbyte();
   test_md5();
   test_memory();
+  test_notify();
   test_path();
   test_pool();
   test_regex();
   test_sha1();
   test_signal();
+  test_slist();
   test_string();
   test_exit();
 

@@ -23,6 +23,14 @@ short C_ReadInc;
 volatile sig_atomic_t SigInt;
 struct Hash *AutoSubscribeCache;
 
+typedef uint16_t CopyMessageFlags;
+typedef uint32_t CopyHeaderFlags;
+
+int mutt_copy_message(FILE *fp_out, struct Mailbox *m, struct Email *e, CopyMessageFlags cmflags, CopyHeaderFlags chflags)
+{
+  return -1;
+}
+
 struct Context *mx_mbox_open(struct Mailbox *m, OpenMailboxFlags flags)
 {
   return NULL;

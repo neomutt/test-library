@@ -35,11 +35,11 @@ void test_body(void)
 
 void test_email(void)
 {
-  // void                    el_free                           (struct EmailList *el);
   // bool                    mutt_email_cmp_strict             (const struct Email *e1, const struct Email *e2);
   // void                    mutt_email_free                   (struct Email **e);
   // struct Email *          mutt_email_new                    (void);
   // size_t                  mutt_email_size                   (const struct Email *e);
+  // void                    mutt_emaillist_free               (struct EmailList *el);
 
   struct Email *e = mutt_email_new();
   mutt_email_free(&e);
@@ -112,7 +112,7 @@ void test_parse(void)
 {
   // void                    mutt_auto_subscribe               (const char *mailto);
   // int                     mutt_check_encoding               (const char *c);
-  // int                     mutt_check_mime_type              (const char *s);
+  // enum ContentType        mutt_check_mime_type              (const char *s);
   // char *                  mutt_extract_message_id           (const char *s, const char **saveptr);
   // bool                    mutt_is_message_type              (int type, const char *subtype);
   // bool                    mutt_matches_ignore               (const char *s);
@@ -181,7 +181,7 @@ void test_thread(void)
 {
   // void                    clean_references                  (struct MuttThread *brk, struct MuttThread *cur);
   // struct Email *          find_virtual                      (struct MuttThread *cur, int reverse);
-  // void                    insert_message                    (struct MuttThread **new, struct MuttThread *newparent, struct MuttThread *cur);
+  // void                    insert_message                    (struct MuttThread **add, struct MuttThread *parent, struct MuttThread *cur);
   // bool                    is_descendant                     (struct MuttThread *a, struct MuttThread *b);
   // void                    mutt_break_thread                 (struct Email *e);
   // void                    thread_hash_destructor            (int type, void *obj, intptr_t data);

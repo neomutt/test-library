@@ -49,15 +49,15 @@ void test_address(void)
 void test_group(void)
 {
   // bool                    mutt_group_match                  (struct Group *g, const char *s);
-  // void                    mutt_grouplist_add                (struct GroupList *head, struct Group *group);
-  // void                    mutt_grouplist_add_addrlist       (struct GroupList *head, struct AddressList *al);
-  // int                     mutt_grouplist_add_regex          (struct GroupList *head, const char *s, int flags, struct Buffer *err);
-  // void                    mutt_grouplist_clear              (struct GroupList *head);
-  // void                    mutt_grouplist_destroy            (struct GroupList *head);
+  // void                    mutt_grouplist_add                (struct GroupList *gl, struct Group *group);
+  // void                    mutt_grouplist_add_addrlist       (struct GroupList *gl, struct AddressList *al);
+  // int                     mutt_grouplist_add_regex          (struct GroupList *gl, const char *s, int flags, struct Buffer *err);
+  // void                    mutt_grouplist_clear              (struct GroupList *gl);
+  // void                    mutt_grouplist_destroy            (struct GroupList *gl);
   // void                    mutt_grouplist_free               (void);
   // void                    mutt_grouplist_init               (void);
-  // int                     mutt_grouplist_remove_addrlist    (struct GroupList *head, struct AddressList *al);
-  // int                     mutt_grouplist_remove_regex       (struct GroupList *head, const char *s);
+  // int                     mutt_grouplist_remove_addrlist    (struct GroupList *gl, struct AddressList *al);
+  // int                     mutt_grouplist_remove_regex       (struct GroupList *gl, const char *s);
   // struct Group *          mutt_pattern_group                (const char *pat);
 
   mutt_grouplist_free();

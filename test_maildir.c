@@ -11,6 +11,9 @@
 
 struct Progress;
 
+typedef uint16_t CopyMessageFlags;
+typedef uint32_t CopyHeaderFlags;
+
 bool C_MaildirCheckCur;
 bool C_AutoSubscribe;
 bool C_FlagSafe;
@@ -26,6 +29,19 @@ short C_Sort;
 short C_WriteInc;
 int MonitorContextChanged = 0;
 struct Hash *AutoSubscribeCache;
+char *C_HeaderCachePagesize;
+bool C_HeaderCacheCompress;
+
+void mutt_encode_path(char *dest, size_t dlen, const char *src)
+{
+  mutt_str_strfcpy(dest, src, dlen);
+  printf("mutt_encode_path: %s\n", src);
+}
+
+int mutt_copy_message(FILE *fp_out, struct Mailbox *m, struct Email *e, CopyMessageFlags cmflags, CopyHeaderFlags chflags)
+{
+  return -1;
+}
 
 void mutt_mailbox_size_add(struct Mailbox *m, const struct Email *e)
 {
@@ -53,46 +69,6 @@ void mutt_clear_threads(struct Context *ctx)
 int mutt_copy_message_ctx(FILE *fpout, struct Context *src, struct Email *hdr, int flags, int chflags)
 {
   mutt_message("mutt_copy_message_ctx NOTIMPL");
-  return -1;
-}
-
-void mutt_hcache_close(header_cache_t *h)
-{
-  mutt_message("mutt_hcache_close NOTIMPL");
-}
-
-int mutt_hcache_delete(header_cache_t *h, const char *key, size_t keylen)
-{
-  mutt_message("mutt_hcache_delete NOTIMPL");
-  return -1;
-}
-
-void *mutt_hcache_fetch(header_cache_t *h, const char *key, size_t keylen)
-{
-  mutt_message("mutt_hcache_fetch NOTIMPL");
-  return NULL;
-}
-
-void mutt_hcache_free(header_cache_t *h, void **data)
-{
-  mutt_message("mutt_hcache_free NOTIMPL");
-}
-
-header_cache_t *mutt_hcache_open(const char *path, const char *folder, hcache_namer_t namer)
-{
-  mutt_message("mutt_hcache_open NOTIMPL");
-  return NULL;
-}
-
-struct Email *mutt_hcache_restore(const unsigned char *d)
-{
-  mutt_message("mutt_hcache_restore NOTIMPL");
-  return NULL;
-}
-
-int mutt_hcache_store(header_cache_t *h, const char *key, size_t keylen, struct Email *header, unsigned int uidvalidity)
-{
-  mutt_message("mutt_hcache_store NOTIMPL");
   return -1;
 }
 
