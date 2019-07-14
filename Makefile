@@ -2,7 +2,7 @@ NEO	?= ../neo
 CC	= gcc
 RM	= rm -fr
 
-OUT	= test_address test_conn test_date test_email test_fuzz test_hcache test_imap test_lib test_maildir test_mbox test_pattern
+OUT	= test_address test_conn test_core test_date test_email test_fuzz test_hcache test_imap test_lib test_maildir test_mbox test_pattern
 
 CFLAGS	+= -DDEBUG
 CFLAGS	+= -Wall
@@ -26,6 +26,7 @@ LDFLAGS	+= -L$(NEO)
 ADDR_LDFLAGS	= -laddress
 CONFIG_LDFLAGS	= -lconfig
 CONN_LDFLAGS	= -lconn -lgnutls
+CORE_LDFLAGS	= -lcore
 EMAIL_LDFLAGS	= -lemail
 FUZZ_LDFLAGS	= -lemail
 HCACHE_LDFLAGS	= -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
@@ -42,6 +43,9 @@ test_address: test_address.c
 
 test_conn: test_conn.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
+
+test_core: test_core.c
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CORE_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(CONFIG_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_date: test_date.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
@@ -62,10 +66,10 @@ test_lib: test_lib.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
 
 test_maildir: test_maildir.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MAILDIR_LDFLAGS) $(HCACHE_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MAILDIR_LDFLAGS) $(HCACHE_LDFLAGS) $(CORE_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_mbox: test_mbox.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MBOX_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MBOX_LDFLAGS) $(CORE_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_pattern: test_pattern.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(PATTERN_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)

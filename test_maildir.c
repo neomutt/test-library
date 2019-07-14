@@ -4,8 +4,8 @@
 #include <sys/stat.h>
 #include "mutt/mutt.h"
 #include "email/email.h"
+#include "core/lib.h"
 #include "context.h"
-#include "mailbox.h"
 #include "maildir/lib.h"
 #include "mx.h"
 
@@ -32,6 +32,10 @@ struct Hash *AutoSubscribeCache;
 char *C_HeaderCachePagesize;
 bool C_HeaderCacheCompress;
 
+void mutt_pretty_mailbox(char *buf, size_t buflen)
+{
+}
+
 void mutt_encode_path(char *dest, size_t dlen, const char *src)
 {
   mutt_str_strfcpy(dest, src, dlen);
@@ -43,21 +47,12 @@ int mutt_copy_message(FILE *fp_out, struct Mailbox *m, struct Email *e, CopyMess
   return -1;
 }
 
-void mutt_mailbox_size_add(struct Mailbox *m, const struct Email *e)
-{
-  m->size += mutt_email_size(e);
-}
-
 int url_parse_mailto(struct Envelope *e, char **body, const char *src)
 {
   return -1;
 }
 
 void ctx_update_tables(struct Context *ctx, bool committing)
-{
-}
-
-void mutt_mailbox_changed(struct Mailbox *m, enum MailboxNotification action)
 {
 }
 

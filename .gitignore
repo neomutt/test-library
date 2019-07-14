@@ -1,6 +1,7 @@
 cache
 test_address
 test_conn
+test_core
 test_date
 test_email
 test_fuzz

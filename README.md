@@ -12,9 +12,18 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (391 functions)
+## Library (409 functions)
 
-There are now three libraries, libaddress, libemail and libmutt.
+There are now four libraries, libaddress, libcore, libemail and libmutt.
+
+### account (core)
+
+```c
+void                    account_free                      (struct Account **ptr);
+bool                    account_mailbox_add               (struct Account *a, struct Mailbox *m);
+bool                    account_mailbox_remove            (struct Account *a, struct Mailbox *m);
+struct Account *        account_new                       (const char *name, struct ConfigSubset *sub);
+```
 
 ### address (address)
 
@@ -362,6 +371,19 @@ int                     log_queue_save                    (FILE *fp);
 void                    log_queue_set_max_size            (int size);
 ```
 
+### mailbox (core)
+
+```c
+void                    mailbox_changed                   (struct Mailbox *m, enum MailboxNotification action);
+struct Mailbox *        mailbox_find                      (const char *path);
+struct Mailbox *        mailbox_find_name                 (const char *name);
+void                    mailbox_free                      (struct Mailbox **ptr);
+struct Mailbox *        mailbox_new                       (void);
+void                    mailbox_size_add                  (struct Mailbox *m, const struct Email *e);
+void                    mailbox_size_sub                  (struct Mailbox *m, const struct Email *e);
+void                    mailbox_update                    (struct Mailbox *m);
+```
+
 ### mapping (mutt)
 
 ```c
@@ -416,6 +438,19 @@ const int IndexHex[];
 const char *const BodyTypes[];
 const char *const BodyEncodings[];
 const char MimeSpecials[];
+```
+
+### neomutt (core)
+
+```c
+struct NeoMutt *NeoMutt;
+
+bool                    neomutt_account_add               (struct NeoMutt *n, struct Account *a);
+bool                    neomutt_account_remove            (struct NeoMutt *n, struct Account *a);
+void                    neomutt_free                      (struct NeoMutt **ptr);
+void                    neomutt_mailboxlist_clear         (struct MailboxList *ml);
+struct MailboxList      neomutt_mailboxlist_get_all       (struct NeoMutt *n, enum MailboxType magic);
+struct NeoMutt *        neomutt_new                       (struct ConfigSet *cs);
 ```
 
 ### notify (mutt)

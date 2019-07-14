@@ -4,8 +4,8 @@
 #include <sys/stat.h>
 #include "mutt/mutt.h"
 #include "email/email.h"
+#include "core/lib.h"
 #include "context.h"
-#include "mailbox.h"
 #include "mbox/mbox.h"
 #include "mx.h"
 
