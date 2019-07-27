@@ -20,7 +20,7 @@ bool test_file(const char *name)
   if (fstat(fileno(fp), &st) != 0)
     return false;
 
-  struct Email *e = mutt_email_new();
+  struct Email *e = email_new();
   struct Envelope *env = NULL;
 
   env = mutt_rfc822_read_header(fp, e, false, false);
@@ -30,7 +30,7 @@ bool test_file(const char *name)
   mutt_parse_part(fp, e->content);
 
   mutt_env_free(&env);
-  mutt_email_free(&e);
+  email_free(&e);
   fclose(fp);
   return true;
 }

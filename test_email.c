@@ -35,14 +35,14 @@ void test_body(void)
 
 void test_email(void)
 {
-  // bool                    mutt_email_cmp_strict             (const struct Email *e1, const struct Email *e2);
-  // void                    mutt_email_free                   (struct Email **e);
-  // struct Email *          mutt_email_new                    (void);
-  // size_t                  mutt_email_size                   (const struct Email *e);
-  // void                    mutt_emaillist_free               (struct EmailList *el);
+  // bool                    email_cmp_strict                  (const struct Email *e1, const struct Email *e2);
+  // void                    email_free                        (struct Email **e);
+  // struct Email *          email_new                         (void);
+  // size_t                  email_size                        (const struct Email *e);
+  // void                    emaillist_free                    (struct EmailList *el);
 
-  struct Email *e = mutt_email_new();
-  mutt_email_free(&e);
+  struct Email *e = email_new();
+  email_free(&e);
 }
 
 void test_email_globals(void)
