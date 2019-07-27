@@ -2,7 +2,7 @@ NEO	?= ../neo
 CC	= gcc
 RM	= rm -fr
 
-OUT	= test_address test_conn test_core test_date test_email test_fuzz test_hcache test_imap test_lib test_maildir test_mbox test_pattern
+OUT	= test_address test_conn test_core test_date test_email test_fuzz test_hcache test_imap test_lib test_maildir test_mbox test_pattern test_reflow
 
 CFLAGS	+= -DDEBUG
 CFLAGS	+= -Wall
@@ -35,6 +35,8 @@ MAILDIR_LDFLAGS	= -lmaildir
 MBOX_LDFLAGS	= -lmbox
 MUTT_LDFLAGS	= -lmutt -lidn -lidn2
 PATTERN_LDFLAGS = $(NEO)/pattern.o
+# REFLOW_LDFLAGS = $(NEO)/reflow.o
+REFLOW_LDFLAGS = reflow.c
 
 all:	$(NEO) $(OUT)
 
@@ -73,6 +75,9 @@ test_mbox: test_mbox.c
 
 test_pattern: test_pattern.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(PATTERN_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)
+
+test_reflow: test_reflow.c reflow.c
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(REFLOW_LDFLAGS) $(MUTT_LDFLAGS)
 
 clean:
 	$(RM) $(OUT) cache tmp
