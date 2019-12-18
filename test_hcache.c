@@ -7,10 +7,25 @@
 #include "email/lib.h"
 #include "hcache/hcache.h"
 
+bool C_Autocrypt;
 bool C_AutoSubscribe;
 bool C_HeaderCacheCompress;
 char *C_HeaderCachePagesize;
 struct Hash *AutoSubscribeCache;
+
+void hcache_per_folder(struct Buffer *hcpath, const char *path,
+                       const char *folder, hcache_namer_t namer)
+{
+}
+
+void mutt_buffer_encode_path(struct Buffer *buf, const char *src)
+{
+}
+
+int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *env)
+{
+  return -1;
+}
 
 int url_parse_mailto(struct Envelope *e, char **body, const char *src)
 {

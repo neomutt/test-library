@@ -8,16 +8,23 @@
 #include "mutt/mutt.h"
 #include "email/lib.h"
 
+bool C_Autocrypt;
 bool C_AutoSubscribe;
 struct Hash *AutoSubscribeCache;
+
+int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *env)
+{
+  return -1;
+}
 
 void test_attach(void)
 {
   // void                    mutt_actx_add_attach              (struct AttachCtx *actx, struct AttachPtr *attach);
   // void                    mutt_actx_add_body                (struct AttachCtx *actx, struct Body *new_body);
   // void                    mutt_actx_add_fp                  (struct AttachCtx *actx, FILE *fp_new);
-  // void                    mutt_actx_free                    (struct AttachCtx **pactx);
-  // void                    mutt_actx_free_entries            (struct AttachCtx *actx);
+  // void                    mutt_actx_entries_free            (struct AttachCtx *actx);
+  // void                    mutt_actx_free                    (struct AttachCtx **ptr);
+  // struct AttachCtx *      mutt_actx_new                     (void);
 
   struct AttachCtx *actx = mutt_mem_calloc(1, sizeof(*actx));
   mutt_actx_free(&actx);
@@ -26,7 +33,7 @@ void test_attach(void)
 void test_body(void)
 {
   // bool                    mutt_body_cmp_strict              (const struct Body *b1, const struct Body *b2);
-  // void                    mutt_body_free                    (struct Body **p);
+  // void                    mutt_body_free                    (struct Body **ptr);
   // struct Body *           mutt_body_new                     (void);
 
   struct Body *b = mutt_body_new();
@@ -36,10 +43,11 @@ void test_body(void)
 void test_email(void)
 {
   // bool                    email_cmp_strict                  (const struct Email *e1, const struct Email *e2);
-  // void                    email_free                        (struct Email **e);
+  // void                    email_free                        (struct Email **ptr);
   // struct Email *          email_new                         (void);
   // size_t                  email_size                        (const struct Email *e);
-  // void                    emaillist_free                    (struct EmailList *el);
+  // int                     emaillist_add_email               (struct EmailList *el, struct Email *e);
+  // void                    emaillist_clear                   (struct EmailList *el);
 
   struct Email *e = email_new();
   email_free(&e);
@@ -63,8 +71,10 @@ void test_email_globals(void)
 
 void test_envelope(void)
 {
+  // void                    mutt_autocrypthdr_free            (struct AutocryptHeader **p);
+  // struct AutocryptHeader *mutt_autocrypthdr_new             (void);
   // bool                    mutt_env_cmp_strict               (const struct Envelope *e1, const struct Envelope *e2);
-  // void                    mutt_env_free                     (struct Envelope **p);
+  // void                    mutt_env_free                     (struct Envelope **ptr);
   // void                    mutt_env_merge                    (struct Envelope *base, struct Envelope **extra);
   // struct Envelope *       mutt_env_new                      (void);
   // int                     mutt_env_to_intl                  (struct Envelope *env, const char **tag, char **err);
@@ -97,13 +107,13 @@ void test_mime(void)
 
 void test_parameter(void)
 {
-  // bool                    mutt_param_cmp_strict             (const struct ParameterList *p1, const struct ParameterList *p2);
-  // void                    mutt_param_delete                 (struct ParameterList *p, const char *attribute);
-  // void                    mutt_param_free                   (struct ParameterList *p);
+  // bool                    mutt_param_cmp_strict             (const struct ParameterList *pl1, const struct ParameterList *pl2);
+  // void                    mutt_param_delete                 (struct ParameterList *pl, const char *attribute);
+  // void                    mutt_param_free                   (struct ParameterList *pl);
   // void                    mutt_param_free_one               (struct Parameter **p);
-  // char *                  mutt_param_get                    (const struct ParameterList *p, const char *s);
+  // char *                  mutt_param_get                    (const struct ParameterList *pl, const char *s);
   // struct Parameter *      mutt_param_new                    (void);
-  // void                    mutt_param_set                    (struct ParameterList *p, const char *attribute, const char *value);
+  // void                    mutt_param_set                    (struct ParameterList *pl, const char *attribute, const char *value);
 
   mutt_param_cmp_strict(NULL, NULL);
 }
@@ -152,7 +162,7 @@ void test_rfc2231(void)
 {
   // bool C_Rfc2047Parameters;
 
-  // void                    rfc2231_decode_parameters         (struct ParameterList *p);
+  // void                    rfc2231_decode_parameters         (struct ParameterList *pl);
   // struct ParameterList    rfc2231_encode_string             (const char *attribute, char *value);
 
   const char *attr = "apple";
@@ -167,12 +177,12 @@ void test_tags(void)
   // char *C_HiddenTags;
   // struct Hash *TagTransforms;
 
-  // void                    driver_tags_free                  (struct TagHead *head);
-  // char *                  driver_tags_get                   (struct TagHead *head);
-  // char *                  driver_tags_get_transformed       (struct TagHead *head);
-  // char *                  driver_tags_get_transformed_for   (const char *name, struct TagHead *head);
-  // char *                  driver_tags_get_with_hidden       (struct TagHead *head);
-  // bool                    driver_tags_replace               (struct TagHead *head, char *tags);
+  // void                    driver_tags_free                  (struct TagList *list);
+  // char *                  driver_tags_get                   (struct TagList *list);
+  // char *                  driver_tags_get_transformed       (struct TagList *list);
+  // char *                  driver_tags_get_transformed_for   (struct TagList *head, const char *name);
+  // char *                  driver_tags_get_with_hidden       (struct TagList *list);
+  // bool                    driver_tags_replace               (struct TagList *head, char *tags);
 
   driver_tags_free(NULL);
 }

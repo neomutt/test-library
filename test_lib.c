@@ -27,23 +27,25 @@ void test_buffer(void)
   // size_t                  mutt_buffer_addch                 (struct Buffer *buf, char c);
   // size_t                  mutt_buffer_addstr                (struct Buffer *buf, const char *s);
   // size_t                  mutt_buffer_addstr_n              (struct Buffer *buf, const char *s, size_t len);
-  // struct Buffer *         mutt_buffer_alloc                 (size_t size);
-  // void                    mutt_buffer_concat_path           (struct Buffer *buf, const char *dir, const char *fname);
+  // void                    mutt_buffer_alloc                 (struct Buffer *buf, size_t new_size);
+  // size_t                  mutt_buffer_concat_path           (struct Buffer *buf, const char *dir, const char *fname);
+  // size_t                  mutt_buffer_concatn_path          (struct Buffer *buf, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
+  // size_t                  mutt_buffer_copy                  (struct Buffer *dst, const struct Buffer *src);
+  // void                    mutt_buffer_dealloc               (struct Buffer *buf);
   // void                    mutt_buffer_fix_dptr              (struct Buffer *buf);
-  // void                    mutt_buffer_free                  (struct Buffer **p);
-  // struct Buffer *         mutt_buffer_from                  (const char *seed);
-  // void                    mutt_buffer_increase_size         (struct Buffer *buf, size_t new_size);
   // struct Buffer *         mutt_buffer_init                  (struct Buffer *buf);
   // bool                    mutt_buffer_is_empty              (const struct Buffer *buf);
   // size_t                  mutt_buffer_len                   (const struct Buffer *buf);
-  // struct Buffer *         mutt_buffer_new                   (void);
+  // struct Buffer           mutt_buffer_make                  (size_t size);
   // int                     mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
   // void                    mutt_buffer_reset                 (struct Buffer *buf);
-  // void                    mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
-  // void                    mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
+  // size_t                  mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
+  // size_t                  mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
+  // char *                  mutt_buffer_strdup                (struct Buffer *buf);
+  // size_t                  mutt_buffer_substrcpy             (struct Buffer *buf, const char *beg, const char *end);
 
   struct Buffer *b = NULL;
-  mutt_buffer_free(&b);
+  mutt_buffer_dealloc(b);
 }
 
 void test_charset(void)
@@ -82,6 +84,8 @@ void test_date(void)
 {
   // time_t                  mutt_date_add_timeout             (time_t now, long timeout);
   // int                     mutt_date_check_month             (const char *s);
+  // time_t                  mutt_date_epoch                   (void);
+  // uint64_t                mutt_date_epoch_ms                (void);
   // struct tm               mutt_date_gmtime                  (time_t t);
   // bool                    mutt_date_is_day_name             (const char *s);
   // time_t                  mutt_date_local_tz                (time_t t);
@@ -94,6 +98,7 @@ void test_date(void)
   // void                    mutt_date_normalize_time          (struct tm *tm);
   // time_t                  mutt_date_parse_date              (const char *s, struct Tz *tz_out);
   // time_t                  mutt_date_parse_imap              (const char *s);
+  // void                    mutt_date_sleep_ms                (size_t ms);
 
   mutt_date_local_tz(1501596063);
 }
@@ -226,15 +231,15 @@ void test_logging(void)
 {
   // log_dispatcher_t MuttLogger;
 
-  // int                     log_disp_file                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
-  // int                     log_disp_null                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
-  // int                     log_disp_queue                    (time_t stamp, const char *file, int line, const char *function, int level, ...);
-  // int                     log_disp_terminal                 (time_t stamp, const char *file, int line, const char *function, int level, ...);
+  // int                     log_disp_file                     (time_t stamp, const char *file, int line, const char *function, enum LogLevel level, ...);
+  // int                     log_disp_null                     (time_t stamp, const char *file, int line, const char *function, enum LogLevel level, ...);
+  // int                     log_disp_queue                    (time_t stamp, const char *file, int line, const char *function, enum LogLevel level, ...);
+  // int                     log_disp_terminal                 (time_t stamp, const char *file, int line, const char *function, enum LogLevel level, ...);
   // void                    log_file_close                    (bool verbose);
   // int                     log_file_open                     (bool verbose);
   // bool                    log_file_running                  (void);
   // int                     log_file_set_filename             (const char *file, bool verbose);
-  // int                     log_file_set_level                (int level, bool verbose);
+  // int                     log_file_set_level                (enum LogLevel level, bool verbose);
   // void                    log_file_set_version              (const char *version);
   // int                     log_queue_add                     (struct LogLine *ll);
   // void                    log_queue_empty                   (void);
@@ -305,7 +310,7 @@ void test_notify(void)
   // void                    notify_free                       (struct Notify **ptr);
   // struct Notify *         notify_new                        (void *object, enum NotifyType type);
   // bool                    notify_observer_add               (struct Notify *notify, enum NotifyType type, int subtype, observer_t callback, intptr_t data);
-  // bool                    notify_observer_remove            (struct Notify *notify, observer_t callback);
+  // bool                    notify_observer_remove            (struct Notify *notify, observer_t callback, intptr_t data);
   // bool                    notify_send                       (struct Notify *notify, int type, int subtype, intptr_t data);
   // void                    notify_set_parent                 (struct Notify *notify, struct Notify *parent);
 
@@ -319,7 +324,6 @@ void test_path(void)
   // const char *            mutt_path_basename                (const char *f);
   // bool                    mutt_path_canon                   (char *buf, size_t buflen, const char *homedir);
   // char *                  mutt_path_concat                  (char *d, const char *dir, const char *fname, size_t l);
-  // char *                  mutt_path_concatn                 (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
   // char *                  mutt_path_dirname                 (const char *path);
   // char *                  mutt_path_escape                  (const char *src);
   // const char *            mutt_path_getcwd                  (struct Buffer *cwd);
@@ -345,34 +349,25 @@ void test_pool(void)
 
 void test_regex(void)
 {
+  // bool                    mutt_regex_capture                (const struct Regex *regex, const char *str, size_t nmatch, regmatch_t matches[]);
   // struct Regex *          mutt_regex_compile                (const char *str, int flags);
   // void                    mutt_regex_free                   (struct Regex **r);
+  // bool                    mutt_regex_match                  (const struct Regex *regex, const char *str);
   // struct Regex *          mutt_regex_new                    (const char *str, int flags, struct Buffer *err);
   // int                     mutt_regexlist_add                (struct RegexList *rl, const char *str, int flags, struct Buffer *err);
   // void                    mutt_regexlist_free               (struct RegexList *rl);
   // bool                    mutt_regexlist_match              (struct RegexList *rl, const char *str);
-  // struct RegexListNode *  mutt_regexlist_new                (void);
+  // struct RegexNode *      mutt_regexlist_new                (void);
   // int                     mutt_regexlist_remove             (struct RegexList *rl, const char *str);
   // int                     mutt_replacelist_add              (struct ReplaceList *rl, const char *pat, const char *templ, struct Buffer *err);
   // char *                  mutt_replacelist_apply            (struct ReplaceList *rl, char *buf, size_t buflen, const char *str);
   // void                    mutt_replacelist_free             (struct ReplaceList *rl);
   // bool                    mutt_replacelist_match            (struct ReplaceList *rl, char *buf, size_t buflen, const char *str);
-  // struct ReplaceListNode *mutt_replacelist_new              (void);
+  // struct Replace *        mutt_replacelist_new              (void);
   // int                     mutt_replacelist_remove           (struct ReplaceList *rl, const char *pat);
 
   struct Regex *rx = mutt_regex_compile("hel*o", 0);
   mutt_regex_free(&rx);
-}
-
-void test_sha1(void)
-{
-  // void                    mutt_sha1_final                   (unsigned char digest[20], struct Sha1Ctx *sha1ctx);
-  // void                    mutt_sha1_init                    (struct Sha1Ctx *sha1ctx);
-  // void                    mutt_sha1_transform               (uint32_t state[5], const unsigned char buffer[64]);
-  // void                    mutt_sha1_update                  (struct Sha1Ctx *sha1ctx, const unsigned char *data, uint32_t len);
-
-  struct Sha1Ctx s;
-  mutt_sha1_init(&s);
 }
 
 void test_signal(void)
@@ -425,7 +420,6 @@ void test_string(void)
   // size_t                  mutt_str_lws_len                  (const char *s, size_t n);
   // size_t                  mutt_str_lws_rlen                 (const char *s, size_t n);
   // const char *            mutt_str_next_word                (const char *s);
-  // void                    mutt_str_pretty_size              (char *buf, size_t buflen, size_t num);
   // int                     mutt_str_remall_strcasestr        (char *str, const char *target);
   // void                    mutt_str_remove_trailing_ws       (char *s);
   // void                    mutt_str_replace                  (char **p, const char *s);
@@ -483,7 +477,6 @@ int main()
   test_path();
   test_pool();
   test_regex();
-  test_sha1();
   test_signal();
   test_slist();
   test_string();

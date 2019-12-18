@@ -12,9 +12,9 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (409 functions)
+## Library (415 functions)
 
-There are now four libraries, libaddress, libcore, libemail and libmutt.
+There are now four libraries: libaddress, libcore, libemail and libmutt.
 
 ### account (core)
 
@@ -37,8 +37,9 @@ bool                    mutt_addr_cmp                     (const struct Address 
 struct Address *        mutt_addr_copy                    (const struct Address *addr);
 struct Address *        mutt_addr_create                  (const char *personal, const char *mailbox);
 const char *            mutt_addr_for_display             (const struct Address *a);
-void                    mutt_addr_free                    (struct Address **a);
+void                    mutt_addr_free                    (struct Address **ptr);
 struct Address *        mutt_addr_new                     (void);
+bool                    mutt_addr_to_intl                 (struct Address *a);
 bool                    mutt_addr_to_local                (struct Address *a);
 bool                    mutt_addr_valid_msgid             (const char *msgid);
 size_t                  mutt_addr_write                   (char *buf, size_t buflen, struct Address *addr, bool display);
@@ -66,8 +67,9 @@ size_t                  mutt_addrlist_write               (char *buf, size_t buf
 void                    mutt_actx_add_attach              (struct AttachCtx *actx, struct AttachPtr *attach);
 void                    mutt_actx_add_body                (struct AttachCtx *actx, struct Body *new_body);
 void                    mutt_actx_add_fp                  (struct AttachCtx *actx, FILE *fp_new);
-void                    mutt_actx_free                    (struct AttachCtx **pactx);
-void                    mutt_actx_free_entries            (struct AttachCtx *actx);
+void                    mutt_actx_entries_free            (struct AttachCtx *actx);
+void                    mutt_actx_free                    (struct AttachCtx **ptr);
+struct AttachCtx *      mutt_actx_new                     (void);
 ```
 
 ### base64 (mutt)
@@ -85,7 +87,7 @@ size_t                  mutt_b64_encode                   (const char *in, size_
 
 ```c
 bool                    mutt_body_cmp_strict              (const struct Body *b1, const struct Body *b2);
-void                    mutt_body_free                    (struct Body **p);
+void                    mutt_body_free                    (struct Body **ptr);
 struct Body *           mutt_body_new                     (void);
 ```
 
@@ -96,20 +98,22 @@ int                     mutt_buffer_add_printf            (struct Buffer *buf, c
 size_t                  mutt_buffer_addch                 (struct Buffer *buf, char c);
 size_t                  mutt_buffer_addstr                (struct Buffer *buf, const char *s);
 size_t                  mutt_buffer_addstr_n              (struct Buffer *buf, const char *s, size_t len);
-struct Buffer *         mutt_buffer_alloc                 (size_t size);
-void                    mutt_buffer_concat_path           (struct Buffer *buf, const char *dir, const char *fname);
+void                    mutt_buffer_alloc                 (struct Buffer *buf, size_t new_size);
+size_t                  mutt_buffer_concat_path           (struct Buffer *buf, const char *dir, const char *fname);
+size_t                  mutt_buffer_concatn_path          (struct Buffer *buf, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
+size_t                  mutt_buffer_copy                  (struct Buffer *dst, const struct Buffer *src);
+void                    mutt_buffer_dealloc               (struct Buffer *buf);
 void                    mutt_buffer_fix_dptr              (struct Buffer *buf);
-void                    mutt_buffer_free                  (struct Buffer **p);
-struct Buffer *         mutt_buffer_from                  (const char *seed);
-void                    mutt_buffer_increase_size         (struct Buffer *buf, size_t new_size);
 struct Buffer *         mutt_buffer_init                  (struct Buffer *buf);
 bool                    mutt_buffer_is_empty              (const struct Buffer *buf);
 size_t                  mutt_buffer_len                   (const struct Buffer *buf);
-struct Buffer *         mutt_buffer_new                   (void);
+struct Buffer           mutt_buffer_make                  (size_t size);
 int                     mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
 void                    mutt_buffer_reset                 (struct Buffer *buf);
-void                    mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
-void                    mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
+size_t                  mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
+size_t                  mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
+char *                  mutt_buffer_strdup                (struct Buffer *buf);
+size_t                  mutt_buffer_substrcpy             (struct Buffer *buf, const char *beg, const char *end);
 ```
 
 ### charset (mutt)
@@ -148,6 +152,8 @@ void                    mutt_ch_set_charset               (const char *charset);
 ```c
 time_t                  mutt_date_add_timeout             (time_t now, long timeout);
 int                     mutt_date_check_month             (const char *s);
+time_t                  mutt_date_epoch                   (void);
+uint64_t                mutt_date_epoch_ms                (void);
 struct tm               mutt_date_gmtime                  (time_t t);
 bool                    mutt_date_is_day_name             (const char *s);
 time_t                  mutt_date_local_tz                (time_t t);
@@ -160,16 +166,18 @@ int                     mutt_date_make_tls                (char *buf, size_t buf
 void                    mutt_date_normalize_time          (struct tm *tm);
 time_t                  mutt_date_parse_date              (const char *s, struct Tz *tz_out);
 time_t                  mutt_date_parse_imap              (const char *s);
+void                    mutt_date_sleep_ms                (size_t ms);
 ```
 
 ### email (email)
 
 ```c
-bool                    mutt_email_cmp_strict             (const struct Email *e1, const struct Email *e2);
-void                    mutt_email_free                   (struct Email **e);
-struct Email *          mutt_email_new                    (void);
-size_t                  mutt_email_size                   (const struct Email *e);
-void                    mutt_emaillist_free               (struct EmailList *el);
+bool                    email_cmp_strict                  (const struct Email *e1, const struct Email *e2);
+void                    email_free                        (struct Email **ptr);
+struct Email *          email_new                         (void);
+size_t                  email_size                        (const struct Email *e);
+int                     emaillist_add_email               (struct EmailList *el, struct Email *e);
+void                    emaillist_clear                   (struct EmailList *el);
 ```
 
 ### email_globals (email)
@@ -190,8 +198,10 @@ struct ListHead UnIgnore;
 ### envelope (email)
 
 ```c
+void                    mutt_autocrypthdr_free            (struct AutocryptHeader **p);
+struct AutocryptHeader *mutt_autocrypthdr_new             (void);
 bool                    mutt_env_cmp_strict               (const struct Envelope *e1, const struct Envelope *e2);
-void                    mutt_env_free                     (struct Envelope **p);
+void                    mutt_env_free                     (struct Envelope **ptr);
 void                    mutt_env_merge                    (struct Envelope *base, struct Envelope **extra);
 struct Envelope *       mutt_env_new                      (void);
 int                     mutt_env_to_intl                  (struct Envelope *env, const char **tag, char **err);
@@ -354,15 +364,15 @@ struct ListHead         mutt_list_str_split               (const char *src, char
 ```c
 log_dispatcher_t MuttLogger;
 
-int                     log_disp_file                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
-int                     log_disp_null                     (time_t stamp, const char *file, int line, const char *function, int level, ...);
-int                     log_disp_queue                    (time_t stamp, const char *file, int line, const char *function, int level, ...);
-int                     log_disp_terminal                 (time_t stamp, const char *file, int line, const char *function, int level, ...);
+int                     log_disp_file                     (time_t stamp, const char *file, int line, const char *function, enum LogLevel level, ...);
+int                     log_disp_null                     (time_t stamp, const char *file, int line, const char *function, enum LogLevel level, ...);
+int                     log_disp_queue                    (time_t stamp, const char *file, int line, const char *function, enum LogLevel level, ...);
+int                     log_disp_terminal                 (time_t stamp, const char *file, int line, const char *function, enum LogLevel level, ...);
 void                    log_file_close                    (bool verbose);
 int                     log_file_open                     (bool verbose);
 bool                    log_file_running                  (void);
 int                     log_file_set_filename             (const char *file, bool verbose);
-int                     log_file_set_level                (int level, bool verbose);
+int                     log_file_set_level                (enum LogLevel level, bool verbose);
 void                    log_file_set_version              (const char *version);
 int                     log_queue_add                     (struct LogLine *ll);
 void                    log_queue_empty                   (void);
@@ -459,7 +469,7 @@ struct NeoMutt *        neomutt_new                       (struct ConfigSet *cs)
 void                    notify_free                       (struct Notify **ptr);
 struct Notify *         notify_new                        (void *object, enum NotifyType type);
 bool                    notify_observer_add               (struct Notify *notify, enum NotifyType type, int subtype, observer_t callback, intptr_t data);
-bool                    notify_observer_remove            (struct Notify *notify, observer_t callback);
+bool                    notify_observer_remove            (struct Notify *notify, observer_t callback, intptr_t data);
 bool                    notify_send                       (struct Notify *notify, int type, int subtype, intptr_t data);
 void                    notify_set_parent                 (struct Notify *notify, struct Notify *parent);
 ```
@@ -467,13 +477,13 @@ void                    notify_set_parent                 (struct Notify *notify
 ### parameter (email)
 
 ```c
-bool                    mutt_param_cmp_strict             (const struct ParameterList *p1, const struct ParameterList *p2);
-void                    mutt_param_delete                 (struct ParameterList *p, const char *attribute);
-void                    mutt_param_free                   (struct ParameterList *p);
+bool                    mutt_param_cmp_strict             (const struct ParameterList *pl1, const struct ParameterList *pl2);
+void                    mutt_param_delete                 (struct ParameterList *pl, const char *attribute);
+void                    mutt_param_free                   (struct ParameterList *pl);
 void                    mutt_param_free_one               (struct Parameter **p);
-char *                  mutt_param_get                    (const struct ParameterList *p, const char *s);
+char *                  mutt_param_get                    (const struct ParameterList *pl, const char *s);
 struct Parameter *      mutt_param_new                    (void);
-void                    mutt_param_set                    (struct ParameterList *p, const char *attribute, const char *value);
+void                    mutt_param_set                    (struct ParameterList *pl, const char *attribute, const char *value);
 ```
 
 ### parse (email)
@@ -503,7 +513,6 @@ bool                    mutt_path_abbr_folder             (char *buf, size_t buf
 const char *            mutt_path_basename                (const char *f);
 bool                    mutt_path_canon                   (char *buf, size_t buflen, const char *homedir);
 char *                  mutt_path_concat                  (char *d, const char *dir, const char *fname, size_t l);
-char *                  mutt_path_concatn                 (char *dst, size_t dstlen, const char *dir, size_t dirlen, const char *fname, size_t fnamelen);
 char *                  mutt_path_dirname                 (const char *path);
 char *                  mutt_path_escape                  (const char *src);
 const char *            mutt_path_getcwd                  (struct Buffer *cwd);
@@ -527,19 +536,21 @@ void                    mutt_buffer_pool_release          (struct Buffer **pbuf)
 ### regex (mutt)
 
 ```c
+bool                    mutt_regex_capture                (const struct Regex *regex, const char *str, size_t nmatch, regmatch_t matches[]);
 struct Regex *          mutt_regex_compile                (const char *str, int flags);
 void                    mutt_regex_free                   (struct Regex **r);
+bool                    mutt_regex_match                  (const struct Regex *regex, const char *str);
 struct Regex *          mutt_regex_new                    (const char *str, int flags, struct Buffer *err);
 int                     mutt_regexlist_add                (struct RegexList *rl, const char *str, int flags, struct Buffer *err);
 void                    mutt_regexlist_free               (struct RegexList *rl);
 bool                    mutt_regexlist_match              (struct RegexList *rl, const char *str);
-struct RegexListNode *  mutt_regexlist_new                (void);
+struct RegexNode *      mutt_regexlist_new                (void);
 int                     mutt_regexlist_remove             (struct RegexList *rl, const char *str);
 int                     mutt_replacelist_add              (struct ReplaceList *rl, const char *pat, const char *templ, struct Buffer *err);
 char *                  mutt_replacelist_apply            (struct ReplaceList *rl, char *buf, size_t buflen, const char *str);
 void                    mutt_replacelist_free             (struct ReplaceList *rl);
 bool                    mutt_replacelist_match            (struct ReplaceList *rl, char *buf, size_t buflen, const char *str);
-struct ReplaceListNode *mutt_replacelist_new              (void);
+struct Replace *        mutt_replacelist_new              (void);
 int                     mutt_replacelist_remove           (struct ReplaceList *rl, const char *pat);
 ```
 
@@ -559,17 +570,8 @@ void                    rfc2047_encode_envelope           (struct Envelope *env)
 ```c
 bool C_Rfc2047Parameters;
 
-void                    rfc2231_decode_parameters         (struct ParameterList *p);
+void                    rfc2231_decode_parameters         (struct ParameterList *pl);
 struct ParameterList    rfc2231_encode_string             (const char *attribute, char *value);
-```
-
-### sha1 (mutt)
-
-```c
-void                    mutt_sha1_final                   (unsigned char digest[20], struct Sha1Ctx *sha1ctx);
-void                    mutt_sha1_init                    (struct Sha1Ctx *sha1ctx);
-void                    mutt_sha1_transform               (uint32_t state[5], const unsigned char buffer[64]);
-void                    mutt_sha1_update                  (struct Sha1Ctx *sha1ctx, const unsigned char *data, uint32_t len);
 ```
 
 ### signal (mutt)
@@ -620,7 +622,6 @@ bool                    mutt_str_is_email_wsp             (char c);
 size_t                  mutt_str_lws_len                  (const char *s, size_t n);
 size_t                  mutt_str_lws_rlen                 (const char *s, size_t n);
 const char *            mutt_str_next_word                (const char *s);
-void                    mutt_str_pretty_size              (char *buf, size_t buflen, size_t num);
 int                     mutt_str_remall_strcasestr        (char *str, const char *target);
 void                    mutt_str_remove_trailing_ws       (char *s);
 void                    mutt_str_replace                  (char **p, const char *s);
@@ -655,12 +656,12 @@ int                     mutt_str_word_casecmp             (const char *a, const 
 char *C_HiddenTags;
 struct Hash *TagTransforms;
 
-void                    driver_tags_free                  (struct TagHead *head);
-char *                  driver_tags_get                   (struct TagHead *head);
-char *                  driver_tags_get_transformed       (struct TagHead *head);
-char *                  driver_tags_get_transformed_for   (const char *name, struct TagHead *head);
-char *                  driver_tags_get_with_hidden       (struct TagHead *head);
-bool                    driver_tags_replace               (struct TagHead *head, char *tags);
+void                    driver_tags_free                  (struct TagList *list);
+char *                  driver_tags_get                   (struct TagList *list);
+char *                  driver_tags_get_transformed       (struct TagList *list);
+char *                  driver_tags_get_transformed_for   (struct TagList *head, const char *name);
+char *                  driver_tags_get_with_hidden       (struct TagList *list);
+bool                    driver_tags_replace               (struct TagList *head, char *tags);
 ```
 
 ### thread (email)

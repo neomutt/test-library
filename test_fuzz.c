@@ -10,6 +10,13 @@
 #include "mutt/mutt.h"
 #include "email/lib.h"
 
+bool C_Autocrypt;
+
+int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *env)
+{
+  return -1;
+}
+
 bool test_file(const char *name)
 {
   FILE *fp = fopen(name, "r");

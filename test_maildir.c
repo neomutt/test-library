@@ -14,6 +14,7 @@ struct Progress;
 typedef uint16_t CopyMessageFlags;
 typedef uint32_t CopyHeaderFlags;
 
+bool C_Autocrypt;
 bool C_MaildirCheckCur;
 bool C_AutoSubscribe;
 bool C_FlagSafe;
@@ -31,6 +32,15 @@ int MonitorContextChanged = 0;
 struct Hash *AutoSubscribeCache;
 char *C_HeaderCachePagesize;
 bool C_HeaderCacheCompress;
+
+void mutt_buffer_encode_path(struct Buffer *buf, const char *src)
+{
+}
+
+int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *env)
+{
+  return -1;
+}
 
 void mutt_pretty_mailbox(char *buf, size_t buflen)
 {
@@ -205,7 +215,8 @@ int main(int argc, char *argv[])
   struct Mailbox m = { 0 };
   ctx.mailbox = &m;
   m.magic = MUTT_MAILDIR;
-  m.pathbuf = mutt_buffer_from(file);
+  m.pathbuf = mutt_buffer_make(128);
+  mutt_buffer_strcpy(&m.pathbuf, file);
 
   int rc = MxMaildirOps.mbox_open(ctx.mailbox);
   printf("%d\n", rc);
@@ -217,5 +228,6 @@ int main(int argc, char *argv[])
   if (rc != 0)
     return 1;
 
+  mutt_buffer_dealloc(&m.pathbuf);
   return 0;
 }

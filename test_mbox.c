@@ -12,6 +12,7 @@
 struct Progress;
 
 bool C_AutoSubscribe;
+bool C_Autocrypt;
 short C_Sort;
 short C_WriteInc;
 bool C_CheckMboxSize;
@@ -25,6 +26,27 @@ struct Hash *AutoSubscribeCache;
 
 typedef uint16_t CopyMessageFlags;
 typedef uint32_t CopyHeaderFlags;
+typedef uint16_t CompletionFlags;
+
+void mutt_buffer_mktemp_full(struct Buffer *buf, const char *prefix,
+                             const char *suffix, const char *src, int line)
+{
+}
+
+void mutt_buffer_pretty_mailbox(struct Buffer *buf)
+{
+}
+
+int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *env)
+{
+  return -1;
+}
+
+int mutt_buffer_get_field_full(const char *field, struct Buffer *buf, CompletionFlags complete,
+                               bool multiple, char ***files, int *numfiles)
+{
+  return -1;
+}
 
 int mutt_copy_message(FILE *fp_out, struct Mailbox *m, struct Email *e, CopyMessageFlags cmflags, CopyHeaderFlags chflags)
 {
@@ -207,7 +229,8 @@ int main(int argc, char *argv[])
   struct Mailbox m = { 0 };
   ctx.mailbox = &m;
   m.magic = MUTT_MBOX;
-  m.pathbuf = mutt_buffer_from(file);
+  m.pathbuf = mutt_buffer_make(128);
+  mutt_buffer_strcpy(&m.pathbuf, file);
 
   int rc = MxMboxOps.mbox_open(ctx.mailbox);
   printf("%d\n", rc);
@@ -219,5 +242,6 @@ int main(int argc, char *argv[])
   if (rc != 0)
     return 1;
 
+  mutt_buffer_dealloc(&m.pathbuf);
   return 0;
 }

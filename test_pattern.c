@@ -34,7 +34,18 @@ bool C_WrapSearch = false;
 int C_ReadInc = 0;
 const char *C_ExternalSearchCommand = NULL;
 
-char *driver_tags_get(struct TagHead *head)
+int mutt_buffer_get_field_full(const char *field, struct Buffer *buf, CompletionFlags complete,
+                               bool multiple, char ***files, int *numfiles)
+{
+  return -1;
+}
+
+struct Email *mutt_get_virt_email(struct Mailbox *m, int vnum)
+{
+  return NULL;
+}
+
+char *driver_tags_get(struct TagList *list)
 {
   return NULL;
 }
@@ -391,18 +402,18 @@ int mutt_extract_token(struct Buffer *dest, struct Buffer *tok, TokenFlags flags
 
 bool test_pattern(char *pat)
 {
-  struct Buffer *err = mutt_buffer_alloc(1024);
+  struct Buffer err = mutt_buffer_make(1024);
   bool result = true;
 
-  struct PatternHead *ph = mutt_pattern_comp(pat, 0, err);
+  struct PatternHead *ph = mutt_pattern_comp(pat, 0, &err);
   if (!ph)
   {
-    printf("Error: %s\n", err->data);
+    printf("Error: %s\n", err.data);
     result = false;
   }
 
   mutt_pattern_free(&ph);
-  mutt_buffer_free(&err);
+  mutt_buffer_dealloc(&err);
   return result;
 }
 
