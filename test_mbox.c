@@ -68,10 +68,6 @@ int url_parse_mailto(struct Envelope *e, char **body, const char *src)
   return -1;
 }
 
-void mutt_mailbox_changed(struct Mailbox *m, enum MailboxNotification action)
-{
-}
-
 void mutt_clear_threads(struct Context *ctx)
 {
   mutt_message("mutt_clear_threads NOTIMPL");
@@ -226,9 +222,12 @@ int main(int argc, char *argv[])
 {
   char *file = "test.mbox";
   struct Context ctx = { 0 };
+  struct Account a = { 0 };
   struct Mailbox m = { 0 };
   ctx.mailbox = &m;
   m.magic = MUTT_MBOX;
+  m.account = &a;
+  a.magic = MUTT_MBOX;
   m.pathbuf = mutt_buffer_make(128);
   mutt_buffer_strcpy(&m.pathbuf, file);
 
