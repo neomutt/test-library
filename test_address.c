@@ -38,10 +38,10 @@ void test_address(void)
   // void                    mutt_addrlist_qualify             (struct AddressList *al, const char *host);
   // int                     mutt_addrlist_remove              (struct AddressList *al, const char *mailbox);
   // void                    mutt_addrlist_remove_xrefs        (const struct AddressList *a, struct AddressList *b);
-  // bool                    mutt_addrlist_search              (const struct Address *needle, const struct AddressList *haystack);
+  // bool                    mutt_addrlist_search              (const struct AddressList *haystack, const struct Address *needle);
   // int                     mutt_addrlist_to_intl             (struct AddressList *al, char **err);
   // int                     mutt_addrlist_to_local            (struct AddressList *al);
-  // size_t                  mutt_addrlist_write               (char *buf, size_t buflen, const struct AddressList *al, bool display);
+  // size_t                  mutt_addrlist_write               (const struct AddressList *al, char *buf, size_t buflen, bool display);
 
   struct Address *a = mutt_addr_new();
   mutt_addr_free(&a);

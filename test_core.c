@@ -37,11 +37,12 @@ void test_account()
 
 void test_mailbox()
 {
-  // void                    mailbox_changed                   (struct Mailbox *m, enum MailboxNotification action);
+  // void                    mailbox_changed                   (struct Mailbox *m, enum NotifyMailbox action);
   // struct Mailbox *        mailbox_find                      (const char *path);
   // struct Mailbox *        mailbox_find_name                 (const char *name);
   // void                    mailbox_free                      (struct Mailbox **ptr);
   // struct Mailbox *        mailbox_new                       (void);
+  // bool                    mailbox_set_subset                (struct Mailbox *m, struct ConfigSubset *sub);
   // void                    mailbox_size_add                  (struct Mailbox *m, const struct Email *e);
   // void                    mailbox_size_sub                  (struct Mailbox *m, const struct Email *e);
   // void                    mailbox_update                    (struct Mailbox *m);

@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (415 functions)
+## Library (419 functions)
 
 There are now four libraries: libaddress, libcore, libemail and libmutt.
 
@@ -55,10 +55,10 @@ void                    mutt_addrlist_prepend             (struct AddressList *a
 void                    mutt_addrlist_qualify             (struct AddressList *al, const char *host);
 int                     mutt_addrlist_remove              (struct AddressList *al, const char *mailbox);
 void                    mutt_addrlist_remove_xrefs        (const struct AddressList *a, struct AddressList *b);
-bool                    mutt_addrlist_search              (const struct Address *needle, const struct AddressList *haystack);
+bool                    mutt_addrlist_search              (const struct AddressList *haystack, const struct Address *needle);
 int                     mutt_addrlist_to_intl             (struct AddressList *al, char **err);
 int                     mutt_addrlist_to_local            (struct AddressList *al);
-size_t                  mutt_addrlist_write               (char *buf, size_t buflen, const struct AddressList *al, bool display);
+size_t                  mutt_addrlist_write               (const struct AddressList *al, char *buf, size_t buflen, bool display);
 ```
 
 ### attach (email)
@@ -271,6 +271,14 @@ void                    mutt_file_unlink_empty            (const char *path);
 int                     mutt_file_unlock                  (int fd);
 ```
 
+### filter (mutt)
+
+```c
+pid_t                   filter_create                     (const char *cmd, FILE **fp_in, FILE **fp_out, FILE **fp_err);
+pid_t                   filter_create_fd                  (const char *cmd, FILE **fp_in, FILE **fp_out, FILE **fp_err, int fdin, int fdout, int fderr);
+int                     filter_wait                       (pid_t pid);
+```
+
 ### from (email)
 
 ```c
@@ -384,11 +392,12 @@ void                    log_queue_set_max_size            (int size);
 ### mailbox (core)
 
 ```c
-void                    mailbox_changed                   (struct Mailbox *m, enum MailboxNotification action);
+void                    mailbox_changed                   (struct Mailbox *m, enum NotifyMailbox action);
 struct Mailbox *        mailbox_find                      (const char *path);
 struct Mailbox *        mailbox_find_name                 (const char *name);
 void                    mailbox_free                      (struct Mailbox **ptr);
 struct Mailbox *        mailbox_new                       (void);
+bool                    mailbox_set_subset                (struct Mailbox *m, struct ConfigSubset *sub);
 void                    mailbox_size_add                  (struct Mailbox *m, const struct Email *e);
 void                    mailbox_size_sub                  (struct Mailbox *m, const struct Email *e);
 void                    mailbox_update                    (struct Mailbox *m);
@@ -467,10 +476,10 @@ struct NeoMutt *        neomutt_new                       (struct ConfigSet *cs)
 
 ```c
 void                    notify_free                       (struct Notify **ptr);
-struct Notify *         notify_new                        (void *object, enum NotifyType type);
-bool                    notify_observer_add               (struct Notify *notify, enum NotifyType type, int subtype, observer_t callback, intptr_t data);
-bool                    notify_observer_remove            (struct Notify *notify, observer_t callback, intptr_t data);
-bool                    notify_send                       (struct Notify *notify, int type, int subtype, intptr_t data);
+struct Notify *         notify_new                        (void);
+bool                    notify_observer_add               (struct Notify *notify, observer_t callback, void *global_data);
+bool                    notify_observer_remove            (struct Notify *notify, observer_t callback, void *global_data);
+bool                    notify_send                       (struct Notify *notify, enum NotifyType event_type, int event_subtype, void *event_data);
 void                    notify_set_parent                 (struct Notify *notify, struct Notify *parent);
 ```
 

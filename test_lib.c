@@ -165,6 +165,15 @@ void test_file(void)
   mutt_file_mkdir("tmp", 0660);
 }
 
+void test_filter(void)
+{
+  // pid_t                   filter_create                     (const char *cmd, FILE **fp_in, FILE **fp_out, FILE **fp_err);
+  // pid_t                   filter_create_fd                  (const char *cmd, FILE **fp_in, FILE **fp_out, FILE **fp_err, int fdin, int fdout, int fderr);
+  // int                     filter_wait                       (pid_t pid);
+
+  filter_wait(-1);
+}
+
 void test_hash(void)
 {
   // void                    mutt_hash_delete                  (struct Hash *table, const char *strkey, const void *data);
@@ -308,10 +317,10 @@ void test_memory(void)
 void test_notify(void)
 {
   // void                    notify_free                       (struct Notify **ptr);
-  // struct Notify *         notify_new                        (void *object, enum NotifyType type);
-  // bool                    notify_observer_add               (struct Notify *notify, enum NotifyType type, int subtype, observer_t callback, intptr_t data);
-  // bool                    notify_observer_remove            (struct Notify *notify, observer_t callback, intptr_t data);
-  // bool                    notify_send                       (struct Notify *notify, int type, int subtype, intptr_t data);
+  // struct Notify *         notify_new                        (void);
+  // bool                    notify_observer_add               (struct Notify *notify, observer_t callback, void *global_data);
+  // bool                    notify_observer_remove            (struct Notify *notify, observer_t callback, void *global_data);
+  // bool                    notify_send                       (struct Notify *notify, enum NotifyType event_type, int event_subtype, void *event_data);
   // void                    notify_set_parent                 (struct Notify *notify, struct Notify *parent);
 
   struct Notify *n = NULL;
@@ -465,6 +474,7 @@ int main()
   test_date();
   test_envlist();
   test_file();
+  test_filter();
   test_hash();
   test_history();
   test_list();
