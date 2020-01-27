@@ -73,7 +73,7 @@ test_mbox: test_mbox.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MBOX_LDFLAGS) $(CORE_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_notmuch: test_notmuch.c
-	$(CC) -o $@ $< $(CFLAGS) ../neo/libnotmuch.a ../neo/libhcache.a -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb ../neo/libnotmuch.a ../neo/libmaildir.a ../neo/libconfig.a ../neo/libcore.a ../neo/libemail.a ../neo/libaddress.a ../neo/libmutt.a -lidn2 -lnotmuch
+	$(CC) -o $@ $< $(CFLAGS) $(NEO)/libnotmuch.a $(NEO)/libhcache.a -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb $(NEO)/libnotmuch.a $(NEO)/libmaildir.a $(NEO)/libconfig.a $(NEO)/libcore.a $(NEO)/libemail.a $(NEO)/libaddress.a $(NEO)/libmutt.a -lidn2 -lnotmuch
 
 test_pattern: test_pattern.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(PATTERN_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)

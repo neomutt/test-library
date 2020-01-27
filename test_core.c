@@ -7,10 +7,6 @@
 #include "mutt/mutt.h"
 #include "core/lib.h"
 
-void mutt_pretty_mailbox(char *buf, size_t buflen)
-{
-}
-
 void test_neomutt()
 {
   // struct NeoMutt *NeoMutt;
