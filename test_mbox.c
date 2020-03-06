@@ -2,11 +2,11 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/stat.h>
-#include "mutt/mutt.h"
+#include "mutt/lib.h"
 #include "email/email.h"
 #include "core/lib.h"
 #include "context.h"
-#include "mbox/mbox.h"
+#include "mbox/lib.h"
 #include "mx.h"
 
 struct Progress;
@@ -212,7 +212,7 @@ int mutt_stat_timespec_compare(struct stat *sba, enum MuttStatType type, struct 
   return mutt_timespec_compare(&a, b);
 }
 
-int mx_path_probe(const char *path, struct stat *st)
+enum MailboxType mx_path_probe(const char *path)
 {
   mutt_message("mx_path_probe NOTIMPL");
   return -1;

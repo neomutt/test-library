@@ -2,7 +2,7 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/stat.h>
-#include "mutt/mutt.h"
+#include "mutt/lib.h"
 #include "email/email.h"
 #include "core/lib.h"
 #include "context.h"

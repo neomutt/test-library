@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
-#include "mutt/mutt.h"
+#include "mutt/lib.h"
 #include "config/lib.h"
 #include "email/lib.h"
 #include "mutt.h"
@@ -33,6 +33,30 @@ bool OptSearchReverse = false;
 bool C_WrapSearch = false;
 int C_ReadInc = 0;
 const char *C_ExternalSearchCommand = NULL;
+
+/**
+ * enum MuttWriteHeaderMode - Modes for mutt_rfc822_write_header()
+ */
+enum MuttWriteHeaderMode
+{
+  MUTT_WRITE_HEADER_NORMAL,   ///< A normal Email, write full header + MIME headers
+  MUTT_WRITE_HEADER_FCC,      ///< fcc mode, like normal mode but for Bcc header
+  MUTT_WRITE_HEADER_POSTPONE, ///< A postponed Email, just the envelope info
+  MUTT_WRITE_HEADER_EDITHDRS, ///< "light" mode (used for edit_hdrs)
+  MUTT_WRITE_HEADER_MIME,     ///< Write protected headers
+};
+
+void mutt_buffer_mktemp_full(struct Buffer *buf, const char *prefix,
+                             const char *suffix, const char *src, int line)
+{
+}
+
+int mutt_rfc822_write_header(FILE *fp, struct Envelope *env,
+                             struct Body *attach, enum MuttWriteHeaderMode mode,
+                             bool privacy, bool hide_protected_subject)
+{
+  return -1;
+}
 
 int mutt_buffer_get_field_full(const char *field, struct Buffer *buf, CompletionFlags complete,
                                bool multiple, char ***files, int *numfiles)

@@ -29,11 +29,11 @@ CONN_LDFLAGS	= -lconn -lgnutls
 CORE_LDFLAGS	= -lcore
 EMAIL_LDFLAGS	= -lemail
 FUZZ_LDFLAGS	= -lemail
-HCACHE_LDFLAGS	= -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb
+HCACHE_LDFLAGS	= -lhcache -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb -lz -llz4 -lzstd
 IMAP_LDFLAGS	= -limap
 MAILDIR_LDFLAGS	= -lmaildir
 MBOX_LDFLAGS	= -lmbox
-NOTMUCH_LDFLAGS	= $(NEO)/libnotmuch.a -lnotmuch
+NOTMUCH_LDFLAGS	= $(NEO)/libnotmuch.a -lnotmuch -lz
 MUTT_LDFLAGS	= -lmutt -lidn -lidn2
 PATTERN_LDFLAGS = $(NEO)/pattern.o
 
@@ -73,7 +73,7 @@ test_mbox: test_mbox.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MBOX_LDFLAGS) $(CORE_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_notmuch: test_notmuch.c
-	$(CC) -o $@ $< $(CFLAGS) $(NEO)/libnotmuch.a $(NEO)/libhcache.a -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb $(NEO)/libnotmuch.a $(NEO)/libmaildir.a $(NEO)/libconfig.a $(NEO)/libcore.a $(NEO)/libemail.a $(NEO)/libaddress.a $(NEO)/libmutt.a -lidn2 -lnotmuch
+	$(CC) -o $@ $< $(CFLAGS) $(NEO)/libnotmuch.a $(NEO)/libhcache.a -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb -lz -llz4 -lzstd $(NEO)/libnotmuch.a $(NEO)/libmaildir.a $(NEO)/libconfig.a $(NEO)/libcore.a $(NEO)/libemail.a $(NEO)/libaddress.a $(NEO)/libmutt.a -lidn2 -lnotmuch
 
 test_pattern: test_pattern.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(PATTERN_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)

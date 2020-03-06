@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "mutt/mutt.h"
+#include "mutt/lib.h"
 #include "email/lib.h"
 
 bool C_Autocrypt;
@@ -203,12 +203,13 @@ void test_thread(void)
 void test_url(void)
 {
   // enum UrlScheme          url_check_scheme                  (const char *s);
-  // void                    url_free                          (struct Url **u);
+  // void                    url_free                          (struct Url **ptr);
+  // struct Url *            url_new                           (void);
   // struct Url *            url_parse                         (const char *src);
   // int                     url_pct_decode                    (char *s);
   // void                    url_pct_encode                    (char *buf, size_t buflen, const char *src);
-  // int                     url_tobuffer                      (struct Url *u, struct Buffer *buf, int flags);
-  // int                     url_tostring                      (struct Url *u, char *dest, size_t len, int flags);
+  // int                     url_tobuffer                      (struct Url *url, struct Buffer *buf, int flags);
+  // int                     url_tostring                      (struct Url *url, char *dest, size_t len, int flags);
 
   url_check_scheme("imaps://host.com");
 }

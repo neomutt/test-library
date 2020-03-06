@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "mutt/mutt.h"
-#include "conn/conn.h"
+#include "mutt/lib.h"
+#include "conn/lib.h"
+#include "imap/account.h"
 
 unsigned char Options[50];
 int SigInt;

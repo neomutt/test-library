@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "mutt/mutt.h"
+#include "mutt/lib.h"
 
 void test_base64(void)
 {
@@ -331,17 +331,18 @@ void test_path(void)
 {
   // bool                    mutt_path_abbr_folder             (char *buf, size_t buflen, const char *folder);
   // const char *            mutt_path_basename                (const char *f);
-  // bool                    mutt_path_canon                   (char *buf, size_t buflen, const char *homedir);
+  // bool                    mutt_path_canon                   (char *buf, size_t buflen, const char *homedir, bool is_dir);
   // char *                  mutt_path_concat                  (char *d, const char *dir, const char *fname, size_t l);
   // char *                  mutt_path_dirname                 (const char *path);
   // char *                  mutt_path_escape                  (const char *src);
   // const char *            mutt_path_getcwd                  (struct Buffer *cwd);
   // bool                    mutt_path_parent                  (char *buf, size_t buflen);
-  // bool                    mutt_path_pretty                  (char *buf, size_t buflen, const char *homedir);
+  // bool                    mutt_path_pretty                  (char *buf, size_t buflen, const char *homedir, bool is_dir);
   // size_t                  mutt_path_realpath                (char *buf);
-  // bool                    mutt_path_tidy                    (char *buf);
+  // bool                    mutt_path_tidy                    (char *buf, bool is_dir);
   // bool                    mutt_path_tidy_dotdot             (char *buf);
-  // bool                    mutt_path_tidy_slash              (char *buf);
+  // bool                    mutt_path_tidy_slash              (char *buf, bool is_dir);
+  // bool                    mutt_path_tilde                   (char *buf, size_t buflen, const char *homedir);
   // bool                    mutt_path_to_absolute             (char *path, const char *reference);
 
   mutt_path_basename("/home/mutt/file");
@@ -451,6 +452,7 @@ void test_string(void)
   // char *                  mutt_str_strncat                  (char *d, size_t l, const char *s, size_t sl);
   // int                     mutt_str_strncmp                  (const char *a, const char *b, size_t l);
   // size_t                  mutt_str_strnfcpy                 (char *dest, const char *src, size_t n, size_t dsize);
+  // char *                  mutt_str_strnlower                (char *str, size_t num);
   // char *                  mutt_str_substr_copy              (const char *begin, const char *end, char *buf, size_t buflen);
   // char *                  mutt_str_substr_dup               (const char *begin, const char *end);
   // const char *            mutt_str_sysexit                  (int err_num);

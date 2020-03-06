@@ -1,10 +1,10 @@
 #include "config.h"
 #include <stdio.h>
-#include "mutt/mutt.h"
+#include "mutt/lib.h"
 #include "address/lib.h"
 #include "email/lib.h"
 #include "core/lib.h"
-#include "notmuch/mutt_notmuch.h"
+#include "notmuch/lib.h"
 
 struct Progress;
 
@@ -27,6 +27,12 @@ char *HomeDir;
 char *ShortHostname;
 int MonitorContextChanged = 0;
 int SigInt = 0;
+
+void mutt_encode_path(char *dest, size_t dlen, const char *src)
+{
+  mutt_str_strfcpy(dest, src, dlen);
+  printf("mutt_encode_path: %s\n", src);
+}
 
 void mutt_set_header_color(struct Mailbox *m, struct Email *e)
 {

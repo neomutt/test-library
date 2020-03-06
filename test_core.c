@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "mutt/mutt.h"
+#include "mutt/lib.h"
 #include "core/lib.h"
 
 void test_neomutt()

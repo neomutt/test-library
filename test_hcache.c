@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "mutt/mutt.h"
+#include "mutt/lib.h"
 #include "email/lib.h"
-#include "hcache/hcache.h"
+#include "hcache/lib.h"
 
 bool C_Autocrypt;
 bool C_AutoSubscribe;

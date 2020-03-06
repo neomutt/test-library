@@ -46,26 +46,4 @@ enum AccountType
 #define MUTT_ACCT_PASS (1 << 3)
 #define MUTT_ACCT_SSL (1 << 4)
 
-/**
- * struct Account - Login details for a remote server
- */
-struct Account
-{
-  char user[64];
-  char login[64];
-  char pass[256];
-  char host[128];
-  unsigned short port;
-  unsigned char type;
-  unsigned char flags;
-};
-
-int mutt_account_match(const struct Account *a1, const struct Account *m2);
-int mutt_account_fromurl(struct Account *account, struct Url *url);
-void mutt_account_tourl(struct Account *account, struct Url *url);
-int mutt_account_getuser(struct Account *account);
-int mutt_account_getlogin(struct Account *account);
-int mutt_account_getpass(struct Account *account);
-void mutt_account_unsetpass(struct Account *account);
-
 #endif /* _MUTT_ACCOUNT_H */
