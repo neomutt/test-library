@@ -25,7 +25,7 @@ LDFLAGS	+= -L$(NEO)
 
 ADDR_LDFLAGS	= -laddress
 CONFIG_LDFLAGS	= -lconfig
-CONN_LDFLAGS	= -lconn -lgnutls
+CONN_LDFLAGS	= -lconn -lgnutls -lsasl2 -lanl
 CORE_LDFLAGS	= -lcore
 EMAIL_LDFLAGS	= -lemail
 FUZZ_LDFLAGS	= -lemail
