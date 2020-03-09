@@ -4,143 +4,53 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include "conn/conn_private.h"
 #include "mutt/lib.h"
 #include "conn/lib.h"
 #include "imap/account.h"
 
-unsigned char Options[50];
+typedef uint16_t CompletionFlags;
 int SigInt;
-const char *C_Preconnect;
-short C_ConnectTimeout;
 bool OptNoCurses;
-bool UseIpv6;
-struct Menu;
-struct MuttWindow;
-bool C_StatusOnTop;
-bool OptIgnoreMacroEvents;
 char *Username;
 
-/* account flags */
-#define MUTT_ACCT_PORT (1 << 0)
-#define MUTT_ACCT_USER (1 << 1)
-#define MUTT_ACCT_LOGIN (1 << 2)
-#define MUTT_ACCT_PASS (1 << 3)
-#define MUTT_ACCT_SSL (1 << 4)
-
-enum MuttWindowOrientation
+int dlg_verify_cert(const char *title, struct ListHead *list, bool allow_always, bool allow_skip)
 {
-  MUTT_WIN_ORIENT_VERTICAL = 1, ///< Window uses all available vertical space
-  MUTT_WIN_ORIENT_HORIZONTAL,   ///< Window uses all available horizontal space
-};
+  printf("\033[1;33mValidate certificate:\033[0m\n");
+  struct ListNode *np = NULL;
+  STAILQ_FOREACH(np, list, entries)
+  {
+    printf("\t%s\n", NONULL(np->data));
+  }
 
-enum MuttWindowSize
-{
-  MUTT_WIN_SIZE_FIXED = 1, ///< Window has a fixed size
-  MUTT_WIN_SIZE_MAXIMISE,  ///< Window wants as much space as possible
-  MUTT_WIN_SIZE_MINIMISE,  ///< Window size depends on its children
-};
-
-enum MenuType
-{
-  MENU_ALIAS,            ///< Select an email address by its alias
-  MENU_ATTACH,           ///< Select an attachment
-  MENU_COMPOSE,          ///< Compose an email
-  MENU_EDITOR,           ///< Text entry area
-  MENU_FOLDER,           ///< General file/mailbox browser
-  MENU_GENERIC,          ///< Generic selection list
-  MENU_MAIN,             ///< Index panel (list of emails)
-  MENU_PAGER,            ///< Pager pager (email viewer)
-  MENU_POSTPONE,         ///< Select a postponed email
-  MENU_QUERY,            ///< Select from results of external query
-  MENU_PGP,              ///< PGP encryption menu
-  MENU_SMIME,            ///< SMIME encryption menu
-  MENU_KEY_SELECT_PGP,   ///< Select a PGP key
-  MENU_KEY_SELECT_SMIME, ///< Select a SMIME key
-  MENU_MIX,              ///< Create/edit a Mixmaster chain
-  MENU_AUTOCRYPT_ACCT,
-  MENU_MAX,
-};
-
-typedef uint16_t CompletionFlags;    ///< Flags for mutt_enter_string_full(), e.g. #MUTT_ALIAS
-#define MUTT_COMP_NO_FLAGS       0   ///< No flags are set
-
-int mutt_get_field_full(const char *field, char *buf, size_t buflen, int complete, bool multiple, char ***files, int *numfiles)
-{
-  return -1;
-}
-
-int mutt_get_field_unbuffered(const char *msg, char *buf, size_t buflen, CompletionFlags flags)
-{
-  return -1;
-}
-
-void dialog_pop(void)
-{
-}
-
-void dialog_push(struct MuttWindow *dlg)
-{
-}
-
-void mutt_make_help(char *buf, size_t buflen, const char *txt, enum MenuType menu, int op)
-{
-}
-
-void mutt_menu_free(struct Menu **ptr)
-{
-}
-
-int mutt_menu_loop(struct Menu *menu)
-{
-  return -1;
-}
-
-struct Menu *mutt_menu_new(enum MenuType type)
-{
-  return NULL;
-}
-
-void mutt_menu_pop_current(struct Menu *menu)
-{
-}
-
-void mutt_menu_push_current(struct Menu *menu)
-{
-}
-
-void mutt_window_free(struct MuttWindow **ptr)
-{
-}
-
-struct MuttWindow *mutt_window_new(enum MuttWindowOrientation orient, enum MuttWindowSize size, int rows, int cols)
-{
-  return NULL;
-}
-
-void mutt_menu_add_dialog_row(struct Menu *menu, const char *row)
-{
-}
-
-void mutt_window_add_child(struct MuttWindow *parent, struct MuttWindow *child)
-{
-}
-
-void mutt_query_exit(void)
-{
+  return 2;
 }
 
 int mutt_system(const char *cmd)
 {
+  printf("mutt_system\n");
   return 0;
 }
 
-void mutt_allow_interrupt(int disposition)
+int mutt_get_field_full(const char *field, char *buf, size_t buflen, CompletionFlags complete, bool multiple, char ***files, int *numfiles)
 {
+  printf("mutt_get_field_full\n");
+  return 0;
+}
+
+void mutt_query_exit(void)
+{
+  printf("mutt_query_exit\n");
+}
+
+int mutt_get_field_unbuffered(const char *msg, char *buf, size_t buflen, CompletionFlags flags)
+{
+  printf("mutt_get_field_unbuffered\n");
+  return 0;
 }
 
 void mutt_sleep(short s)
 {
-  printf("mutt_sleep\n");
 }
 
 void test_connaccount(void)
@@ -229,13 +139,13 @@ void test_tunnel(void)
 
 int main()
 {
-  void test_connaccount(void);
-  void test_conn_raw(void);
-  void test_getdomain(void);
-  void test_sasl(void);
-  void test_sasl_plain(void);
-  void test_socket(void);
-  void test_ssl(void);
-  void test_tunnel(void);
+  test_connaccount();
+  test_conn_raw();
+  test_getdomain();
+  test_sasl();
+  test_sasl_plain();
+  test_socket();
+  test_ssl();
+  test_tunnel();
   return 0;
 }
