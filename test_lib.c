@@ -6,6 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "mutt/lib.h"
+#include "history/lib.h"
 
 void test_base64(void)
 {
@@ -148,6 +149,7 @@ void test_file(void)
   // char *                  mutt_file_read_keyword            (const char *file, char *buf, size_t buflen);
   // char *                  mutt_file_read_line               (char *line, size_t *size, FILE *fp, int *line_num, int flags);
   // int                     mutt_file_rename                  (const char *oldfile, const char *newfile);
+  // void                    mutt_file_resolve_symlink         (struct Buffer *buf);
   // int                     mutt_file_rmtree                  (const char *path);
   // int                     mutt_file_safe_rename             (const char *src, const char *target);
   // void                    mutt_file_sanitize_filename       (char *path, bool slash);
@@ -193,27 +195,6 @@ void test_hash(void)
 
   struct Hash *h = NULL;
   mutt_hash_free(&h);
-}
-
-void test_history(void)
-{
-  // short C_History;
-  // char *C_HistoryFile;
-  // bool C_HistoryRemoveDups;
-  // short C_SaveHistory;
-
-  // void                    mutt_hist_add                     (enum HistoryClass hclass, const char *str, bool save);
-  // bool                    mutt_hist_at_scratch              (enum HistoryClass hclass);
-  // void                    mutt_hist_free                    (void);
-  // void                    mutt_hist_init                    (void);
-  // char *                  mutt_hist_next                    (enum HistoryClass hclass);
-  // char *                  mutt_hist_prev                    (enum HistoryClass hclass);
-  // void                    mutt_hist_read_file               (void);
-  // void                    mutt_hist_reset_state             (enum HistoryClass hclass);
-  // void                    mutt_hist_save_scratch            (enum HistoryClass hclass, const char *str);
-  // int                     mutt_hist_search                  (const char *search_buf, enum HistoryClass hclass, char **matches);
-
-  mutt_hist_free();
 }
 
 void test_list(void)
@@ -478,7 +459,6 @@ int main()
   test_file();
   test_filter();
   test_hash();
-  test_history();
   test_list();
   test_logging();
   test_mapping();

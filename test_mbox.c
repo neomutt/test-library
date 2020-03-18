@@ -225,9 +225,9 @@ int main(int argc, char *argv[])
   struct Account a = { 0 };
   struct Mailbox m = { 0 };
   ctx.mailbox = &m;
-  m.magic = MUTT_MBOX;
+  m.type = MUTT_MBOX;
   m.account = &a;
-  a.magic = MUTT_MBOX;
+  a.type = MUTT_MBOX;
   m.pathbuf = mutt_buffer_make(128);
   mutt_buffer_strcpy(&m.pathbuf, file);
 

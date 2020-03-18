@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (422 functions)
+## Library (412 functions)
 
 There are now four libraries: libaddress, libcore, libemail and libmutt.
 
@@ -256,6 +256,7 @@ size_t                  mutt_file_quote_filename          (const char *filename,
 char *                  mutt_file_read_keyword            (const char *file, char *buf, size_t buflen);
 char *                  mutt_file_read_line               (char *line, size_t *size, FILE *fp, int *line_num, int flags);
 int                     mutt_file_rename                  (const char *oldfile, const char *newfile);
+void                    mutt_file_resolve_symlink         (struct Buffer *buf);
 int                     mutt_file_rmtree                  (const char *path);
 int                     mutt_file_safe_rename             (const char *src, const char *target);
 void                    mutt_file_sanitize_filename       (char *path, bool slash);
@@ -318,26 +319,6 @@ struct Hash *           mutt_hash_new                     (size_t nelem, HashFla
 void                    mutt_hash_set_destructor          (struct Hash *table, hashelem_free_t fn, intptr_t fn_data);
 struct HashElem *       mutt_hash_typed_insert            (struct Hash *table, const char *strkey, int type, void *data);
 struct HashElem *       mutt_hash_walk                    (const struct Hash *table, struct HashWalkState *state);
-```
-
-### history (mutt)
-
-```c
-short C_History;
-char *C_HistoryFile;
-bool C_HistoryRemoveDups;
-short C_SaveHistory;
-
-void                    mutt_hist_add                     (enum HistoryClass hclass, const char *str, bool save);
-bool                    mutt_hist_at_scratch              (enum HistoryClass hclass);
-void                    mutt_hist_free                    (void);
-void                    mutt_hist_init                    (void);
-char *                  mutt_hist_next                    (enum HistoryClass hclass);
-char *                  mutt_hist_prev                    (enum HistoryClass hclass);
-void                    mutt_hist_read_file               (void);
-void                    mutt_hist_reset_state             (enum HistoryClass hclass);
-void                    mutt_hist_save_scratch            (enum HistoryClass hclass, const char *str);
-int                     mutt_hist_search                  (const char *search_buf, enum HistoryClass hclass, char **matches);
 ```
 
 ### idna (address)
@@ -468,7 +449,7 @@ bool                    neomutt_account_add               (struct NeoMutt *n, st
 bool                    neomutt_account_remove            (struct NeoMutt *n, struct Account *a);
 void                    neomutt_free                      (struct NeoMutt **ptr);
 void                    neomutt_mailboxlist_clear         (struct MailboxList *ml);
-struct MailboxList      neomutt_mailboxlist_get_all       (struct NeoMutt *n, enum MailboxType magic);
+struct MailboxList      neomutt_mailboxlist_get_all       (struct NeoMutt *n, enum MailboxType type);
 struct NeoMutt *        neomutt_new                       (struct ConfigSet *cs);
 ```
 

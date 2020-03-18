@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
   struct Context ctx = { 0 };
   struct Mailbox m = { 0 };
   ctx.mailbox = &m;
-  m.magic = MUTT_MAILDIR;
+  m.type = MUTT_MAILDIR;
   m.pathbuf = mutt_buffer_make(128);
   mutt_buffer_strcpy(&m.pathbuf, file);
 
