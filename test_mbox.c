@@ -11,7 +11,6 @@
 
 struct Progress;
 
-bool C_AutoSubscribe;
 bool C_Autocrypt;
 short C_Sort;
 short C_WriteInc;
@@ -22,7 +21,6 @@ char *ShortHostname;
 char *Username;
 short C_ReadInc;
 volatile sig_atomic_t SigInt;
-struct Hash *AutoSubscribeCache;
 
 typedef uint16_t CopyMessageFlags;
 typedef uint32_t CopyHeaderFlags;

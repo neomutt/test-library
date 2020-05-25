@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (412 functions)
+## Library (415 functions)
 
 There are now four libraries: libaddress, libcore, libemail and libmutt.
 
@@ -59,6 +59,7 @@ bool                    mutt_addrlist_search              (const struct AddressL
 int                     mutt_addrlist_to_intl             (struct AddressList *al, char **err);
 int                     mutt_addrlist_to_local            (struct AddressList *al);
 size_t                  mutt_addrlist_write               (const struct AddressList *al, char *buf, size_t buflen, bool display);
+size_t                  mutt_addrlist_write_list          (const struct AddressList *al, struct ListHead *list);
 ```
 
 ### attach (email)
@@ -150,12 +151,11 @@ void                    mutt_ch_set_charset               (const char *charset);
 ### date (mutt)
 
 ```c
-time_t                  mutt_date_add_timeout             (time_t now, long timeout);
+time_t                  mutt_date_add_timeout             (time_t now, time_t timeout);
 int                     mutt_date_check_month             (const char *s);
 time_t                  mutt_date_epoch                   (void);
 uint64_t                mutt_date_epoch_ms                (void);
 struct tm               mutt_date_gmtime                  (time_t t);
-bool                    mutt_date_is_day_name             (const char *s);
 time_t                  mutt_date_local_tz                (time_t t);
 struct tm               mutt_date_localtime               (time_t t);
 size_t                  mutt_date_localtime_format        (char *buf, size_t buflen, const char *format, time_t t);
@@ -389,6 +389,7 @@ void                    mailbox_update                    (struct Mailbox *m);
 ```c
 const char *            mutt_map_get_name                 (int val, const struct Mapping *map);
 int                     mutt_map_get_value                (const char *name, const struct Mapping *map);
+int                     mutt_map_get_value_n              (const char *name, size_t len, const struct Mapping *map);
 ```
 
 ### mbyte (mutt)
@@ -482,11 +483,11 @@ void                    mutt_param_set                    (struct ParameterList 
 void                    mutt_auto_subscribe               (const char *mailto);
 int                     mutt_check_encoding               (const char *c);
 enum ContentType        mutt_check_mime_type              (const char *s);
-char *                  mutt_extract_message_id           (const char *s, const char **saveptr);
+char *                  mutt_extract_message_id           (const char *s, size_t *len);
 bool                    mutt_is_message_type              (int type, const char *subtype);
 bool                    mutt_matches_ignore               (const char *s);
 void                    mutt_parse_content_type           (const char *s, struct Body *ct);
-int                     mutt_parse_mailto                 (struct Envelope *e, char **body, const char *src);
+bool                    mutt_parse_mailto                 (struct Envelope *e, char **body, const char *src);
 struct Body *           mutt_parse_multipart              (FILE *fp, const char *boundary, off_t end_off, bool digest);
 void                    mutt_parse_part                   (FILE *fp, struct Body *b);
 struct Body *           mutt_read_mime_header             (FILE *fp, bool digest);
@@ -522,6 +523,13 @@ bool                    mutt_path_to_absolute             (char *path, const cha
 void                    mutt_buffer_pool_free             (void);
 struct Buffer *         mutt_buffer_pool_get              (void);
 void                    mutt_buffer_pool_release          (struct Buffer **pbuf);
+```
+
+### prex (mutt)
+
+```c
+regmatch_t *            mutt_prex_capture                 (enum Prex which, const char *str);
+void                    mutt_prex_free                    (void);
 ```
 
 ### regex (mutt)
@@ -671,9 +679,8 @@ void                    unlink_message                    (struct MuttThread **o
 ### url (email)
 
 ```c
-enum UrlScheme          url_check_scheme                  (const char *s);
+enum UrlScheme          url_check_scheme                  (const char *str);
 void                    url_free                          (struct Url **ptr);
-struct Url *            url_new                           (void);
 struct Url *            url_parse                         (const char *src);
 int                     url_pct_decode                    (char *s);
 void                    url_pct_encode                    (char *buf, size_t buflen, const char *src);

@@ -104,7 +104,7 @@ bool mutt_addr_is_user(struct Address *addr)
   return g_addr_is_user;
 }
 
-struct Address *mutt_alias_reverse_lookup(struct Address *a)
+struct Address *alias_reverse_lookup(struct Address *a)
 {
   return NULL;
 }

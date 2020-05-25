@@ -83,12 +83,11 @@ void test_charset(void)
 
 void test_date(void)
 {
-  // time_t                  mutt_date_add_timeout             (time_t now, long timeout);
+  // time_t                  mutt_date_add_timeout             (time_t now, time_t timeout);
   // int                     mutt_date_check_month             (const char *s);
   // time_t                  mutt_date_epoch                   (void);
   // uint64_t                mutt_date_epoch_ms                (void);
   // struct tm               mutt_date_gmtime                  (time_t t);
-  // bool                    mutt_date_is_day_name             (const char *s);
   // time_t                  mutt_date_local_tz                (time_t t);
   // struct tm               mutt_date_localtime               (time_t t);
   // size_t                  mutt_date_localtime_format        (char *buf, size_t buflen, const char *format, time_t t);
@@ -244,6 +243,7 @@ void test_mapping(void)
 {
   // const char *            mutt_map_get_name                 (int val, const struct Mapping *map);
   // int                     mutt_map_get_value                (const char *name, const struct Mapping *map);
+  // int                     mutt_map_get_value_n              (const char *name, size_t len, const struct Mapping *map);
 
   struct Mapping m[] = { { "apple", 1 }, { NULL, 0 } };
 
@@ -336,6 +336,14 @@ void test_pool(void)
   // void                    mutt_buffer_pool_release          (struct Buffer **pbuf);
 
   mutt_buffer_pool_free();
+}
+
+void test_prex(void)
+{
+  // regmatch_t *            mutt_prex_capture                 (enum Prex which, const char *str);
+  // void                    mutt_prex_free                    (void);
+
+  mutt_prex_free();
 }
 
 void test_regex(void)
@@ -468,6 +476,7 @@ int main()
   test_notify();
   test_path();
   test_pool();
+  test_prex();
   test_regex();
   test_signal();
   test_slist();

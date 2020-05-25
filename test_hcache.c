@@ -8,10 +8,8 @@
 #include "hcache/lib.h"
 
 bool C_Autocrypt;
-bool C_AutoSubscribe;
 bool C_HeaderCacheCompress;
 char *C_HeaderCachePagesize;
-struct Hash *AutoSubscribeCache;
 
 void hcache_per_folder(struct Buffer *hcpath, const char *path,
                        const char *folder, hcache_namer_t namer)

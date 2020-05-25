@@ -87,9 +87,11 @@ void test_conn_raw(void)
 
 void test_getdomain(void)
 {
-  // int                getdnsdomainname           (char *buf, size_t buflen);
-  char buf[256] = { 0 };
-  getdnsdomainname(buf, sizeof(buf));
+  // int                getdnsdomainname           (struct Buffer *domain);
+
+  struct Buffer b = mutt_buffer_make(256);
+  getdnsdomainname(&b);
+  mutt_buffer_dealloc(&b);
 }
 
 void test_sasl(void)

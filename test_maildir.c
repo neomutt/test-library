@@ -15,21 +15,17 @@ typedef uint16_t CopyMessageFlags;
 typedef uint32_t CopyHeaderFlags;
 
 bool C_Autocrypt;
-bool C_MaildirCheckCur;
-bool C_AutoSubscribe;
 bool C_FlagSafe;
 char *C_HeaderCache;
 char *HomeDir;
 bool C_MailCheckRecent;
 bool C_MaildirTrash;
-bool C_MarkOld;
 short C_ReadInc;
 char *ShortHostname;
 volatile sig_atomic_t SigInt;
 short C_Sort;
 short C_WriteInc;
 int MonitorContextChanged = 0;
-struct Hash *AutoSubscribeCache;
 char *C_HeaderCachePagesize;
 bool C_HeaderCacheCompress;
 

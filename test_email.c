@@ -9,8 +9,6 @@
 #include "email/lib.h"
 
 bool C_Autocrypt;
-bool C_AutoSubscribe;
-struct Hash *AutoSubscribeCache;
 
 int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *env)
 {
@@ -123,11 +121,11 @@ void test_parse(void)
   // void                    mutt_auto_subscribe               (const char *mailto);
   // int                     mutt_check_encoding               (const char *c);
   // enum ContentType        mutt_check_mime_type              (const char *s);
-  // char *                  mutt_extract_message_id           (const char *s, const char **saveptr);
+  // char *                  mutt_extract_message_id           (const char *s, size_t *len);
   // bool                    mutt_is_message_type              (int type, const char *subtype);
   // bool                    mutt_matches_ignore               (const char *s);
   // void                    mutt_parse_content_type           (const char *s, struct Body *ct);
-  // int                     mutt_parse_mailto                 (struct Envelope *e, char **body, const char *src);
+  // bool                    mutt_parse_mailto                 (struct Envelope *e, char **body, const char *src);
   // struct Body *           mutt_parse_multipart              (FILE *fp, const char *boundary, off_t end_off, bool digest);
   // void                    mutt_parse_part                   (FILE *fp, struct Body *b);
   // struct Body *           mutt_read_mime_header             (FILE *fp, bool digest);
@@ -202,9 +200,8 @@ void test_thread(void)
 
 void test_url(void)
 {
-  // enum UrlScheme          url_check_scheme                  (const char *s);
+  // enum UrlScheme          url_check_scheme                  (const char *str);
   // void                    url_free                          (struct Url **ptr);
-  // struct Url *            url_new                           (void);
   // struct Url *            url_parse                         (const char *src);
   // int                     url_pct_decode                    (char *s);
   // void                    url_pct_encode                    (char *buf, size_t buflen, const char *src);
