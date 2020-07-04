@@ -13,4 +13,5 @@ test_mbox
 test_notmuch
 test_pattern
 test_sasl
+test_smtp
 tmp

@@ -2,7 +2,9 @@ NEO	?= ../neo
 CC	= gcc
 RM	= rm -fr
 
-OUT	= test_address test_conn test_core test_date test_email test_fuzz test_hcache test_imap test_lib test_maildir test_mbox test_notmuch test_pattern test_sasl
+OUT	= test_address test_conn test_core test_date test_email test_fuzz \
+	  test_hcache test_imap test_lib test_maildir test_mbox test_notmuch \
+	  test_pattern test_sasl test_smtp
 
 CFLAGS	+= -DDEBUG
 CFLAGS	+= -Wall
@@ -38,6 +40,7 @@ MBOX_LDFLAGS	= -lmbox
 NOTMUCH_LDFLAGS	= $(NEO)/libnotmuch.a -lnotmuch -lz
 MUTT_LDFLAGS	= -lmutt -lidn -lidn2 -lpcre2-8
 PATTERN_LDFLAGS = $(NEO)/pattern.o -lpcre2-8
+SEND_LDFLAGS	= -lsend
 
 all:	$(NEO) $(OUT)
 
@@ -82,6 +85,9 @@ test_pattern: test_pattern.c
 
 test_sasl: test_sasl.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
+
+test_smtp: test_smtp.c
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(SEND_LDFLAGS) $(CONN_LDFLAGS) $(CORE_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 clean:
 	$(RM) $(OUT) cache tmp
