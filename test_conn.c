@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "conn/conn_private.h"
+#include "conn/private.h"
 #include "mutt/lib.h"
 #include "conn/lib.h"
 #include "imap/account.h"

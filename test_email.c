@@ -32,6 +32,7 @@ void test_body(void)
 {
   // bool                    mutt_body_cmp_strict              (const struct Body *b1, const struct Body *b2);
   // void                    mutt_body_free                    (struct Body **ptr);
+  // char *                  mutt_body_get_charset             (struct Body *b, char *buf, size_t buflen);
   // struct Body *           mutt_body_new                     (void);
 
   struct Body *b = mutt_body_new();
@@ -161,11 +162,12 @@ void test_rfc2231(void)
   // bool C_Rfc2047Parameters;
 
   // void                    rfc2231_decode_parameters         (struct ParameterList *pl);
-  // struct ParameterList    rfc2231_encode_string             (const char *attribute, char *value);
+  // size_t                  rfc2231_encode_string             (struct ParameterList *head, const char *attribute, char *value);
 
   const char *attr = "apple";
   char *value = strdup("한국어 Русский 义勇军");
-  struct ParameterList pl = rfc2231_encode_string(attr, value);
+  struct ParameterList pl = TAILQ_HEAD_INITIALIZER(pl);
+  rfc2231_encode_string(&pl, attr, value);
   if (TAILQ_EMPTY(&pl))
     return;
 }

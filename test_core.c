@@ -15,7 +15,7 @@ void test_neomutt()
   // bool                    neomutt_account_remove            (struct NeoMutt *n, struct Account *a);
   // void                    neomutt_free                      (struct NeoMutt **ptr);
   // void                    neomutt_mailboxlist_clear         (struct MailboxList *ml);
-  // struct MailboxList      neomutt_mailboxlist_get_all       (struct NeoMutt *n, enum MailboxType type);
+  // size_t                  neomutt_mailboxlist_get_all       (struct MailboxList *head, struct NeoMutt *n, enum MailboxType type);
   // struct NeoMutt *        neomutt_new                       (struct ConfigSet *cs);
 
   neomutt_free(NULL);

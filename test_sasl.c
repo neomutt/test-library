@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "conn/conn_private.h"
+#include "conn/private.h"
 #include "mutt/lib.h"
 #include "conn/lib.h"
 #include "imap/account.h"
@@ -102,8 +102,8 @@ int auth_sasl(struct Connection *conn)
   /* looping protocol */
   while (true)
   {
-    mutt_str_strfcpy(buf + olen, "\r\n", bufsize - olen);
-    mutt_socket_write_d(conn, buf, mutt_str_strlen(buf), MUTT_SOCK_LOG_CMD);
+    mutt_str_copy(buf + olen, "\r\n", bufsize - olen);
+    mutt_socket_write_d(conn, buf, mutt_str_len(buf), MUTT_SOCK_LOG_CMD);
     if (mutt_socket_readln_d(inbuf, sizeof(inbuf), conn, MUTT_SOCK_LOG_FULL) < 0)
     {
       sasl_dispose(&saslconn);
@@ -118,7 +118,7 @@ int auth_sasl(struct Connection *conn)
     if (!client_start && (rc != SASL_CONTINUE))
       break;
 
-    if (mutt_str_startswith(inbuf, "+ ", CASE_MATCH) &&
+    if (mutt_str_startswith(inbuf, "+ ") &&
         (sasl_decode64(inbuf + 2, strlen(inbuf + 2), buf, bufsize - 1, &len) != SASL_OK))
     {
       mutt_debug(LL_DEBUG1, "error base64-decoding server response\n");
@@ -165,7 +165,7 @@ int auth_sasl(struct Connection *conn)
   if (rc != SASL_OK)
     goto bail;
 
-  if (mutt_str_startswith(inbuf, "+OK", CASE_MATCH))
+  if (mutt_str_startswith(inbuf, "+OK"))
   {
     mutt_sasl_setup_conn(conn, saslconn);
     FREE(&buf);
@@ -176,7 +176,7 @@ bail:
   sasl_dispose(&saslconn);
 
   /* terminate SASL session if the last response is not +OK nor -ERR */
-  // if (mutt_str_startswith(inbuf, "+ ", CASE_MATCH))
+  // if (mutt_str_startswith(inbuf, "+ "))
   // {
   //   snprintf(buf, bufsize, "*\r\n");
   //   if (pop_query(adata, buf, bufsize) == -1)
@@ -192,7 +192,7 @@ bail:
   return -1;
 }
 
-const char *get_field(enum ConnAccountField field)
+const char *get_field(enum ConnAccountField field, void *gf_data)
 {
   printf("get_field: %d\n", field);
   return NULL;
@@ -249,7 +249,7 @@ bool get_env_var(const char *name, char *buf, size_t buflen)
     printf("env var '%s' not set\n", name);
     return false;
   }
-  mutt_str_strfcpy(buf, value, buflen);
+  mutt_str_copy(buf, value, buflen);
   return true;
 }
 
@@ -266,7 +266,7 @@ int main()
     return 1;
   if (!get_env_var("NEOMUTT_SASL_USER", cac->user, sizeof(cac->user)))
     return 1;
-  mutt_str_strfcpy(cac->login, cac->user, sizeof(cac->login));
+  mutt_str_copy(cac->login, cac->user, sizeof(cac->login));
   if (!get_env_var("NEOMUTT_SASL_PASS", cac->pass, sizeof(cac->pass)))
     return 1;
 

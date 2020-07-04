@@ -78,7 +78,7 @@ test_notmuch: test_notmuch.c
 	$(CC) -o $@ $< $(CFLAGS) $(NEO)/libnotmuch.a $(NEO)/libhcache.a $(NEO)/libstore.a -ltokyocabinet -lkyotocabinet -lgdbm -lqdbm -ldb-5.3 -llmdb -lz -llz4 -lzstd $(NEO)/libnotmuch.a $(NEO)/libmaildir.a $(NEO)/libconfig.a $(NEO)/libcore.a $(NEO)/libcompress.a $(NEO)/libemail.a $(NEO)/libaddress.a $(NEO)/libmutt.a -lidn2 -lnotmuch -lpcre2-8 -lrocksdb -ltdb
 
 test_pattern: test_pattern.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(PATTERN_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(PATTERN_LDFLAGS) $(CORE_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_sasl: test_sasl.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)

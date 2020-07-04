@@ -44,7 +44,7 @@ void mutt_pretty_mailbox(char *buf, size_t buflen)
 
 void mutt_encode_path(char *dest, size_t dlen, const char *src)
 {
-  mutt_str_strfcpy(dest, src, dlen);
+  mutt_str_copy(dest, src, dlen);
   printf("mutt_encode_path: %s\n", src);
 }
 

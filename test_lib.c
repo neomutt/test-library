@@ -177,22 +177,22 @@ void test_filter(void)
 
 void test_hash(void)
 {
-  // void                    mutt_hash_delete                  (struct Hash *table, const char *strkey, const void *data);
-  // void *                  mutt_hash_find                    (const struct Hash *table, const char *strkey);
-  // struct HashElem *       mutt_hash_find_bucket             (const struct Hash *table, const char *strkey);
-  // struct HashElem *       mutt_hash_find_elem               (const struct Hash *table, const char *strkey);
-  // void                    mutt_hash_free                    (struct Hash **ptr);
-  // struct HashElem *       mutt_hash_insert                  (struct Hash *table, const char *strkey, void *data);
-  // void                    mutt_hash_int_delete              (struct Hash *table, unsigned int intkey, const void *data);
-  // void *                  mutt_hash_int_find                (const struct Hash *table, unsigned int intkey);
-  // struct HashElem *       mutt_hash_int_insert              (struct Hash *table, unsigned int intkey, void *data);
-  // struct Hash *           mutt_hash_int_new                 (size_t nelem, HashFlags flags);
-  // struct Hash *           mutt_hash_new                     (size_t nelem, HashFlags flags);
-  // void                    mutt_hash_set_destructor          (struct Hash *table, hashelem_free_t fn, intptr_t fn_data);
-  // struct HashElem *       mutt_hash_typed_insert            (struct Hash *table, const char *strkey, int type, void *data);
-  // struct HashElem *       mutt_hash_walk                    (const struct Hash *table, struct HashWalkState *state);
+  // void                    mutt_hash_delete                  (struct HashTable *table, const char *strkey, const void *data);
+  // void *                  mutt_hash_find                    (const struct HashTable *table, const char *strkey);
+  // struct HashElem *       mutt_hash_find_bucket             (const struct HashTable *table, const char *strkey);
+  // struct HashElem *       mutt_hash_find_elem               (const struct HashTable *table, const char *strkey);
+  // void                    mutt_hash_free                    (struct HashTable **ptr);
+  // struct HashElem *       mutt_hash_insert                  (struct HashTable *table, const char *strkey, void *data);
+  // void                    mutt_hash_int_delete              (struct HashTable *table, unsigned int intkey, const void *data);
+  // void *                  mutt_hash_int_find                (const struct HashTable *table, unsigned int intkey);
+  // struct HashElem *       mutt_hash_int_insert              (struct HashTable *table, unsigned int intkey, void *data);
+  // struct HashTable *      mutt_hash_int_new                 (size_t num_elems, HashFlags flags);
+  // struct HashTable *      mutt_hash_new                     (size_t num_elems, HashFlags flags);
+  // void                    mutt_hash_set_destructor          (struct HashTable *table, hash_hdata_free_t fn, intptr_t fn_data);
+  // struct HashElem *       mutt_hash_typed_insert            (struct HashTable *table, const char *strkey, int type, void *data);
+  // struct HashElem *       mutt_hash_walk                    (const struct HashTable *table, struct HashWalkState *state);
 
-  struct Hash *h = NULL;
+  struct HashTable *h = NULL;
   mutt_hash_free(&h);
 }
 
@@ -207,7 +207,7 @@ void test_list(void)
   // struct ListNode *       mutt_list_insert_head             (struct ListHead *h, char *s);
   // struct ListNode *       mutt_list_insert_tail             (struct ListHead *h, char *s);
   // bool                    mutt_list_match                   (const char *s, struct ListHead *h);
-  // struct ListHead         mutt_list_str_split               (const char *src, char sep);
+  // size_t                  mutt_list_str_split               (struct ListHead *head, const char *src, char sep);
 
   struct ListHead head = STAILQ_HEAD_INITIALIZER(head);
 
@@ -346,6 +346,15 @@ void test_prex(void)
   mutt_prex_free();
 }
 
+void test_random(void)
+{
+  // uint32_t                mutt_rand32                       (void);
+  // uint64_t                mutt_rand64                       (void);
+  // void                    mutt_rand_base32                  (char *buf, size_t buflen);
+
+  mutt_rand32();
+}
+
 void test_regex(void)
 {
   // bool                    mutt_regex_capture                (const struct Regex *regex, const char *str, size_t nmatch, regmatch_t matches[]);
@@ -401,6 +410,13 @@ void test_slist(void)
 
 void test_string(void)
 {
+  // int                     mutt_istr_cmp                     (const char *a, const char *b);
+  // bool                    mutt_istr_equal                   (const char *a, const char *b);
+  // const char *            mutt_istr_find                    (const char *haystack, const char *needle);
+  // int                     mutt_istr_remall                  (char *str, const char *target);
+  // size_t                  mutt_istr_startswith              (const char *str, const char *prefix);
+  // int                     mutt_istrn_cmp                    (const char *a, const char *b, size_t l);
+  // bool                    mutt_istrn_equal                  (const char *a, const char *b, size_t l);
   // void                    mutt_str_adjust                   (char **p);
   // void                    mutt_str_append_item              (char **str, const char *item, char sep);
   // int                     mutt_str_asprintf                 (char **strp, const char *fmt, ...);
@@ -410,44 +426,36 @@ void test_string(void)
   // int                     mutt_str_atoui                    (const char *str, unsigned int *dst);
   // int                     mutt_str_atoul                    (const char *str, unsigned long *dst);
   // int                     mutt_str_atoull                   (const char *str, unsigned long long *dst);
+  // char *                  mutt_str_cat                      (char *buf, size_t buflen, const char *s);
+  // int                     mutt_str_cmp                      (const char *a, const char *b);
+  // int                     mutt_str_coll                     (const char *a, const char *b);
+  // size_t                  mutt_str_copy                     (char *dest, const char *src, size_t dsize);
   // void                    mutt_str_dequote_comment          (char *s);
+  // char *                  mutt_str_dup                      (const char *str);
+  // bool                    mutt_str_equal                    (const char *a, const char *b);
   // const char *            mutt_str_find_word                (const char *src);
   // const char *            mutt_str_getenv                   (const char *name);
   // bool                    mutt_str_inline_replace           (char *buf, size_t buflen, size_t xlen, const char *rstr);
   // bool                    mutt_str_is_ascii                 (const char *str, size_t len);
   // bool                    mutt_str_is_email_wsp             (char c);
+  // size_t                  mutt_str_len                      (const char *a);
+  // char *                  mutt_str_lower                    (char *s);
   // size_t                  mutt_str_lws_len                  (const char *s, size_t n);
   // size_t                  mutt_str_lws_rlen                 (const char *s, size_t n);
   // const char *            mutt_str_next_word                (const char *s);
-  // int                     mutt_str_remall_strcasestr        (char *str, const char *target);
   // void                    mutt_str_remove_trailing_ws       (char *s);
-  // void                    mutt_str_replace                  (char **p, const char *s);
-  // const char *            mutt_str_rstrnstr                 (const char *haystack, size_t haystack_length, const char *needle);
+  // char *                  mutt_str_replace                  (char **p, const char *s);
   // char *                  mutt_str_skip_email_wsp           (const char *s);
   // char *                  mutt_str_skip_whitespace          (const char *p);
-  // size_t                  mutt_str_startswith               (const char *str, const char *prefix, enum CaseSensitivity cs);
-  // int                     mutt_str_strcasecmp               (const char *a, const char *b);
-  // const char *            mutt_str_strcasestr               (const char *haystack, const char *needle);
-  // char *                  mutt_str_strcat                   (char *buf, size_t buflen, const char *s);
-  // const char *            mutt_str_strchrnul                (const char *s, char c);
-  // int                     mutt_str_strcmp                   (const char *a, const char *b);
-  // int                     mutt_str_strcoll                  (const char *a, const char *b);
-  // char *                  mutt_str_strdup                   (const char *str);
-  // size_t                  mutt_str_strfcpy                  (char *dest, const char *src, size_t dsize);
-  // const char *            mutt_str_stristr                  (const char *haystack, const char *needle);
-  // size_t                  mutt_str_strlen                   (const char *a);
-  // char *                  mutt_str_strlower                 (char *s);
-  // int                     mutt_str_strncasecmp              (const char *a, const char *b, size_t l);
-  // char *                  mutt_str_strncat                  (char *d, size_t l, const char *s, size_t sl);
-  // int                     mutt_str_strncmp                  (const char *a, const char *b, size_t l);
-  // size_t                  mutt_str_strnfcpy                 (char *dest, const char *src, size_t n, size_t dsize);
-  // char *                  mutt_str_strnlower                (char *str, size_t num);
-  // char *                  mutt_str_substr_copy              (const char *begin, const char *end, char *buf, size_t buflen);
-  // char *                  mutt_str_substr_dup               (const char *begin, const char *end);
+  // size_t                  mutt_str_startswith               (const char *str, const char *prefix);
   // const char *            mutt_str_sysexit                  (int err_num);
-  // int                     mutt_str_word_casecmp             (const char *a, const char *b);
+  // char *                  mutt_strn_cat                     (char *d, size_t l, const char *s, size_t sl);
+  // char *                  mutt_strn_copy                    (char *dest, const char *src, size_t len, size_t dsize);
+  // char *                  mutt_strn_dup                     (const char *begin, size_t len);
+  // bool                    mutt_strn_equal                   (const char *a, const char *b, size_t l);
+  // const char *            mutt_strn_rfind                   (const char *haystack, size_t haystack_length, const char *needle);
 
-  mutt_str_strlen("hello");
+  mutt_str_len("hello");
 }
 
 void test_exit(void)
@@ -477,6 +485,7 @@ int main()
   test_path();
   test_pool();
   test_prex();
+  test_random();
   test_regex();
   test_signal();
   test_slist();
