@@ -10,6 +10,10 @@
 
 bool C_Autocrypt;
 
+void nm_edata_free(void **ptr)
+{
+}
+
 int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *env)
 {
   return -1;

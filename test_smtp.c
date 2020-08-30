@@ -24,8 +24,14 @@ static const char *lorem_text =
 
 // clang-format off
 struct Address *C_EnvelopeFromAddress; ///< Config: Manually set the sender for outgoing messages
-bool            C_SslForceTls;         ///< Config: (ssl) Require TLS encryption for all connections
-unsigned char   C_SslStarttls;         ///< Config: (ssl) Use STARTTLS on servers advertising the capability
+
+char *C_DsnNotify = NULL;
+char *C_DsnReturn = NULL;
+char *C_SmtpOauthRefreshCommand = NULL;
+char *C_SmtpPass = NULL;
+char *C_SmtpUrl = NULL;
+char *C_SmtpUser = NULL;
+struct Slist *C_SmtpAuthenticators = NULL;
 
 static struct ConfigDef Vars[] = {
   { "dsn_notify",                 DT_STRING,                &C_DsnNotify,               0,        0, NULL },
@@ -42,15 +48,23 @@ static struct ConfigDef Vars[] = {
 };
 // clang-format on
 
+#define CONFIG_INIT_TYPE(CS, NAME)                                             \
+  extern const struct ConfigSetType cst_##NAME;                                \
+  cs_register_type(CS, &cst_##NAME)
+
+void nm_edata_free(void **ptr)
+{
+}
+
 struct ConfigSet *config_setup(void)
 {
   struct ConfigSet *cs = cs_new(32);
 
-  address_init(cs);
-  bool_init(cs);
-  quad_init(cs);
-  slist_init(cs);
-  string_init(cs);
+  CONFIG_INIT_TYPE(cs, address);
+  CONFIG_INIT_TYPE(cs, bool);
+  CONFIG_INIT_TYPE(cs, quad);
+  CONFIG_INIT_TYPE(cs, slist);
+  CONFIG_INIT_TYPE(cs, string);
 
   if (!cs_register_variables(cs, Vars, 0))
     cs_free(&cs);
@@ -235,15 +249,17 @@ int mutt_system(const char *cmd)
 
 // conn
 
-int dlg_verify_cert(const char *title, struct ListHead *list, bool allow_always, bool allow_skip)
+int dlg_verify_certificate(const char *title, struct ListHead *list, bool allow_always, bool allow_skip)
 {
-  if (title || list || allow_always || allow_skip)
+  printf("\033[1;33mValidate certificate:\033[0m\n");
+  struct ListNode *np = NULL;
+  STAILQ_FOREACH(np, list, entries)
   {
+    printf("\t%s\n", NONULL(np->data));
   }
 
-  return 0;
+  return 2;
 }
-
 
 // sendlib
 
@@ -262,9 +278,12 @@ bool create_message(const char *file, struct AddressList *from, struct AddressLi
   if (!fp)
     return false;
 
-  char buf[1024];
+  struct Buffer date = mutt_buffer_make(32);
+  mutt_date_make_date(&date);
+  fputs(mutt_b2s(&date), fp);
+  mutt_buffer_dealloc(&date);
 
-  fputs(mutt_date_make_date(buf, sizeof(buf)), fp);
+  char buf[1024];
 
   if (!TAILQ_EMPTY(from))
   {

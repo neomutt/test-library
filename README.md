@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (421 functions)
+## Library (423 functions)
 
 There are now four libraries: libaddress, libcore, libemail and libmutt.
 
@@ -61,7 +61,7 @@ int                     mutt_addrlist_to_intl             (struct AddressList *a
 int                     mutt_addrlist_to_local            (struct AddressList *al);
 bool                    mutt_addrlist_uses_unicode        (const struct AddressList *al);
 size_t                  mutt_addrlist_write               (const struct AddressList *al, char *buf, size_t buflen, bool display);
-void                    mutt_addrlist_write_file          (const struct AddressList *al, FILE *fp, int linelen, bool display);
+void                    mutt_addrlist_write_file          (const struct AddressList *al, FILE *fp, int start_col, bool display);
 size_t                  mutt_addrlist_write_list          (const struct AddressList *al, struct ListHead *list);
 ```
 
@@ -163,7 +163,7 @@ struct tm               mutt_date_gmtime                  (time_t t);
 time_t                  mutt_date_local_tz                (time_t t);
 struct tm               mutt_date_localtime               (time_t t);
 size_t                  mutt_date_localtime_format        (char *buf, size_t buflen, const char *format, time_t t);
-char *                  mutt_date_make_date               (char *buf, size_t buflen);
+void                    mutt_date_make_date               (struct Buffer *buf);
 int                     mutt_date_make_imap               (char *buf, size_t buflen, time_t timestamp);
 time_t                  mutt_date_make_time               (struct tm *t, bool local);
 int                     mutt_date_make_tls                (char *buf, size_t buflen, time_t timestamp);
@@ -463,8 +463,9 @@ struct NeoMutt *        neomutt_new                       (struct ConfigSet *cs)
 ```c
 void                    notify_free                       (struct Notify **ptr);
 struct Notify *         notify_new                        (void);
-bool                    notify_observer_add               (struct Notify *notify, observer_t callback, void *global_data);
+bool                    notify_observer_add               (struct Notify *notify, enum NotifyType type, observer_t callback, void *global_data);
 bool                    notify_observer_remove            (struct Notify *notify, observer_t callback, void *global_data);
+void                    notify_observer_remove_all        (struct Notify *notify);
 bool                    notify_send                       (struct Notify *notify, enum NotifyType event_type, int event_subtype, void *event_data);
 void                    notify_set_parent                 (struct Notify *notify, struct Notify *parent);
 ```
@@ -608,6 +609,7 @@ struct Slist *          slist_dup                         (const struct Slist *l
 struct Slist *          slist_empty                       (struct Slist **list);
 void                    slist_free                        (struct Slist **list);
 bool                    slist_is_member                   (const struct Slist *list, const char *str);
+struct Slist *          slist_new                         (int flags);
 struct Slist *          slist_parse                       (const char *str, int flags);
 struct Slist *          slist_remove_string               (struct Slist *list, const char *str);
 ```

@@ -8,8 +8,29 @@
 #include "hcache/lib.h"
 
 bool C_Autocrypt;
-bool C_HeaderCacheCompress;
-char *C_HeaderCachePagesize;
+struct ConfigDef;
+
+void nm_edata_free(void **ptr)
+{
+}
+
+int hcache_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
+                     intptr_t value, struct Buffer *err)
+{
+  return 0;
+}
+
+int compress_method_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
+                              intptr_t value, struct Buffer *err)
+{
+  return 0;
+}
+
+int compress_level_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
+                             intptr_t value, struct Buffer *err)
+{
+  return 0;
+}
 
 void hcache_per_folder(struct Buffer *hcpath, const char *path,
                        const char *folder, hcache_namer_t namer)
@@ -77,7 +98,7 @@ int main()
   printf("%s is %svalid\n", name, mutt_hcache_is_valid_backend(name) ? "" : "not ");
 #endif
 
-  header_cache_t *hc = NULL;
+  struct HeaderCache *hc = NULL;
   const char *path = "cache/";
   const char *folder = "test";
 

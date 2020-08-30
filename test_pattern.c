@@ -33,7 +33,6 @@ const char *C_SimpleSearch = "~f %s | ~s %s";
 bool OptSearchReverse = false;
 bool C_WrapSearch = false;
 int C_ReadInc = 0;
-const char *C_ExternalSearchCommand = NULL;
 
 /**
  * enum MuttWriteHeaderMode - Modes for mutt_rfc822_write_header()
@@ -46,6 +45,10 @@ enum MuttWriteHeaderMode
   MUTT_WRITE_HEADER_EDITHDRS, ///< "light" mode (used for edit_hdrs)
   MUTT_WRITE_HEADER_MIME,     ///< Write protected headers
 };
+
+void nm_edata_free(void **ptr)
+{
+}
 
 void mutt_buffer_mktemp_full(struct Buffer *buf, const char *prefix,
                              const char *suffix, const char *src, int line)

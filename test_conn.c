@@ -14,7 +14,7 @@ int SigInt;
 bool OptNoCurses;
 char *Username;
 
-int dlg_verify_cert(const char *title, struct ListHead *list, bool allow_always, bool allow_skip)
+int dlg_verify_certificate(const char *title, struct ListHead *list, bool allow_always, bool allow_skip)
 {
   printf("\033[1;33mValidate certificate:\033[0m\n");
   struct ListNode *np = NULL;

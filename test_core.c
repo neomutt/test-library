@@ -7,6 +7,10 @@
 #include "mutt/lib.h"
 #include "core/lib.h"
 
+void nm_edata_free(void **ptr)
+{
+}
+
 void test_neomutt()
 {
   // struct NeoMutt *NeoMutt;

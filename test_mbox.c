@@ -26,6 +26,10 @@ typedef uint16_t CopyMessageFlags;
 typedef uint32_t CopyHeaderFlags;
 typedef uint16_t CompletionFlags;
 
+void nm_edata_free(void **ptr)
+{
+}
+
 void mutt_buffer_mktemp_full(struct Buffer *buf, const char *prefix,
                              const char *suffix, const char *src, int line)
 {

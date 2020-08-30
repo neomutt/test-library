@@ -40,9 +40,10 @@ static int test_mutt_local_tz(const char *arg)
 
 static int test_mutt_make_date(const char *arg)
 {
-  char buf[64];
-  mutt_date_make_date(buf, sizeof(buf));
-  printf("%s", buf);
+  struct Buffer buf = mutt_buffer_make(64);
+  mutt_date_make_date(&buf);
+  printf("%s", mutt_b2s(&buf));
+  mutt_buffer_dealloc(&buf);
 
   return 0;
 }

@@ -16,18 +16,36 @@ typedef uint32_t CopyHeaderFlags;
 
 bool C_Autocrypt;
 bool C_FlagSafe;
-char *C_HeaderCache;
 char *HomeDir;
 bool C_MailCheckRecent;
-bool C_MaildirTrash;
 short C_ReadInc;
 char *ShortHostname;
 volatile sig_atomic_t SigInt;
 short C_Sort;
 short C_WriteInc;
 int MonitorContextChanged = 0;
-char *C_HeaderCachePagesize;
-bool C_HeaderCacheCompress;
+
+int hcache_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
+                     intptr_t value, struct Buffer *err)
+{
+  return 0;
+}
+
+int compress_method_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
+                              intptr_t value, struct Buffer *err)
+{
+  return 0;
+}
+
+int compress_level_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
+                             intptr_t value, struct Buffer *err)
+{
+  return 0;
+}
+
+void nm_edata_free(void **ptr)
+{
+}
 
 void mutt_buffer_encode_path(struct Buffer *buf, const char *src)
 {
@@ -132,7 +150,7 @@ int mx_msg_close(struct Mailbox *m, struct Message **msg)
   return -1;
 }
 
-struct Message *mx_msg_open_new(struct Mailbox *m, struct Email *e, MsgOpenFlags flags)
+struct Message *mx_msg_open_new(struct Mailbox *m, const struct Email *e, MsgOpenFlags flags)
 {
   mutt_message("mx_msg_open_new NOTIMPL");
   return NULL;

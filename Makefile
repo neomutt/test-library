@@ -39,7 +39,7 @@ MAILDIR_LDFLAGS	= -lmaildir -lstore -lpcre2-8
 MBOX_LDFLAGS	= -lmbox
 NOTMUCH_LDFLAGS	= $(NEO)/libnotmuch.a -lnotmuch -lz
 MUTT_LDFLAGS	= -lmutt -lidn -lidn2 -lpcre2-8
-PATTERN_LDFLAGS = $(NEO)/pattern.o -lpcre2-8
+PATTERN_LDFLAGS = -lpattern -lpcre2-8
 SEND_LDFLAGS	= -lsend
 
 all:	$(NEO) $(OUT)
@@ -48,7 +48,7 @@ test_address: test_address.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_conn: test_conn.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(CONFIG_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_core: test_core.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CORE_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(CONFIG_LDFLAGS) $(MUTT_LDFLAGS)
@@ -63,7 +63,7 @@ test_fuzz: test_fuzz.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(FUZZ_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_hcache: test_hcache.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(HCACHE_LDFLAGS) $(COMPRESS_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(HCACHE_LDFLAGS) $(COMPRESS_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(CONFIG_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_imap: test_imap.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(MUTT_LDFLAGS)
@@ -84,7 +84,7 @@ test_pattern: test_pattern.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(PATTERN_LDFLAGS) $(CORE_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_sasl: test_sasl.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(CONFIG_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_smtp: test_smtp.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(SEND_LDFLAGS) $(CONN_LDFLAGS) $(CORE_LDFLAGS) $(CONFIG_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)

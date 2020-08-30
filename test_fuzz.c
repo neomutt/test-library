@@ -12,6 +12,10 @@
 
 bool C_Autocrypt;
 
+void nm_edata_free(void **ptr)
+{
+}
+
 int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *env)
 {
   return -1;
@@ -34,7 +38,7 @@ bool test_file(const char *name)
   if (!env)
     return false;
 
-  mutt_parse_part(fp, e->content);
+  mutt_parse_part(fp, e->body);
 
   mutt_env_free(&env);
   email_free(&e);
