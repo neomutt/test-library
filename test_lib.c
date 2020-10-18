@@ -42,7 +42,7 @@ void test_buffer(void)
   // void                    mutt_buffer_reset                 (struct Buffer *buf);
   // size_t                  mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
   // size_t                  mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
-  // char *                  mutt_buffer_strdup                (struct Buffer *buf);
+  // char *                  mutt_buffer_strdup                (const struct Buffer *buf);
   // size_t                  mutt_buffer_substrcpy             (struct Buffer *buf, const char *beg, const char *end);
 
   struct Buffer *b = NULL;
@@ -405,6 +405,7 @@ void test_slist(void)
   // struct Slist *          slist_new                         (int flags);
   // struct Slist *          slist_parse                       (const char *str, int flags);
   // struct Slist *          slist_remove_string               (struct Slist *list, const char *str);
+  // int                     slist_to_buffer                   (const struct Slist *list, struct Buffer *buf);
 
   struct Slist *s = NULL;
   slist_free(&s);

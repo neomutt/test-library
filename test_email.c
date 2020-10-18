@@ -51,6 +51,11 @@ void test_email(void)
   // size_t                  email_size                        (const struct Email *e);
   // int                     emaillist_add_email               (struct EmailList *el, struct Email *e);
   // void                    emaillist_clear                   (struct EmailList *el);
+  // struct ListNode *       header_add                        (struct ListHead *hdrlist, const char *header);
+  // struct ListNode *       header_find                       (const struct ListHead *hdrlist, const char *header);
+  // void                    header_free                       (struct ListHead *hdrlist, struct ListNode *target);
+  // struct ListNode *       header_set                        (struct ListHead *hdrlist, const char *header);
+  // struct ListNode *       header_update                     (struct ListNode *hdr, const char *header);
 
   struct Email *e = email_new();
   email_free(&e);

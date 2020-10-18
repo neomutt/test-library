@@ -5,6 +5,7 @@
 #include "email/lib.h"
 #include "core/lib.h"
 #include "notmuch/lib.h"
+#include "mutt_commands.h"
 
 struct Progress;
 
@@ -22,22 +23,20 @@ char *ShortHostname;
 int MonitorContextChanged = 0;
 int SigInt = 0;
 
-int hcache_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
-                     intptr_t value, struct Buffer *err)
+void commands_register(const struct Command *cmds, const size_t num_cmds)
 {
-  return 0;
 }
 
-int compress_method_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
-                              intptr_t value, struct Buffer *err)
+enum CommandResult parse_mailboxes(struct Buffer *buf, struct Buffer *s,
+                                   intptr_t data, struct Buffer *err)
 {
-  return 0;
+  return MUTT_CMD_SUCCESS;
 }
 
-int compress_level_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
-                             intptr_t value, struct Buffer *err)
+enum CommandResult parse_unmailboxes(struct Buffer *buf, struct Buffer *s,
+                                     intptr_t data, struct Buffer *err)
 {
-  return 0;
+  return MUTT_CMD_SUCCESS;
 }
 
 void mutt_encode_path(char *dest, size_t dlen, const char *src)

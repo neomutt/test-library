@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (423 functions)
+## Library (429 functions)
 
 There are now four libraries: libaddress, libcore, libemail and libmutt.
 
@@ -117,7 +117,7 @@ int                     mutt_buffer_printf                (struct Buffer *buf, c
 void                    mutt_buffer_reset                 (struct Buffer *buf);
 size_t                  mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
 size_t                  mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
-char *                  mutt_buffer_strdup                (struct Buffer *buf);
+char *                  mutt_buffer_strdup                (const struct Buffer *buf);
 size_t                  mutt_buffer_substrcpy             (struct Buffer *buf, const char *beg, const char *end);
 ```
 
@@ -182,6 +182,11 @@ struct Email *          email_new                         (void);
 size_t                  email_size                        (const struct Email *e);
 int                     emaillist_add_email               (struct EmailList *el, struct Email *e);
 void                    emaillist_clear                   (struct EmailList *el);
+struct ListNode *       header_add                        (struct ListHead *hdrlist, const char *header);
+struct ListNode *       header_find                       (const struct ListHead *hdrlist, const char *header);
+void                    header_free                       (struct ListHead *hdrlist, struct ListNode *target);
+struct ListNode *       header_set                        (struct ListHead *hdrlist, const char *header);
+struct ListNode *       header_update                     (struct ListNode *hdr, const char *header);
 ```
 
 ### email_globals (email)
@@ -612,6 +617,7 @@ bool                    slist_is_member                   (const struct Slist *l
 struct Slist *          slist_new                         (int flags);
 struct Slist *          slist_parse                       (const char *str, int flags);
 struct Slist *          slist_remove_string               (struct Slist *list, const char *str);
+int                     slist_to_buffer                   (const struct Slist *list, struct Buffer *buf);
 ```
 
 ### string (mutt)

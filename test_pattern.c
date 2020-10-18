@@ -46,6 +46,11 @@ enum MuttWriteHeaderMode
   MUTT_WRITE_HEADER_MIME,     ///< Write protected headers
 };
 
+char *menu_create_alias_title(char *menu_name, char *limit)
+{
+  return NULL;
+}
+
 void nm_edata_free(void **ptr)
 {
 }

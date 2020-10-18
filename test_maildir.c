@@ -25,24 +25,6 @@ short C_Sort;
 short C_WriteInc;
 int MonitorContextChanged = 0;
 
-int hcache_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
-                     intptr_t value, struct Buffer *err)
-{
-  return 0;
-}
-
-int compress_method_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
-                              intptr_t value, struct Buffer *err)
-{
-  return 0;
-}
-
-int compress_level_validator(const struct ConfigSet *cs, const struct ConfigDef *cdef,
-                             intptr_t value, struct Buffer *err)
-{
-  return 0;
-}
-
 void nm_edata_free(void **ptr)
 {
 }
