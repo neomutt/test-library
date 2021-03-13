@@ -6,9 +6,17 @@
 #include "mutt/lib.h"
 #include "email/lib.h"
 #include "hcache/lib.h"
+#include "context.h"
 
 bool C_Autocrypt;
 struct ConfigDef;
+
+struct Context *Context = NULL;
+
+struct Mailbox *ctx_mailbox(struct Context *ctx)
+{
+  return ctx ? ctx->mailbox : NULL;
+}
 
 void nm_edata_free(void **ptr)
 {
@@ -39,10 +47,12 @@ int mutt_convert_string(char **ps, const char *from, const char *to, int flags)
   return -1;
 }
 
-void mutt_encode_path(char *dest, size_t dlen, const char *src)
+void mutt_encode_path(struct Buffer *buf, const char *src)
 {
-  mutt_str_copy(dest, src, dlen);
-  printf("mutt_encode_path: %s\n", src);
+  char *copy = strdup(src);
+  mutt_buffer_strcpy(buf, copy);
+  printf("mutt_encode_path: %s\n", mutt_buffer_string(buf));
+  FREE(&copy);
 }
 
 struct Body *mutt_new_body(void)

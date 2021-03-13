@@ -9,8 +9,16 @@
 #include <unistd.h>
 #include "mutt/lib.h"
 #include "email/lib.h"
+#include "context.h"
 
 bool C_Autocrypt;
+
+struct Context *Context = NULL;
+
+struct Mailbox *ctx_mailbox(struct Context *ctx)
+{
+  return ctx ? ctx->mailbox : NULL;
+}
 
 void nm_edata_free(void **ptr)
 {

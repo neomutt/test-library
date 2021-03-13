@@ -5,8 +5,8 @@
 #include "mutt/lib.h"
 #include "email/email.h"
 #include "core/lib.h"
-#include "context.h"
 #include "mbox/lib.h"
+#include "context.h"
 #include "mx.h"
 
 struct Progress;
@@ -21,10 +21,16 @@ char *ShortHostname;
 char *Username;
 short C_ReadInc;
 volatile sig_atomic_t SigInt;
+struct Context *Context = NULL;
 
 typedef uint16_t CopyMessageFlags;
 typedef uint32_t CopyHeaderFlags;
 typedef uint16_t CompletionFlags;
+
+struct Mailbox *ctx_mailbox(struct Context *ctx)
+{
+  return ctx ? ctx->mailbox : NULL;
+}
 
 void nm_edata_free(void **ptr)
 {
@@ -44,8 +50,8 @@ int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *en
   return -1;
 }
 
-int mutt_buffer_get_field_full(const char *field, struct Buffer *buf, CompletionFlags complete,
-                               bool multiple, char ***files, int *numfiles)
+int mutt_buffer_get_field(const char *field, struct Buffer *buf, CompletionFlags complete,
+                          bool multiple, char ***files, int *numfiles)
 {
   return -1;
 }

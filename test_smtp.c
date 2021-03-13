@@ -90,7 +90,7 @@ char *Username;
 
 // gui
 
-int mutt_get_field_full(const char *field, char *buf, size_t buflen, CompletionFlags complete, bool multiple, char ***files, int *numfiles)
+int mutt_get_field(const char *field, char *buf, size_t buflen, CompletionFlags complete, bool multiple, char ***files, int *numfiles)
 {
   if (field || buf || buflen || complete || multiple || files || numfiles)
   {
@@ -280,7 +280,7 @@ bool create_message(const char *file, struct AddressList *from, struct AddressLi
 
   struct Buffer date = mutt_buffer_make(32);
   mutt_date_make_date(&date);
-  fputs(mutt_b2s(&date), fp);
+  fputs(mutt_buffer_string(&date), fp);
   mutt_buffer_dealloc(&date);
 
   char buf[1024];

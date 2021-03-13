@@ -5,10 +5,13 @@
 #include "email/lib.h"
 #include "core/lib.h"
 #include "notmuch/lib.h"
+#include "context.h"
 #include "mutt_commands.h"
+#include "mx.h"
 
 struct Progress;
 
+typedef uint16_t CompletionFlags;
 typedef uint16_t CopyMessageFlags;
 typedef uint32_t CopyHeaderFlags;
 
@@ -22,6 +25,22 @@ char *HomeDir;
 char *ShortHostname;
 int MonitorContextChanged = 0;
 int SigInt = 0;
+struct Context *Context = NULL;
+
+struct Mailbox *mx_path_resolve(const char *path)
+{
+  return NULL;
+}
+
+bool mx_mbox_ac_link(struct Mailbox *m)
+{
+  return false;
+}
+
+struct Mailbox *ctx_mailbox(struct Context *ctx)
+{
+  return ctx ? ctx->mailbox : NULL;
+}
 
 void commands_register(const struct Command *cmds, const size_t num_cmds)
 {
@@ -72,8 +91,14 @@ int mutt_copy_message(FILE *fp_out, struct Mailbox *m, struct Email *e, CopyMess
   return -1;
 }
 
-int mutt_get_field_full(const char *field, char *buf, size_t buflen,
-                        int complete, bool multiple, char ***files, int *numfiles)
+int mutt_buffer_get_field(const char *field, struct Buffer *buf, CompletionFlags complete,
+                          bool multiple, char ***files, int *numfiles)
+{
+  return -1;
+}
+
+int mutt_get_field(const char *field, char *buf, size_t buflen, int complete,
+                   bool multiple, char ***files, int *numfiles)
 {
   return -1;
 }

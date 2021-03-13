@@ -37,7 +37,7 @@ int mutt_system(const char *cmd)
   return 0;
 }
 
-int mutt_get_field_full(const char *field, char *buf, size_t buflen, CompletionFlags complete, bool multiple, char ***files, int *numfiles)
+int mutt_get_field(const char *field, char *buf, size_t buflen, CompletionFlags complete, bool multiple, char ***files, int *numfiles)
 {
   printf("mutt_get_field_full\n");
   return 0;

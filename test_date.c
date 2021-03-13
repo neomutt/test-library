@@ -42,7 +42,7 @@ static int test_mutt_make_date(const char *arg)
 {
   struct Buffer buf = mutt_buffer_make(64);
   mutt_date_make_date(&buf);
-  printf("%s", mutt_b2s(&buf));
+  printf("%s", mutt_buffer_string(&buf));
   mutt_buffer_dealloc(&buf);
 
   return 0;

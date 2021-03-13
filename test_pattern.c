@@ -8,6 +8,7 @@
 #include "email/lib.h"
 #include "core/lib.h"
 #include "mutt.h"
+#include "context.h"
 
 struct PatternHead *mutt_pattern_comp(char *s, int flags, struct Buffer *err);
 void mutt_pattern_free(struct PatternHead **pat);
@@ -45,6 +46,11 @@ enum MuttWriteHeaderMode
   MUTT_WRITE_HEADER_EDITHDRS, ///< "light" mode (used for edit_hdrs)
   MUTT_WRITE_HEADER_MIME,     ///< Write protected headers
 };
+
+struct Mailbox *ctx_mailbox(struct Context *ctx)
+{
+  return ctx ? ctx->mailbox : NULL;
+}
 
 char *menu_create_alias_title(char *menu_name, char *limit)
 {
@@ -137,8 +143,14 @@ pid_t mutt_create_filter(const char *s, FILE **fp_in, FILE **fp_out, FILE **fp_e
   return -1;
 }
 
-int mutt_get_field_full(const char *field, char *buf, size_t buflen,
-                        int complete, bool multiple, char ***files, int *numfiles)
+int mutt_buffer_get_field(const char *field, struct Buffer *buf, CompletionFlags complete,
+                          bool multiple, char ***files, int *numfiles)
+{
+  return -1;
+}
+
+int mutt_get_field(const char *field, char *buf, size_t buflen, int complete,
+                   bool multiple, char ***files, int *numfiles)
 {
   return -1;
 }

@@ -1,4 +1,5 @@
 #include "config.h"
+#include "context.h"
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/stat.h>
@@ -24,6 +25,12 @@ volatile sig_atomic_t SigInt;
 short C_Sort;
 short C_WriteInc;
 int MonitorContextChanged = 0;
+struct Context *Context = NULL;
+
+struct Mailbox *ctx_mailbox(struct Context *ctx)
+{
+  return ctx ? ctx->mailbox : NULL;
+}
 
 void nm_edata_free(void **ptr)
 {
