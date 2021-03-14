@@ -41,6 +41,9 @@ void test_mailbox()
   // struct Mailbox *        mailbox_find                      (const char *path);
   // struct Mailbox *        mailbox_find_name                 (const char *name);
   // void                    mailbox_free                      (struct Mailbox **ptr);
+  // void                    mailbox_gc_add                    (struct Email *e);
+  // void                    mailbox_gc_run                    (void);
+  // int                     mailbox_gen                       (void);
   // struct Mailbox *        mailbox_new                       (void);
   // bool                    mailbox_set_subset                (struct Mailbox *m, struct ConfigSubset *sub);
   // void                    mailbox_size_add                  (struct Mailbox *m, const struct Email *e);

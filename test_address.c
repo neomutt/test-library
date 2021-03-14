@@ -56,7 +56,7 @@ void test_group(void)
   // bool                    mutt_group_match                  (struct Group *g, const char *s);
   // void                    mutt_grouplist_add                (struct GroupList *gl, struct Group *group);
   // void                    mutt_grouplist_add_addrlist       (struct GroupList *gl, struct AddressList *al);
-  // int                     mutt_grouplist_add_regex          (struct GroupList *gl, const char *s, int flags, struct Buffer *err);
+  // int                     mutt_grouplist_add_regex          (struct GroupList *gl, const char *s, uint16_t flags, struct Buffer *err);
   // void                    mutt_grouplist_clear              (struct GroupList *gl);
   // void                    mutt_grouplist_destroy            (struct GroupList *gl);
   // void                    mutt_grouplist_free               (void);
@@ -73,10 +73,10 @@ void test_idna(void)
   // bool C_IdnDecode;
   // bool C_IdnEncode;
 
-  // char *                  mutt_idna_intl_to_local           (const char *user, const char *domain, int flags);
+  // char *                  mutt_idna_intl_to_local           (const char *user, const char *domain, uint8_t flags);
   // char *                  mutt_idna_local_to_intl           (const char *user, const char *domain);
   // const char *            mutt_idna_print_version           (void);
-  // int                     mutt_idna_to_ascii_lz             (const char *input, char **output, int flags);
+  // int                     mutt_idna_to_ascii_lz             (const char *input, char **output, uint8_t flags);
 
   setlocale(LC_ALL, "");
 

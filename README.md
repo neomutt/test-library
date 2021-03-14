@@ -12,7 +12,7 @@
 - `test_hcache` creates an entry in the header cache and retrieves it
 - `test_lib` calls a function from each of the library source files
 
-## Library (429 functions)
+## Library (434 functions)
 
 There are now four libraries: libaddress, libcore, libemail and libmutt.
 
@@ -115,6 +115,7 @@ size_t                  mutt_buffer_len                   (const struct Buffer *
 struct Buffer           mutt_buffer_make                  (size_t size);
 int                     mutt_buffer_printf                (struct Buffer *buf, const char *fmt, ...);
 void                    mutt_buffer_reset                 (struct Buffer *buf);
+void                    mutt_buffer_seek                  (struct Buffer *buf, size_t offset);
 size_t                  mutt_buffer_strcpy                (struct Buffer *buf, const char *s);
 size_t                  mutt_buffer_strcpy_n              (struct Buffer *buf, const char *s, size_t len);
 char *                  mutt_buffer_strdup                (const struct Buffer *buf);
@@ -137,16 +138,16 @@ bool                    mutt_ch_check_charset             (const char *cs, bool 
 char *                  mutt_ch_choose                    (const char *fromcode, const char *charsets, const char *u, size_t ulen, char **d, size_t *dlen);
 bool                    mutt_ch_chscmp                    (const char *cs1, const char *cs2);
 int                     mutt_ch_convert_nonmime_string    (char **ps);
-int                     mutt_ch_convert_string            (char **ps, const char *from, const char *to, int flags);
+int                     mutt_ch_convert_string            (char **ps, const char *from, const char *to, uint8_t flags);
 int                     mutt_ch_fgetconv                  (struct FgetConv *fc);
 void                    mutt_ch_fgetconv_close            (struct FgetConv **fc);
-struct FgetConv *       mutt_ch_fgetconv_open             (FILE *fp, const char *from, const char *to, int flags);
+struct FgetConv *       mutt_ch_fgetconv_open             (FILE *fp, const char *from, const char *to, uint8_t flags);
 char *                  mutt_ch_fgetconvs                 (char *buf, size_t buflen, struct FgetConv *fc);
 char *                  mutt_ch_get_default_charset       (void);
 char *                  mutt_ch_get_langinfo_charset      (void);
 size_t                  mutt_ch_iconv                     (iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft, const char **inrepls, const char *outrepl, int *iconverrno);
 const char *            mutt_ch_iconv_lookup              (const char *chs);
-iconv_t                 mutt_ch_iconv_open                (const char *tocode, const char *fromcode, int flags);
+iconv_t                 mutt_ch_iconv_open                (const char *tocode, const char *fromcode, uint8_t flags);
 bool                    mutt_ch_lookup_add                (enum LookupType type, const char *pat, const char *replace, struct Buffer *err);
 void                    mutt_ch_lookup_remove             (void);
 void                    mutt_ch_set_charset               (const char *charset);
@@ -255,15 +256,15 @@ FILE *                  mutt_file_fopen                   (const char *path, con
 int                     mutt_file_fsync_close             (FILE **fp);
 long                    mutt_file_get_size                (const char *path);
 void                    mutt_file_get_stat_timespec       (struct timespec *dest, struct stat *sb, enum MuttStatType type);
-bool                    mutt_file_iter_line               (struct MuttFileIter *iter, FILE *fp, int flags);
+bool                    mutt_file_iter_line               (struct MuttFileIter *iter, FILE *fp, ReadLineFlags flags);
 int                     mutt_file_lock                    (int fd, bool excl, bool timeout);
-bool                    mutt_file_map_lines               (mutt_file_map_t func, void *user_data, FILE *fp, int flags);
+bool                    mutt_file_map_lines               (mutt_file_map_t func, void *user_data, FILE *fp, ReadLineFlags flags);
 int                     mutt_file_mkdir                   (const char *path, mode_t mode);
 FILE *                  mutt_file_mkstemp_full            (const char *file, int line, const char *func);
-int                     mutt_file_open                    (const char *path, int flags);
+int                     mutt_file_open                    (const char *path, uint32_t flags);
 size_t                  mutt_file_quote_filename          (const char *filename, char *buf, size_t buflen);
 char *                  mutt_file_read_keyword            (const char *file, char *buf, size_t buflen);
-char *                  mutt_file_read_line               (char *line, size_t *size, FILE *fp, int *line_num, int flags);
+char *                  mutt_file_read_line               (char *line, size_t *size, FILE *fp, int *line_num, ReadLineFlags flags);
 int                     mutt_file_rename                  (const char *oldfile, const char *newfile);
 void                    mutt_file_resolve_symlink         (struct Buffer *buf);
 int                     mutt_file_rmtree                  (const char *path);
@@ -301,7 +302,7 @@ bool                    is_from                           (const char *s, char *
 bool                    mutt_group_match                  (struct Group *g, const char *s);
 void                    mutt_grouplist_add                (struct GroupList *gl, struct Group *group);
 void                    mutt_grouplist_add_addrlist       (struct GroupList *gl, struct AddressList *al);
-int                     mutt_grouplist_add_regex          (struct GroupList *gl, const char *s, int flags, struct Buffer *err);
+int                     mutt_grouplist_add_regex          (struct GroupList *gl, const char *s, uint16_t flags, struct Buffer *err);
 void                    mutt_grouplist_clear              (struct GroupList *gl);
 void                    mutt_grouplist_destroy            (struct GroupList *gl);
 void                    mutt_grouplist_free               (void);
@@ -336,10 +337,10 @@ struct HashElem *       mutt_hash_walk                    (const struct HashTabl
 bool C_IdnDecode;
 bool C_IdnEncode;
 
-char *                  mutt_idna_intl_to_local           (const char *user, const char *domain, int flags);
+char *                  mutt_idna_intl_to_local           (const char *user, const char *domain, uint8_t flags);
 char *                  mutt_idna_local_to_intl           (const char *user, const char *domain);
 const char *            mutt_idna_print_version           (void);
-int                     mutt_idna_to_ascii_lz             (const char *input, char **output, int flags);
+int                     mutt_idna_to_ascii_lz             (const char *input, char **output, uint8_t flags);
 ```
 
 ### list (mutt)
@@ -386,6 +387,9 @@ void                    mailbox_changed                   (struct Mailbox *m, en
 struct Mailbox *        mailbox_find                      (const char *path);
 struct Mailbox *        mailbox_find_name                 (const char *name);
 void                    mailbox_free                      (struct Mailbox **ptr);
+void                    mailbox_gc_add                    (struct Email *e);
+void                    mailbox_gc_run                    (void);
+int                     mailbox_gen                       (void);
 struct Mailbox *        mailbox_new                       (void);
 bool                    mailbox_set_subset                (struct Mailbox *m, struct ConfigSubset *sub);
 void                    mailbox_size_add                  (struct Mailbox *m, const struct Email *e);
@@ -412,7 +416,7 @@ bool                    mutt_mb_get_initials              (const char *name, cha
 bool                    mutt_mb_is_display_corrupting_utf8(wchar_t wc);
 bool                    mutt_mb_is_lower                  (const char *s);
 bool                    mutt_mb_is_shell_char             (wchar_t ch);
-size_t                  mutt_mb_mbstowcs                  (wchar_t **pwbuf, size_t *pwbuflen, size_t i, char *buf);
+size_t                  mutt_mb_mbstowcs                  (wchar_t **pwbuf, size_t *pwbuflen, size_t i, const char *buf);
 void                    mutt_mb_wcstombs                  (char *dest, size_t dlen, const wchar_t *src, size_t slen);
 int                     mutt_mb_wcswidth                  (const wchar_t *s, size_t n);
 int                     mutt_mb_wcwidth                   (wchar_t wc);
@@ -554,11 +558,11 @@ void                    mutt_rand_base32                  (char *buf, size_t buf
 
 ```c
 bool                    mutt_regex_capture                (const struct Regex *regex, const char *str, size_t nmatch, regmatch_t matches[]);
-struct Regex *          mutt_regex_compile                (const char *str, int flags);
+struct Regex *          mutt_regex_compile                (const char *str, uint16_t flags);
 void                    mutt_regex_free                   (struct Regex **r);
 bool                    mutt_regex_match                  (const struct Regex *regex, const char *str);
-struct Regex *          mutt_regex_new                    (const char *str, int flags, struct Buffer *err);
-int                     mutt_regexlist_add                (struct RegexList *rl, const char *str, int flags, struct Buffer *err);
+struct Regex *          mutt_regex_new                    (const char *str, uint32_t flags, struct Buffer *err);
+int                     mutt_regexlist_add                (struct RegexList *rl, const char *str, uint16_t flags, struct Buffer *err);
 void                    mutt_regexlist_free               (struct RegexList *rl);
 bool                    mutt_regexlist_match              (struct RegexList *rl, const char *str);
 struct RegexNode *      mutt_regexlist_new                (void);
@@ -614,8 +618,8 @@ struct Slist *          slist_dup                         (const struct Slist *l
 struct Slist *          slist_empty                       (struct Slist **list);
 void                    slist_free                        (struct Slist **list);
 bool                    slist_is_member                   (const struct Slist *list, const char *str);
-struct Slist *          slist_new                         (int flags);
-struct Slist *          slist_parse                       (const char *str, int flags);
+struct Slist *          slist_new                         (uint32_t flags);
+struct Slist *          slist_parse                       (const char *str, uint32_t flags);
 struct Slist *          slist_remove_string               (struct Slist *list, const char *str);
 int                     slist_to_buffer                   (const struct Slist *list, struct Buffer *buf);
 ```
@@ -628,9 +632,9 @@ bool                    mutt_istr_equal                   (const char *a, const 
 const char *            mutt_istr_find                    (const char *haystack, const char *needle);
 int                     mutt_istr_remall                  (char *str, const char *target);
 size_t                  mutt_istr_startswith              (const char *str, const char *prefix);
-int                     mutt_istrn_cmp                    (const char *a, const char *b, size_t l);
-bool                    mutt_istrn_equal                  (const char *a, const char *b, size_t l);
-void                    mutt_str_adjust                   (char **p);
+int                     mutt_istrn_cmp                    (const char *a, const char *b, size_t num);
+bool                    mutt_istrn_equal                  (const char *a, const char *b, size_t num);
+void                    mutt_str_adjust                   (char **ptr);
 void                    mutt_str_append_item              (char **str, const char *item, char sep);
 int                     mutt_str_asprintf                 (char **strp, const char *fmt, ...);
 int                     mutt_str_atoi                     (const char *str, int *dst);
@@ -643,7 +647,7 @@ char *                  mutt_str_cat                      (char *buf, size_t buf
 int                     mutt_str_cmp                      (const char *a, const char *b);
 int                     mutt_str_coll                     (const char *a, const char *b);
 size_t                  mutt_str_copy                     (char *dest, const char *src, size_t dsize);
-void                    mutt_str_dequote_comment          (char *s);
+void                    mutt_str_dequote_comment          (char *str);
 char *                  mutt_str_dup                      (const char *str);
 bool                    mutt_str_equal                    (const char *a, const char *b);
 const char *            mutt_str_find_word                (const char *src);
@@ -652,7 +656,7 @@ bool                    mutt_str_inline_replace           (char *buf, size_t buf
 bool                    mutt_str_is_ascii                 (const char *str, size_t len);
 bool                    mutt_str_is_email_wsp             (char c);
 size_t                  mutt_str_len                      (const char *a);
-char *                  mutt_str_lower                    (char *s);
+char *                  mutt_str_lower                    (char *str);
 size_t                  mutt_str_lws_len                  (const char *s, size_t n);
 size_t                  mutt_str_lws_rlen                 (const char *s, size_t n);
 const char *            mutt_str_next_word                (const char *s);
@@ -665,7 +669,7 @@ const char *            mutt_str_sysexit                  (int err_num);
 char *                  mutt_strn_cat                     (char *d, size_t l, const char *s, size_t sl);
 char *                  mutt_strn_copy                    (char *dest, const char *src, size_t len, size_t dsize);
 char *                  mutt_strn_dup                     (const char *begin, size_t len);
-bool                    mutt_strn_equal                   (const char *a, const char *b, size_t l);
+bool                    mutt_strn_equal                   (const char *a, const char *b, size_t num);
 const char *            mutt_strn_rfind                   (const char *haystack, size_t haystack_length, const char *needle);
 ```
 
@@ -675,6 +679,7 @@ const char *            mutt_strn_rfind                   (const char *haystack,
 char *C_HiddenTags;
 struct Hash *TagTransforms;
 
+void                    driver_tags_add                   (struct TagList *list, char *new_tag);
 void                    driver_tags_free                  (struct TagList *list);
 char *                  driver_tags_get                   (struct TagList *list);
 char *                  driver_tags_get_transformed       (struct TagList *list);
@@ -703,7 +708,7 @@ void                    url_free                          (struct Url **ptr);
 struct Url *            url_parse                         (const char *src);
 int                     url_pct_decode                    (char *s);
 void                    url_pct_encode                    (char *buf, size_t buflen, const char *src);
-int                     url_tobuffer                      (struct Url *url, struct Buffer *buf, int flags);
-int                     url_tostring                      (struct Url *url, char *dest, size_t len, int flags);
+int                     url_tobuffer                      (struct Url *url, struct Buffer *buf, uint8_t flags);
+int                     url_tostring                      (struct Url *url, char *dest, size_t len, uint8_t flags);
 ```
 

@@ -194,6 +194,7 @@ void test_tags(void)
   // char *C_HiddenTags;
   // struct Hash *TagTransforms;
 
+  // void                    driver_tags_add                   (struct TagList *list, char *new_tag);
   // void                    driver_tags_free                  (struct TagList *list);
   // char *                  driver_tags_get                   (struct TagList *list);
   // char *                  driver_tags_get_transformed       (struct TagList *list);
@@ -224,8 +225,8 @@ void test_url(void)
   // struct Url *            url_parse                         (const char *src);
   // int                     url_pct_decode                    (char *s);
   // void                    url_pct_encode                    (char *buf, size_t buflen, const char *src);
-  // int                     url_tobuffer                      (struct Url *url, struct Buffer *buf, int flags);
-  // int                     url_tostring                      (struct Url *url, char *dest, size_t len, int flags);
+  // int                     url_tobuffer                      (struct Url *url, struct Buffer *buf, uint8_t flags);
+  // int                     url_tostring                      (struct Url *url, char *dest, size_t len, uint8_t flags);
 
   url_check_scheme("imaps://host.com");
 }
