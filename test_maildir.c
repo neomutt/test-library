@@ -1,13 +1,13 @@
 #include "config.h"
-#include "context.h"
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/stat.h>
 #include "mutt/lib.h"
 #include "email/email.h"
 #include "core/lib.h"
-#include "context.h"
+#include "debug/lib.h"
 #include "maildir/lib.h"
+#include "context.h"
 #include "mx.h"
 
 struct Progress;
@@ -26,6 +26,33 @@ short C_Sort;
 short C_WriteInc;
 int MonitorContextChanged = 0;
 struct Context *Context = NULL;
+
+bool mx_ac_add(struct Account *a, struct Mailbox *m)
+{
+  if (!a || !m || !m->mx_ops || !m->mx_ops->ac_add)
+    return false;
+
+  return m->mx_ops->ac_add(a, m) && account_mailbox_add(a, m);
+}
+
+void ctx_free(struct Context **ptr)
+{
+  if (!ptr || !*ptr)
+    return;
+
+  // struct Context *ctx = *ptr;
+
+  FREE(ptr);
+}
+
+struct Context *ctx_new(struct Mailbox *m)
+{
+  struct Context *ctx = mutt_mem_calloc(1, sizeof(struct Context));
+
+  ctx->mailbox = m;
+
+  return ctx;
+}
 
 struct Mailbox *ctx_mailbox(struct Context *ctx)
 {
@@ -211,26 +238,53 @@ int mutt_stat_timespec_compare(struct stat *sba, enum MuttStatType type, struct 
   return mutt_timespec_compare(&a, b);
 }
 
-int main(int argc, char *argv[])
+int test_open_and_close(void)
 {
   char *file = "test.maildir";
-  struct Context ctx = { 0 };
-  struct Mailbox m = { 0 };
-  ctx.mailbox = &m;
-  m.type = MUTT_MAILDIR;
-  m.pathbuf = mutt_buffer_make(128);
-  mutt_buffer_strcpy(&m.pathbuf, file);
 
-  int rc = MxMaildirOps.mbox_open(ctx.mailbox);
+  struct Account *a = account_new(NULL, NeoMutt->sub);
+  a->type = MUTT_MAILDIR;
+  neomutt_account_add(NeoMutt, a);
+
+  struct Mailbox *m = mailbox_new();
+  m->type = MUTT_MAILDIR;
+  m->mx_ops = &MxMaildirOps;
+  mutt_buffer_strcpy(&m->pathbuf, file);
+
+  mx_ac_add(a, m);
+
+  struct Context *ctx = ctx_new(m);
+
+  int rc = m->mx_ops->mbox_open(ctx->mailbox);
   printf("%d\n", rc);
   if (rc != 0)
     return 1;
 
-  rc = MxMaildirOps.mbox_close(ctx.mailbox);
+  rc = m->mx_ops->mbox_close(ctx->mailbox);
   printf("%d\n", rc);
   if (rc != 0)
     return 1;
 
-  mutt_buffer_dealloc(&m.pathbuf);
+  ctx_free(&ctx);
+  return 0;
+}
+
+int main(int argc, char *argv[])
+{
+  struct ConfigSet *cs = cs_new(32);
+  if (!cs)
+    return 1;
+
+  NeoMutt = neomutt_new(cs);
+  if (!NeoMutt)
+    return 1;
+
+  int rc;
+  rc = test_open_and_close();
+  if (rc != 0)
+    return 1;
+
+  neomutt_free(&NeoMutt);
+  cs_free(&cs);
   return 0;
 }
