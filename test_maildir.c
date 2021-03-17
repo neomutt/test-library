@@ -260,6 +260,10 @@ int test_open_and_close(void)
   if (rc != 0)
     return 1;
 
+#ifdef USE_DEBUG_GRAPHVIZ
+  dump_graphviz("index", ctx);
+#endif
+
   rc = m->mx_ops->mbox_close(ctx->mailbox);
   printf("%d\n", rc);
   if (rc != 0)
