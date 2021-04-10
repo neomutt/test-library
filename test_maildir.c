@@ -1,4 +1,6 @@
 #include "config.h"
+#include <errno.h>
+#include <ftw.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/stat.h>
@@ -238,21 +240,22 @@ int mutt_stat_timespec_compare(struct stat *sba, enum MuttStatType type, struct 
   return mutt_timespec_compare(&a, b);
 }
 
-int test_open_and_close(void)
+void build_test_maildir(struct Account *a, struct Mailbox *m)
 {
   char *file = "test.maildir";
 
-  struct Account *a = account_new(NULL, NeoMutt->sub);
   a->type = MUTT_MAILDIR;
   neomutt_account_add(NeoMutt, a);
 
-  struct Mailbox *m = mailbox_new();
   m->type = MUTT_MAILDIR;
   m->mx_ops = &MxMaildirOps;
   mutt_buffer_strcpy(&m->pathbuf, file);
 
   mx_ac_add(a, m);
+}
 
+int test_open_and_close(struct Mailbox *m)
+{
   struct Context *ctx = ctx_new(m);
 
   int rc = m->mx_ops->mbox_open(ctx->mailbox);
@@ -273,6 +276,50 @@ int test_open_and_close(void)
   return 0;
 }
 
+int test_mbox_create(struct Account *test_account, struct Mailbox *test_mailbox)
+{
+  struct Mailbox *new_mailbox = NULL;
+  int rc = MxMaildirOps.mbox_create(test_account, test_mailbox, "", &new_mailbox);
+  if (rc != MX_CREATE_BAD_NAME) {
+      fprintf(stderr, "Failed invalid name test\n");
+      return 1;
+  }
+
+  rc = MxMaildirOps.mbox_create(test_account, test_mailbox, "child_maildir", &new_mailbox);
+  if (rc != MX_CREATE_EXISTS) {
+      fprintf(stderr, "Failed existing maildir test\n");
+      return 1;
+  }
+
+  rc = MxMaildirOps.mbox_create(test_account, test_mailbox, "this_is_a_file", &new_mailbox);
+  if (rc != MX_CREATE_SYS_ERROR) {
+      if (errno != ENOTDIR)
+          fprintf(stderr, "Failed setting errno correctly\n");
+      fprintf(stderr, "Failed creation with system error\n");
+      return 1;
+  }
+
+  rc = MxMaildirOps.mbox_create(test_account, test_mailbox, "new_maildir", &new_mailbox);
+  if (rc != MX_CREATE_OK) {
+      fprintf(stderr, "Failed creation test\n");
+      return 1;
+  }
+
+  const char *expected_subdirs[] = {"test.maildir/new_maildir/cur", "test.maildir/new_maildir/new", "test.maildir/new_maildir/tmp"};
+  int create_error = 0;
+  for (int i = 0; i < 3; i++) {
+      struct stat statbuf;
+      const char *subdir = expected_subdirs[i];
+      if (stat(subdir, &statbuf) || !S_ISDIR(statbuf.st_mode)) {
+          fprintf(stderr, "Failed to create %s\n", subdir);
+          create_error = -1;
+      }
+  }
+  mutt_file_rmtree("test.maildir/new_maildir");
+
+  return create_error;
+}
+
 int main(int argc, char *argv[])
 {
   struct ConfigSet *cs = cs_new(32);
@@ -283,12 +330,20 @@ int main(int argc, char *argv[])
   if (!NeoMutt)
     return 1;
 
-  int rc;
-  rc = test_open_and_close();
+  struct Account *test_account = account_new(NULL, NeoMutt->sub);
+  struct Mailbox *test_mailbox = mailbox_new();
+  build_test_maildir(test_account, test_mailbox);
+
+  int rc = 0;
+  //rc = test_open_and_close(test_mailbox);
   if (rc != 0)
     return 1;
 
+  if (test_mbox_create(test_account, test_mailbox) != 0)
+      return 1;
+
   neomutt_free(&NeoMutt);
   cs_free(&cs);
+
   return 0;
 }
