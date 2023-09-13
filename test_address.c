@@ -118,11 +118,6 @@ void test_idna(void)
 
   char *mailbox = NULL;
 
-  // C_IdnEncode = true;
-  // C_IdnDecode = true;
-
-  // mutt_str_replace(&C_Charset, "utf-8");
-
   char *user = "joe";
   char *domain1 = "\360\237\222\251.la";
   char *domain2 = "xn--pxaix.la";
@@ -141,8 +136,6 @@ void test_idna(void)
     FREE(&mailbox);
   }
 
-  // FREE(&C_Charset);
-
   char *input = "\316\264\317\200\316\270.com";
   char *output = NULL;
 
@@ -156,6 +149,10 @@ void test_idna(void)
   {
     printf("failed: %d\n", rc);
   }
+
+  config_cache_cleanup();
+  neomutt_free(&NeoMutt);
+  cs_free(&cs);
 }
 
 void print_addresses(const struct AddressList *al)
