@@ -19,13 +19,10 @@ LDFLAGS	+= -L$(NEO)
 # CFLAGS	+= -fsanitize=undefined -fno-sanitize-recover=undefined
 # LDFLAGS	+= -fsanitize=undefined -fno-sanitize-recover=undefined
 
-# CFLAGS	+=-fsanitize=address -fsanitize-recover=address
-# LDFLAGS	+=-fsanitize=address -fsanitize-recover=address
+CFLAGS	+=-fsanitize=address
+LDFLAGS	+=-fsanitize=address
 
-# CFLAGS	+= -fsanitize=address -fno-sanitize-recover=address
-# LDFLAGS	+= -fsanitize=address -fno-sanitize-recover=address
-
-ADDR_LDFLAGS	= -laddress
+ADDR_LDFLAGS	= -laddress -lcore -lemail -lconfig
 COMPRESS_LDFLAGS= -lcompress
 CONFIG_LDFLAGS	= -lconfig
 CONN_LDFLAGS	= -lconn -lgnutls -lsasl2 -lanl
@@ -45,7 +42,7 @@ SEND_LDFLAGS	= -lsend
 all:	$(NEO) $(OUT)
 
 test_address: test_address.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(ADDR_LDFLAGS) $(MUTT_LDFLAGS)
 
 test_conn: test_conn.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(CONN_LDFLAGS) $(EMAIL_LDFLAGS) $(ADDR_LDFLAGS) $(CONFIG_LDFLAGS) $(MUTT_LDFLAGS)
