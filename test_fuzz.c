@@ -9,7 +9,6 @@
 #include <unistd.h>
 #include "mutt/lib.h"
 #include "email/lib.h"
-#include "context.h"
 
 bool C_Autocrypt;
 

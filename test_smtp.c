@@ -8,7 +8,6 @@
 #include "config/lib.h"
 #include "core/lib.h"
 #include "conn/lib.h"
-#include "context.h"
 #include "send/lib.h"
 
 static const char *lorem_text =
@@ -278,10 +277,10 @@ bool create_message(const char *file, struct AddressList *from, struct AddressLi
   if (!fp)
     return false;
 
-  struct Buffer date = mutt_buffer_make(32);
+  struct Buffer date = buf_make(32);
   mutt_date_make_date(&date);
-  fputs(mutt_buffer_string(&date), fp);
-  mutt_buffer_dealloc(&date);
+  fputs(buf_string(&date), fp);
+  buf_dealloc(&date);
 
   char buf[1024];
 

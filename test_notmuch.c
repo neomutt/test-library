@@ -5,7 +5,6 @@
 #include "email/lib.h"
 #include "core/lib.h"
 #include "notmuch/lib.h"
-#include "context.h"
 #include "mutt_commands.h"
 #include "mx.h"
 
@@ -78,7 +77,7 @@ int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *en
   return -1;
 }
 
-void mutt_buffer_encode_path(struct Buffer *buf, const char *src)
+void buf_encode_path(struct Buffer *buf, const char *src)
 {
 }
 
@@ -91,7 +90,7 @@ int mutt_copy_message(FILE *fp_out, struct Mailbox *m, struct Email *e, CopyMess
   return -1;
 }
 
-int mutt_buffer_get_field(const char *field, struct Buffer *buf, CompletionFlags complete,
+int buf_get_field(const char *field, struct Buffer *buf, CompletionFlags complete,
                           bool multiple, char ***files, int *numfiles)
 {
   return -1;

@@ -1,12 +1,10 @@
 #include "config.h"
-#include "context.h"
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/stat.h>
 #include "mutt/lib.h"
 #include "email/email.h"
 #include "core/lib.h"
-#include "context.h"
 #include "maildir/lib.h"
 #include "mx.h"
 
@@ -36,7 +34,7 @@ void nm_edata_free(void **ptr)
 {
 }
 
-void mutt_buffer_encode_path(struct Buffer *buf, const char *src)
+void buf_encode_path(struct Buffer *buf, const char *src)
 {
 }
 
@@ -218,8 +216,8 @@ int main(int argc, char *argv[])
   struct Mailbox m = { 0 };
   ctx.mailbox = &m;
   m.type = MUTT_MAILDIR;
-  m.pathbuf = mutt_buffer_make(128);
-  mutt_buffer_strcpy(&m.pathbuf, file);
+  m.pathbuf = buf_make(128);
+  buf_strcpy(&m.pathbuf, file);
 
   int rc = MxMaildirOps.mbox_open(ctx.mailbox);
   printf("%d\n", rc);
@@ -231,6 +229,6 @@ int main(int argc, char *argv[])
   if (rc != 0)
     return 1;
 
-  mutt_buffer_dealloc(&m.pathbuf);
+  buf_dealloc(&m.pathbuf);
   return 0;
 }

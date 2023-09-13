@@ -89,9 +89,9 @@ void test_getdomain(void)
 {
   // int                getdnsdomainname           (struct Buffer *domain);
 
-  struct Buffer b = mutt_buffer_make(256);
+  struct Buffer b = buf_make(256);
   getdnsdomainname(&b);
-  mutt_buffer_dealloc(&b);
+  buf_dealloc(&b);
 }
 
 void test_sasl(void)

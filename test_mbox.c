@@ -6,7 +6,6 @@
 #include "email/email.h"
 #include "core/lib.h"
 #include "mbox/lib.h"
-#include "context.h"
 #include "mx.h"
 
 struct Progress;
@@ -36,12 +35,12 @@ void nm_edata_free(void **ptr)
 {
 }
 
-void mutt_buffer_mktemp_full(struct Buffer *buf, const char *prefix,
+void buf_mktemp_full(struct Buffer *buf, const char *prefix,
                              const char *suffix, const char *src, int line)
 {
 }
 
-void mutt_buffer_pretty_mailbox(struct Buffer *buf)
+void buf_pretty_mailbox(struct Buffer *buf)
 {
 }
 
@@ -50,7 +49,7 @@ int mutt_autocrypt_process_autocrypt_header(struct Email *e, struct Envelope *en
   return -1;
 }
 
-int mutt_buffer_get_field(const char *field, struct Buffer *buf, CompletionFlags complete,
+int buf_get_field(const char *field, struct Buffer *buf, CompletionFlags complete,
                           bool multiple, char ***files, int *numfiles)
 {
   return -1;
@@ -236,8 +235,8 @@ int main(int argc, char *argv[])
   m.type = MUTT_MBOX;
   m.account = &a;
   a.type = MUTT_MBOX;
-  m.pathbuf = mutt_buffer_make(128);
-  mutt_buffer_strcpy(&m.pathbuf, file);
+  m.pathbuf = buf_make(128);
+  buf_strcpy(&m.pathbuf, file);
 
   int rc = MxMboxOps.mbox_open(ctx.mailbox);
   printf("%d\n", rc);
@@ -249,6 +248,6 @@ int main(int argc, char *argv[])
   if (rc != 0)
     return 1;
 
-  mutt_buffer_dealloc(&m.pathbuf);
+  buf_dealloc(&m.pathbuf);
   return 0;
 }

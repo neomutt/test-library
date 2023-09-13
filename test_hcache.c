@@ -6,7 +6,6 @@
 #include "mutt/lib.h"
 #include "email/lib.h"
 #include "hcache/lib.h"
-#include "context.h"
 
 bool C_Autocrypt;
 struct ConfigDef;
@@ -27,7 +26,7 @@ void hcache_per_folder(struct Buffer *hcpath, const char *path,
 {
 }
 
-void mutt_buffer_encode_path(struct Buffer *buf, const char *src)
+void buf_encode_path(struct Buffer *buf, const char *src)
 {
 }
 
@@ -50,8 +49,8 @@ int mutt_convert_string(char **ps, const char *from, const char *to, int flags)
 void mutt_encode_path(struct Buffer *buf, const char *src)
 {
   char *copy = strdup(src);
-  mutt_buffer_strcpy(buf, copy);
-  printf("mutt_encode_path: %s\n", mutt_buffer_string(buf));
+  buf_strcpy(buf, copy);
+  printf("mutt_encode_path: %s\n", buf_string(buf));
   FREE(&copy);
 }
 
