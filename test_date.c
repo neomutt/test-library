@@ -41,7 +41,7 @@ static int test_mutt_local_tz(const char *arg)
 static int test_mutt_make_date(const char *arg)
 {
   struct Buffer buf = buf_make(64);
-  mutt_date_make_date(&buf);
+  mutt_date_make_date(&buf, true);
   printf("%s", buf_string(&buf));
   buf_dealloc(&buf);
 
