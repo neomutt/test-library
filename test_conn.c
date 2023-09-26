@@ -5,13 +5,14 @@
 #include <string.h>
 #include <unistd.h>
 #include "mutt/lib.h"
+#include "config/lib.h"
 #include "conn/lib.h"
 #include "conn/private.h"
 #include "mutt.h"
 #include "history/lib.h"
+#include "key/lib.h"
 #include "menu/lib.h"
 #include "imap/account.h"
-#include "keymap.h"
 
 struct AddressList;
 struct Envelope;
@@ -23,6 +24,11 @@ int SigInt;
 bool OptNoCurses;
 char *Username;
 char **EnvList = NULL;
+char *HomeDir = "/";
+
+#define CONFIG_INIT_TYPE(CS, NAME)                                             \
+  extern const struct ConfigSetType Cst##NAME;                                 \
+  cs_register_type(CS, &Cst##NAME)
 
 void mutt_query_exit(void)
 {
@@ -115,7 +121,6 @@ void test_conn_raw(void)
   conn.account.type = MUTT_ACCT_TYPE_SMTP;
   conn.account.flags = MUTT_ACCT_PORT;
 
-  // mutt_socket_open(&conn);
   raw_socket_open(&conn);
 }
 
@@ -159,7 +164,8 @@ void test_socket(void)
   // void               mutt_socket_empty          (struct Connection *conn);
   // int                mutt_socket_buffer_readln_d(struct Buffer *buf, struct Connection *conn, int dbg);
 
-  mutt_socket_new(MUTT_CONNECTION_SIMPLE);
+  struct Connection *conn = mutt_socket_new(MUTT_CONNECTION_SIMPLE);
+  FREE(&conn);
 }
 
 void test_ssl(void)
@@ -181,6 +187,34 @@ void test_tunnel(void)
 
 int main()
 {
+  static struct ConfigDef Vars[] = {
+    // clang-format off
+    { "certificate_file", DT_PATH|DT_PATH_FILE, IP "~/.mutt_certificates", 0, NULL, NULL },
+    { "socket_timeout", DT_NUMBER, 30, 0, NULL, NULL },
+    { "ssl_ca_certificates_file", DT_PATH|DT_PATH_FILE, 0, 0, NULL, NULL },
+    { "ssl_ciphers", DT_STRING, 0, 0, NULL, NULL },
+    { "ssl_client_cert", DT_PATH|DT_PATH_FILE, 0, 0, NULL, NULL },
+    { "ssl_min_dh_prime_bits", DT_NUMBER|DT_NOT_NEGATIVE, 0, 0, NULL, NULL },
+    { "ssl_use_sslv3", DT_BOOL, false, 0, NULL, NULL },
+    { "ssl_use_tlsv1", DT_BOOL, false, 0, NULL, NULL },
+    { "ssl_use_tlsv1_1", DT_BOOL, false, 0, NULL, NULL },
+    { "ssl_use_tlsv1_2", DT_BOOL, true, 0, NULL, NULL },
+    { "ssl_use_tlsv1_3", DT_BOOL, true, 0, NULL, NULL },
+    { "use_ipv6", DT_BOOL, true, 0, NULL, NULL },
+    { NULL },
+    // clang-format on
+  };
+
+  struct ConfigSet *cs = cs_new(50);
+  CONFIG_INIT_TYPE(cs, Bool);
+  CONFIG_INIT_TYPE(cs, Number);
+  CONFIG_INIT_TYPE(cs, Path);
+  CONFIG_INIT_TYPE(cs, String);
+
+  NeoMutt = neomutt_new(cs);
+
+  cs_register_variables(cs, Vars, DT_NO_FLAGS);
+
   test_connaccount();
   test_conn_raw();
   test_getdomain();
@@ -189,5 +223,9 @@ int main()
   test_socket();
   test_ssl();
   test_tunnel();
+
+  // config_cache_cleanup();
+  neomutt_free(&NeoMutt);
+  cs_free(&cs);
   return 0;
 }
